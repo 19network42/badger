@@ -1,0 +1,14 @@
+# general
+*.swp
+venv/
+.vscode/
+.DS_Store
+__pycache__/
+
+# webapp
+/webapp/.env
+/webapp/.docker.env
+/webapp/db.sqlite3
+
+# embedded
+/embedded/app/arduino_secrets.h

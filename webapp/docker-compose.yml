@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  webapp:
+    build: .
+    command: scripts/webapp.sh
+    ports:
+      - 8000:8000
+    env_file:
+      - ./docker.env
+    volumes:
+      - static:/app/static
+    depends_on:
+      - redis
+      - db
+  celery_beat:
+    build: .
+    command: scripts/celery_beat.sh
+    env_file:
+      - ./docker.env
+    depends_on:
+      - redis
+      - db
+  celery_worker:
+    build: .
+    command: scripts/celery_worker.sh
+    env_file:
+      - ./docker.env
+    depends_on:
+      - redis
+      - db
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASSWORD=db_password
+  redis:
+    image: redis:6-alpine
+volumes:
+  postgres_data:
+    driver_opts:
+      type: none
+      device: /var/www/badges/data
+      o: bind
+  static:
+    driver_opts:
+      type: none
+      device: /var/www/badges/static
+      o: bind
