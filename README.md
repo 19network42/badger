@@ -6,10 +6,10 @@ This repository contains the result of a project between the staff of [19](https
 The project's goals is to build and develop a badge reader that would help the staff know the list of students who participate in an event.
 This repository is divided in two parts: `embedded` and `webapp`.
 
-### `embedded`
+### [embedded](/embedded)
 This directory contains the code to run the physical reader, which as an `Arduino MKK WiFi 1010` connected to an `Adafruit PN532 NFC/RFID controller breakout board`.
 
-### `webapp`
+### [webapp](/webapp)
 This directory contains a Django web application which communicates with the physical reader through an HTTP API and can be configured through a web panel.
 
 ## Authors
@@ -36,19 +36,6 @@ $ pip install -r webapp/requirements.txt
 - Create and populate a `.env` file from the template:
 ```sh
 $ cp webapp/.env.template webapp/.env
-```
-
-### `embedded`:
-- Create a secrets file:
-```sh
-$ touch embedded/app/arduino_secrets.h
-```
-- Populate it with the following template:
-```c
-#define WIFI_SSID ""
-#define WIFI_PASS ""
-#define API_URL ""
-#define API_TOKEN ""
 ```
 
 ## License
