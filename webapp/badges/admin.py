@@ -10,7 +10,7 @@ admin.site.register(Student, StudentAdmin)
 
 
 class BadgeAdmin(admin.ModelAdmin):
-    list_display = ('serial', 'uid', 'reference', 'badge_type', 'lost')
+    list_display = ('serial', 'uid', 'reference', 'badge_type')
 
 
 admin.site.register(Badge, BadgeAdmin)
