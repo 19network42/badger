@@ -17,8 +17,10 @@ The reader will prove its identity by sending a secret token in a custom HTTP He
 The content of the request will be formated in JSON.
 The request will send the following JSON values:
 - `uid`: string
+
 4 bytes UID of a badge, in uppercase hexadecimal, each bytes separated by a semicolon.
 - `timestamp`: int
+
 Epoch time of the request, in seconds.
 
 ### Example
@@ -44,8 +46,10 @@ If the server could process the request, it will return the `200 OK` status code
 The content of the response will be formated in JSON.
 The response will send the following JSON values:
 - `message`: string
+
 String message to output on the LCD screen.
 - `sound`: int
+
 Code of the sound to play with the piezo buzzer.
 
 ### Example
