@@ -23,7 +23,6 @@ class Badge(models.Model):
     reference = models.CharField(max_length=255, null=True, blank=True)
     badge_type = models.CharField(
         max_length=255, choices=BadgeType.choices, default=BadgeType.STUDENT,)
-    lost = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(self.serial)
@@ -38,6 +37,7 @@ class StudentBadge(models.Model):
     end_at = models.DateTimeField(null=True, blank=True)
     caution_paid = models.FloatField(default=0.0)
     caution_returned = models.BooleanField(default=False)
+    lost = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(self.id)
