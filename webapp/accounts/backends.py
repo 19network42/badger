@@ -38,8 +38,8 @@ class UserBackend(ModelBackend):
                 'displayname': data['displayname'],
                 'image': data['image_url'],
                 'profile': data['url'],
-                'is_staff': data['staff?'],
-                'is_superuser': data['staff?'],
+                'is_staff': True, # TODO: change for prod
+                'is_superuser': True, # TODO: change for prod
             }
         )
         if not created:
