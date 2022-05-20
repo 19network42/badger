@@ -11,4 +11,4 @@ __pycache__/
 /webapp/db.sqlite3
 
 # embedded
-/embedded/app/arduino_secrets.h
+/embedded/badger/arduino_secrets.h
