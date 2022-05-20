@@ -21,23 +21,6 @@ This directory contains a Django web application which communicates with the phy
 - Nathan Colin (student)
 - Romain Van Der Vennet (staff)
 
-# Setup
-
-### `webapp`:
-- Create and activate a python3 virtual environement:
-```sh
-$ python3 -m venv venv
-$ source venv/bin/activate
-```
-- Install the dependencies:
-```sh
-$ pip install -r webapp/requirements.txt
-```
-- Create and populate a `.env` file from the template:
-```sh
-$ cp webapp/.env.template webapp/.env
-```
-
 ## License
 
 This project is distributed under the [MIT License](/LICENSE).
