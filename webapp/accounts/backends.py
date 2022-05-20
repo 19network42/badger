@@ -24,9 +24,9 @@ class UserBackend(ModelBackend):
         if not any(campus['id'] == 12 for campus in data['campus']):
             return None
 
-        # check if user is staff member
-        if data['staff?'] == False:
-            return None
+        # # check if user is staff member
+        # if data['staff?'] == False:
+        #     return None
 
         user, created = User.objects.get_or_create(
             user_id=data['id'],
