@@ -13,9 +13,9 @@ $ source venv/bin/activate
 ```
 - Install the dependencies:
 ```sh
-$ pip install -r webapp/requirements.txt
+$ pip install -r requirements.txt
 ```
 - Create and populate a `.env` file from the template:
 ```sh
-$ cp webapp/.env.template webapp/.env
+$ cp .env.template .env
 ```
