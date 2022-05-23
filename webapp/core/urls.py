@@ -23,3 +23,7 @@ urlpatterns = [
     path('', include('accounts.urls', namespace='accounts')),
     path('badges/', include('badges.urls', namespace='badges')),
 ]
+
+admin.site.site_header = "Badger Administration"
+admin.site.site_title = "YO"
+admin.site.index_title = "What are you doing here?"

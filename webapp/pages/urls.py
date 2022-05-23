@@ -15,3 +15,7 @@ urlpatterns = [
     path('search_general/', search_general, name = 'search_general'),
     path('calendar/', calendar_page, name = 'calendar'),
 ]
+
+# admin.site.site_heard = "Badger Administration"
+# admin.site.site_title = "YO"
+# admin.site.index_title = "What are you doing here?"
