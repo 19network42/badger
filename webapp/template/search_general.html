@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+	<center>
+	<br><br><br>
+		{% if searched %}
+		<h1>You searched for {{ searched }}</h1>
+		<br/>
+		{% for event in events %}
+			<a href="{% url 'pages:events' %}">{{ event.name}} - {{ event.date }} </a><br/>
+
+		{% endfor %}
+
+		{% for scan in users %}
+			<a href="{% url 'pages:scan' %}">{{ scan.uid}} - {{ scan.date }} </a><br/>
+
+		{% endfor %}
+		
+		{% else %}
+		<h1>Nothing to search for!</h1>
+		{% endif %}
+	
+	</center>
+
+{% endblock %}

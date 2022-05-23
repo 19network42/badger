@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="one_event_page">
+	<h1 id="one_event_title">{{one_event.name}}</h1>
+	<table class="scan_table">
+		<tr>
+			<th>Login</th>
+			<th>Date</th>
+			<th>Drinks</th>
+		</tr>
+		{% for scan in scans %}
+		<tr>
+			<th>{{ scan.uid }}</th>
+			<th>{{ scan.date }}</th>
+			<th>{{ one_event.drinks }}</th>
+		</tr>
+		{% endfor %}
+	</table>
+	<div class="blue_cube"> .</div>
+	<p><a class="link_one_event" href="../../admin/pages/event/add/">Add an event here</a></p>
+	<p><a class="link_one_event" href="../../user/">Add a user there</a></p>
+</div>
+{% endblock %}
+
