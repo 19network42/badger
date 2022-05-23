@@ -1,0 +1,215 @@
+a:link { text-decoration: none; color: black; }
+a:visited { text-decoration: none; color: black; }
+a:hover { text-decoration: none; color: black; }
+a:active { text-decoration: none; color: black; }
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+@font-face {
+    font-family: 'SoMeFlOwErS';
+    src: url('./fonts/SoMeFlOwErS.woff2') format('woff2'),
+        url('./fonts/SoMeFlOwErS.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Blazed';
+    src: url('./fonts/Blazed.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Raleway-Medium';
+    src: url('./fonts/Raleway-Medium.woff') format('woff'),
+    	url('./fonts/Raleway-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Raleway-Regular';
+    src: url('./fonts/Raleway-Regular.woff') format('woff'),
+    	url('./fonts/Raleway-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Retrolight';
+    src: url('./fonts/Retrolight.woff') format('woff'),
+    	url('./fonts/Retrolight.woff2') format('woff2');
+}
+	
+
+
+/* ----------------------------------------------------------- */
+
+		/*					HOME PAGE					 */
+
+/* ----------------------------------------------------------- */
+
+#home_event {
+	background-color: lightcoral;
+	color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 50vh;
+	font-family: "SoMeFlOwErS", sans-serif;
+	font-size: 175px;
+}
+
+#home_user {
+	background-color: rgb(168, 167, 243);
+	color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 50vh;
+	font-family: "SoMeFlOwErS", sans-serif;
+	font-size: 175px;
+}
+
+
+/* --------------------------------------------------------- */
+
+/*							EVENT PAGE						 */
+
+/* --------------------------------------------------------- */
+
+
+#event_page {
+	color: rgb(202, 31, 31);
+	height: 100vh;
+	font-family: 'Raleway-Regular', serif;
+}
+
+#event_page #title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 40px;
+	line-height: 90%;
+	font-family: 'Blazed', serif;
+	font-size: 125px;
+}
+
+#event_page #info {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 60px;
+	font-size: 35px;
+}
+
+#event_page #table {
+	margin-top: 40px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#table td, #table th {
+	padding: 8px;
+	border: 1px solid rgb(184, 28, 28);
+}
+
+#table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+#table tr:hover {
+	background-color: #ddd;
+}
+
+#table th {
+	background-color: white;
+	color: rgb(202, 31, 31);
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+.white_cube {
+	margin: 350px;
+}
+
+.link_event {
+	color:  rgb(202, 31, 31)!important;
+	font-style: italic;
+}
+
+#event_page p {
+	position: sticky;
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	font-size: larger;
+}
+
+
+/* ----------------------------------------------------------- */
+
+/*				DRINK PAGE					 */
+
+/* ----------------------------------------------------------- */
+
+#one_event_page {
+	background-color: blue;
+	color: white;
+	height: 100vh;
+	font-family: 'Raleway-Regular', serif;
+}
+
+#one_event_title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Retrolight';
+	font-size: 175px;
+	font-weight: 100;
+}
+
+.scan_table {
+	margin-top: 40px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.scan_table td, .scan_table th {
+	border: 1px solid white;
+	padding: 8px;
+}
+
+.scan_table tr:nth-child(even) {
+	background-color: #d26aff;
+}
+
+.scan_table tr:hover {
+	background-color: rgb(164, 214, 99);
+}
+
+.scan_table th {
+	background-color: blue;
+	color: white;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+.link_one_event {
+	color: white !important;
+	font-style: italic;
+}
+
+#one_event_page p {
+	position: sticky;
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	font-size: larger;
+}
+
+.blue_cube {
+	background-color: blue;
+	color: blue;
+	margin: 400px;
+}
