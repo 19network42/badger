@@ -76,5 +76,7 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 	now = datetime.now()
 	current_year = now.year
 	time = now.strftime('%H:%M %p')
+	day = now.strftime('%j')
 	return render(request, 'calendar.html', {"year": year, "month": month,
-		"month_number": month_number, "cal": cal, "now": now, "current_year": current_year, "time": time,})
+		"month_number": month_number, "cal": cal, "now": now, "current_year": current_year,
+		"time": time, "day": day})
