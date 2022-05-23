@@ -21,13 +21,13 @@ int keyIndex = 0;            // your network key index number (needed only for W
 int status = WL_IDLE_STATUS;
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
-//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
-char server[] = "10.40.3.104";    // name address for Google (using DNS)
+IPAddress server(10,40,6,198);  // numeric IP for Google (no DNS)
+//char server[] = "10.40.6.198";    // name address for Google (using DNS)
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server
 // that you want to connect to (port 80 is default for HTTP):
-WiFiSSLClient client;
+WiFiClient client;
 
 // If using the breakout or shield with I2C, define just the pins connected
 // to the IRQ and reset lines.  Use the values below (2, 3) for the shield!
@@ -57,9 +57,10 @@ void setup() {
   }
   nfc.begin();
   uint32_t versiondata = nfc.getFirmwareVersion();
-  if (!versiondata) {
+  while (!versiondata) {
     Serial.print("Didn't find PN53x board");
-    while (1); // halt
+    versiondata = nfc.getFirmwareVersion();
+//    while (1); // halt
   }
   
   // Got ok data, print it out!
@@ -75,7 +76,7 @@ void setup() {
   // configure board to read RFID tags
   nfc.SAMConfig();
   
-  Serial.println("Waiting for an ISO14443A card");
+
   // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
@@ -106,7 +107,7 @@ void setup() {
     status = WiFi.begin(ssid, pass);
 
     // wait 10 seconds for connection:
-    delay(10000);
+    delay(100);
   }
   Serial.println("Connected to WiFi");
   printWiFiStatus();
@@ -114,6 +115,15 @@ void setup() {
   
   while (!Serial) delay(10); // for Leonardo/Micro/Zero
   Serial.println("Hello!");
+  Serial.println("\nStarting connection to server...");
+  if (client.connect(server, 8000)) {
+      Serial.println("connected to server");
+      // Make a HTTP request: 
+   }
+   else
+   {
+     Serial.println("No connection for you");
+    }
 //  lcd.begin(16,2);
 }}
 
@@ -122,6 +132,8 @@ void loop() {
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
   uint8_t uidLength;        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
   
+
+  Serial.println("Waiting for an ISO14443A card");
   // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
   // 'uid' will be populated with the UID, and uidLength will indicate
   // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
@@ -129,9 +141,10 @@ void loop() {
 
   int len = 0;
   char id[20];
+  
   if (success) {
     Serial.println("Found a card!");
-    Serial.print("UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
+//    Serial.print("UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
     Serial.print("UID Value: ");
     for (uint8_t i=0; i < uidLength - 1; i++) 
     {
@@ -139,20 +152,21 @@ void loop() {
     }
     sprintf(id + len, "%X", uid[uidLength - 1]);
     Serial.println(id);
-    Serial.println("\nStarting connection to server...");
   // if you get a connection, report back via serial:
-    if (client.connect(server, 4242)) {
-      Serial.println("connected to server");
-      // Make a HTTP request:
-      client.println(id);
-      client.println();
-    }
-    else
-    {
-     Serial.println("No connection for you");
-    }
+
+    String jsonObject = "{\n\"id\": \"";
+    client.println("POST / HTTP/1.1");
+    client.println("Host: 10.40.6.198");
+    client.println("Content-Type: application/json");
+    client.println("Connection: keep-alive");
+    client.println();
+
+    //BODY
+    client.print(jsonObject);
+    client.print(id);
+    client.println("\"}\n");
+    client.println();
     // wait 10 seconds for connection:
-    delay(10000);
     delay(3000);
   }
 //    Serial.println(id);
@@ -167,8 +181,21 @@ void loop() {
     // PN532 probably timed out waiting for a card
     Serial.println("Timed out waiting for a card");
   }
-}
+  while (client.available()) {
+    char c = client.read();
+    Serial.write(c);
+  }
 
+  // if the server's disconnected, stop the client:
+  if (!client.connected()) {
+    Serial.println();
+    Serial.println("disconnecting from server.");
+    client.stop();
+
+    // do nothing forevermore:
+    while (true);
+}
+}
 
 void printWiFiStatus() {
   // print the SSID of the network you're attached to:
