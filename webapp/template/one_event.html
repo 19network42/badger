@@ -8,12 +8,15 @@
 			<th>Login</th>
 			<th>Date</th>
 			<th>Drinks</th>
+			<th></th>
 		</tr>
 		{% for scan in scans %}
 		<tr>
-			<th>{{ scan.uid }}</th>
-			<th>{{ scan.date }}</th>
-			<th>{{ one_event.drinks }}</th>
+			<td>{{ scan.uid }}</td>
+			<td>{{ scan.date }}</td>
+			<td>{{ one_event.drinks }}</td>
+			<td align="center"><a href="{% url 'pages:update_event' event.id %}"
+				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
 		{% endfor %}
 	</table>

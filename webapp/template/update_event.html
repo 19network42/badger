@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+	<center>
+	<br/><br/><br/>
+	<h1>Update {{ event.name }}</h1>
+	<br/>
+	<form action="" method=POST>
+		<br/>
+		{% csrf_token %}
+		{{ form.as_p}}
+		<input type="submit" value="Update" class="btn btn-success">
+	</form>
+	</center>
+{% endblock %}
