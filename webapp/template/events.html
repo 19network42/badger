@@ -9,7 +9,8 @@
 			<th>Name</th>
 			<th>Drinks</th>
 			<th>Date</th>
-			<th>Duration</th>
+			<th>End</th>
+			<th></th>
 		</tr>
 		{% for event in events %}
 		<tr>
@@ -17,12 +18,13 @@
 				{{ event.name }}</a></td>
 			<td>{{ event.drinks }}</td>
 			<td>{{ event.date }}</td>
-			<td>{{ event.duration }} hour(s)</td>
+			<td>{{ event.end }}</td>
+			<td align="center"><a href="{% url 'pages:update_event' event.id %}"
+				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
 		{% endfor %}
-	</table>
+		</table>
 	<div class="white_cube"> .</div>
-	<p><a class="link_event" href="../admin/pages/event/add/">Add an event here</a></p>
 	<p><a class="link_event" href="../user/">Add a user there</a></p>
 </div>
 {% endblock %}

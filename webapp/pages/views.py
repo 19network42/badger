@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Event
+from .forms import EventForm
 from accounts.models import User
 import json
 import calendar
@@ -11,7 +13,8 @@ from datetime import datetime
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
 	context = {
-		'scans': Scan.objects.all()
+		'scans': Scan.objects.all(),
+		'current_event': [ev for ev in Event.objects.all() if ev.is_current()]
 	}
 	return render(request, "home.html", context)
 
@@ -29,6 +32,7 @@ def events_page(request, *args, **kwargs):
 	}
 	return render(request, "events.html", context)
 
+@csrf_exempt
 def	one_event(request, event_id, *args, **kwargs):
 	one_event = Event.objects.get(id=event_id)
 	print(one_event)
@@ -38,6 +42,7 @@ def	one_event(request, event_id, *args, **kwargs):
 	}
 	return render(request, "one_event.html", context)
 
+@csrf_exempt
 def user_page(request, *args, **kwargs):
 	context = {
 		'scans': Scan.objects.all(),
@@ -59,12 +64,14 @@ def scan_page(request, *args, **kwargs):
 	}
 	return render(request, "scan.html", context)
 
+@csrf_exempt
 def	search_general(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
 		users = Scan.objects.filter(uid__contains=searched)
-		return render(request, 'search_general.html', {'searched': searched, 'events': events, 'users': users})
+		return render(request, 'search_general.html', 
+			{'searched': searched, 'events': events, 'users': users})
 	else:
 		return render(request, 'search_general.html', {})
 
@@ -77,4 +84,26 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 	current_year = now.year
 	time = now.strftime('%H:%M %p')
 	return render(request, 'calendar.html', {"year": year, "month": month,
-		"month_number": month_number, "cal": cal, "now": now, "current_year": current_year, "time": time,})
+		"month_number": month_number, "cal": cal, "now": now, 
+		"current_year": current_year, "time": time,})
+
+def	update_event(request, event_id):
+	event = Event.objects.get(pk=event_id)
+	form = EventForm(request.POST or None, instance=event)
+	if form.is_valid():
+		form.save()
+		return redirect('pages:events')
+	return render(request, "update_event.html", {'event': event, 'form': form})
+
+def	add_event(request):
+	submitted = False
+	if request.method == "POST":
+		form = EventForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('/add_event?submitted=True')
+	else:
+		form = EventForm()
+		if 'submitted' in request.GET:
+			submitted = True
+	return render(request, "add_event.html", {'form': form, 'submitted': submitted})
