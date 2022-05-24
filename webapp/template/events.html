@@ -10,6 +10,7 @@
 			<th>Drinks</th>
 			<th>Date</th>
 			<th>Duration</th>
+			<th></th>
 		</tr>
 		{% for event in events %}
 		<tr>
@@ -18,6 +19,7 @@
 			<td>{{ event.drinks }}</td>
 			<td>{{ event.date }}</td>
 			<td>{{ event.duration }} hour(s)</td>
+			<td align="center"><a href="{% url 'pages:update_event' event.id %}">Update</a></td>
 		</tr>
 		{% endfor %}
 	</table>
