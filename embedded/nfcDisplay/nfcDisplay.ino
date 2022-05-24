@@ -18,7 +18,7 @@ WiFiClient client;
 
 ////	Server setup
 
-IPAddress server(10,40,6,198); 
+IPAddress server(10,40,3,104); 
 int port = 8000;
 
 int status = WL_IDLE_STATUS;
@@ -29,6 +29,7 @@ int status = WL_IDLE_STATUS;
 #define PN532_MOSI 3
 #define PN532_SS   4
 #define PN532_MISO 5
+#define BUZZER A1
 
 Adafruit_PN532 nfc(PN532_SCK, PN532_MISO, PN532_MOSI, PN532_SS);
 
@@ -38,7 +39,7 @@ void setup() {
 	while (!Serial) {
 		; // Wait for serial port to connect. Needed for native USB port only
 	}
-
+  pinMode(BUZZER, OUTPUT);
 	String fv = WiFi.firmwareVersion();
 	if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
 		Serial.println("Please upgrade the firmware");
@@ -92,6 +93,11 @@ void setup() {
 	}
 
 	Serial.println("Connected to WiFi");
+  tone(BUZZER, 100);
+  delay(100);
+  tone(BUZZER, 1000);
+  delay(600);
+  noTone(BUZZER);
 	printWiFiStatus();
 
 	//	Connecting to webapp
@@ -126,20 +132,25 @@ void loop() {
 		Serial.print("UID Value: ");
 		Serial.println(id);
 		// if you get a connection, report back via serial:
-
-		String jsonObject = "{\n\"id\": \"";
-		client.println("POST / HTTP/1.1");
-		client.println("Host: 10.40.6.198");
-		client.println("Content-Type: application/json");
-		client.println("Connection: keep-alive");
-		client.println();
-
-		//BODY
-		client.print(jsonObject);
-		client.print(id);
-		client.println("\"}\n");
-		client.println();
-
+    String postData = "{\"id\":\"" + String(id) + "\"}";
+//		String jsonObject = "{\"id\":\"";
+//		client.println("POST /scan HTTP/1.1");
+//		client.println("Host: 10.40.3.104");
+//		client.println("Content-Type: application/json");
+//		client.println("Connection: keep-alive");
+//		//BODY
+//    client.println("{");
+//    client.print("\"id\":\"");
+//		client.print(id);
+//		client.println("\"");
+//		client.println("}");
+    client.print(
+      String("POST ") + "/scan/" + " HTTP/1.1\r\n" +
+      "Content-Type: application/json\r\n" +
+      "Content-Length: " + postData.length() + "\r\n" +
+      "\r\n" +
+      postData
+      );
 		//	wait 3 seconds for connection:
 		delay(3000);
 
