@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('', include('pages.urls', namespace='pages')),
     path('', include('accounts.urls', namespace='accounts')),
-    path('badges/', include('badges.urls', namespace='badges')),
+    path('', include('badges.urls', namespace='badges')),
 ]
 
 admin.site.site_header = "Badger Administration"

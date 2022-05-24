@@ -82,14 +82,6 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 		"month_number": month_number, "cal": cal, "now": now, "current_year": current_year,
 		"time": time, "day": day})
 
-def	update_event(request, event_id):
-	event = Event.objects.get(pk=event_id)
-	form = EventForm(request.POST or None, instance=event)
-	if form.is_valid():
-		form.save()
-		return redirect('pages:events')
-	return render(request, "update_event.html", {'event': event, 'form': form})
-
 def	add_event(request):
 	submitted = False
 	if request.method == "POST":
@@ -102,3 +94,12 @@ def	add_event(request):
 		if 'submitted' in request.GET:
 			submitted = True
 	return render(request, "add_event.html", {'form': form, 'submitted': submitted})
+
+def	update_event(request, event_id):
+	event = Event.objects.get(pk=event_id)
+	form = EventForm(request.POST or None, instance=event)
+	if form.is_valid():
+		form.save()
+		return redirect('pages:events')
+	return render(request, "update_event.html", {'event': event, 'form': form})
+

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<center>
+	<br/><br/><br/>
+	<h1>Add a student to database...</h1>
+	<br/><br/><br/>
+	{% if submitted %}
+		The student was added!
+
+	{% else %}
+
+		<form action="" method=POST>
+			{% csrf_token %}
+			
+			{{ form.as_p}}
+			
+			<input type="submit" value="Add" class="btn btn-success">
+		</form>
+
+	{% endif %}
+	</center>
+{% endblock %}
