@@ -8,12 +8,14 @@
 			<th>Login</th>
 			<th>Date</th>
 			<th>Drinks</th>
+			<th></th>
 		</tr>
 		{% for scan in scans %}
 		<tr>
 			<th>{{ scan.uid }}</th>
 			<th>{{ scan.date }}</th>
 			<th>{{ one_event.drinks }}</th>
+			<th align="center">Update</th>
 		</tr>
 		{% endfor %}
 	</table>
