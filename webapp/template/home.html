@@ -2,9 +2,14 @@
 {% load static %}
 
 {% block content %}
+
 <div id="home_event">
 	<a id="events" href="events/">EVENTS</a>	
 </div>
+
+{% for event in events %}
+	<P>{{ event.name  }} </P>
+{% endfor %}
 <div id="home_user">
 	<a :link id="user" href="user/">USER INFOS</a>	
 </div>

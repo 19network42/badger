@@ -11,7 +11,8 @@ from datetime import datetime
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
 	context = {
-		'scans': Scan.objects.all()
+		'scans': Scan.objects.all(),
+		'events' : [ev for ev in Event.objects.all() if ev.is_current()]
 	}
 	return render(request, "home.html", context)
 
@@ -53,7 +54,10 @@ def scan_page(request, *args, **kwargs):
 		d = json.loads(res)
 		scan = Scan(uid = d['id'])
 		scan.save()
-
+		response_data = {}
+		response_data['result'] = True
+		response_data['led'] = True
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
 	context = {
 		'scans': Scan.objects.all()
 	}
