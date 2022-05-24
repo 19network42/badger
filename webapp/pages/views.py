@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Event
@@ -84,7 +84,11 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
-	return render(request, "update_event.html", {'event': event})
+	form = EventForm(request.POST or None, instance=event)
+	if form.is_valid():
+		form.save()
+		return redirect('pages:events')
+	return render(request, "update_event.html", {'event': event, 'form': form})
 
 def	add_event(request):
 	submitted = False
@@ -94,7 +98,7 @@ def	add_event(request):
 			form.save()
 			return HttpResponseRedirect('/add_event?submitted=True')
 	else:
-		form = EventForm
+		form = EventForm()
 		if 'submitted' in request.GET:
 			submitted = True
 	return render(request, "add_event.html", {'form': form, 'submitted': submitted})

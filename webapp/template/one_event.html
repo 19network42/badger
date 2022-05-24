@@ -15,13 +15,12 @@
 			<th>{{ scan.uid }}</th>
 			<th>{{ scan.date }}</th>
 			<th>{{ one_event.drinks }}</th>
-			<th align="center">Update</th>
+			<th align="center"><a href="{% url 'pages:update_event' event.id %}"
+				class="btn btn-outline-secondary btn-sm">Update</a></th>
 		</tr>
 		{% endfor %}
 	</table>
 	<div class="blue_cube"> .</div>
-	<p><a class="link_one_event" href="../../admin/pages/event/add/">Add an event here</a></p>
-	<p><a class="link_one_event" href="../../user/">Add a user there</a></p>
 </div>
 {% endblock %}
 
