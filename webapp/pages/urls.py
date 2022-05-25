@@ -1,7 +1,17 @@
 from django.contrib import admin
 from django.urls import path
 
-from pages.views import home_page, scan_page, events_page, user_page, one_event, search_general, calendar_page, update_event, add_event
+from pages.views import (
+                            home_page,
+                            scan_page,
+                            events_page,
+                            user_page,
+                            one_event,
+                            search_general,
+                            calendar_page,
+                            update_event, 
+                            add_event
+                        )
 
 app_name = 'pages'
 
