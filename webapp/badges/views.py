@@ -37,6 +37,14 @@ def	update_student(request, student_id):
 		return redirect('badges:students')
 	return render(request, "update_student.html", {'student': student, 'form': form})
 
+def	one_student(request, student_id, *args, **kwargs):
+	student = Student.objects.get(pk=student_id)
+	context = {
+		'student' : student,
+	}
+	return render(request, "one_event.html", context)
+
+# Create your views her
 def testing_student(request):
-    update_students()
-    return HttpResponse("tested")
+	update_students()
+	return HttpResponse("tested")

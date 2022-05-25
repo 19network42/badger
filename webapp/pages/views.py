@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Event, Mode
 from .forms import EventForm
+from badges.models import Student
+from badges.forms import StudentForm
 from accounts.models import User
 import json
 import calendar
@@ -34,10 +36,10 @@ def events_page(request, *args, **kwargs):
 
 @csrf_exempt
 def	one_event(request, event_id, *args, **kwargs):
-	event = Event.objects.get(pk=event_id)
+	event = Event.objects.get(id=event_id)
 	context = {
 		'scans': Scan.objects.all(),
-		'event' : event
+		'event' : event,
 	}
 	return render(request, "one_event.html", context)
 
@@ -71,9 +73,9 @@ def	search_general(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
-		users = Scan.objects.filter(uid__contains=searched)
+		students = Student.objects.filter(intra_id__contains=searched)
 		return render(request, 'search_general.html', 
-			{'searched': searched, 'events': events, 'users': users})
+			{'searched': searched, 'events': events, 'students': students})
 	else:
 		return render(request, 'search_general.html', {})
 
