@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -36,3 +37,12 @@ def	update_student(request, student_id):
 		return redirect('badges:students')
 	return render(request, "update_student.html", {'student': student, 'form': form})
 
+=======
+from django.http import HttpResponse
+from django.shortcuts import render
+from .tasks import update_students
+# Create your views here.
+def testing_student(request):
+    update_students()
+    return HttpResponse("tested")
+>>>>>>> 8ce54b259d19077bd9cf0a06647b73af453d20ff
