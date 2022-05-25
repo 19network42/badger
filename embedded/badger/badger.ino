@@ -58,8 +58,9 @@ void loop() {
 	char id[20];
   String uid;
   String mode = "default";
-  
-   uid = readCardUID();
+
+  clientIsConnected(false);  
+  uid = readCardUID();
    if (strcmp("ERROR", uid.c_str()) == 0)
    {
       Serial.println("ERROR reading card");
@@ -74,30 +75,42 @@ void loop() {
       }
    }
 	  // if the server's disconnected, stop the client:
-	  clientIsConnected();
+	 clientIsConnected(true);
   delay(3000);
 }
 
 /*
  * Check if the client is connected.
- * @error : If the client isn't connected anymore : infinite loop
- * to restart the arduino and server.
+ * @error : If the client isn't connected anymore : Try to
+ * reconnect every 5 seconds.
+ * 
  */
-void  clientIsConnected(void)
+void  clientIsConnected(bool reconnection)
 {
-  if (!client.connected()) {
+  lcd.clear();
+  if (reconnection && !client.connected()) {
 		  Serial.println();
 		  Serial.println("Disconnected from server.");
-      lcd.clear();
       lcd.print("Server connect.");
       lcd.setCursor(0,1);
       lcd.print("lost...");
 		  client.stop();
-
-		  // do nothing forevermore:
-		  while (true)
-			;
-	  }
+	 }
+   lcd.print("Retry connect.");
+    lcd.setCursor(0,1);
+    lcd.print("to server...");
+   while (!client.connected())
+   {
+      connectToWebApp();
+      if (!client.connected())
+      {
+        lcd.print("Retry connect.");
+        lcd.setCursor(0,1);
+        lcd.print("to server...");
+        delay(5000);
+      }
+   }
+   delay(1000);
 }
 
 
@@ -201,28 +214,29 @@ void  createAndSendHTTPRequest(String uid, String mode)
  * Try to connect to the server.
  * @Error : infinite loop to force turn off the arduino.
  */
-void  connectToWebApp(void)
+void  connectToWebApp()
 {
   Serial.println("\nStarting connection to server...");
   if (client.connect(IPADDRESS_SERVER, PORT))
   {
+    lcd.clear();
     Serial.println("Connected to server");
     lcd.print("Connect. server");
     lcd.setCursor(0,1);
     lcd.print("OK!");
-    
+    turnOnLed(0,0,255);
   }
   else
   {
+    lcd.clear();
     Serial.println("Failed to connect to the server");
     lcd.print("Connect. server");
     lcd.setCursor(0,1);
     lcd.print("KO!");
-    while(1);
+//    while(1);
   }
   delay(1500);
   lcd.clear();
-  turnOnLed(0,0,255);
 }
 
 /*
