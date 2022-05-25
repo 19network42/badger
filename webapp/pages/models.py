@@ -6,11 +6,19 @@ from datetime import datetime
 def two_hours_hence():
 	return timezone.now() + timezone.timedelta(hours=1)
 
-class Mode(models.Model):
+class Type(models.Model):
 	type = models.CharField(max_length = 100)
+	def __str__(self):
+		return str(self.type)
+
+class Amount(models.Model):
 	amount = models.IntegerField()
 	def __str__(self):
-		return self.type
+		return str(self.amount)
+
+class Mode(models.Model):
+	amount = models.IntegerField()
+	type = models.ForeignKey(Type, on_delete=models.CASCADE)
 
 class Event(models.Model):
 	date = models.DateTimeField(default=timezone.now)

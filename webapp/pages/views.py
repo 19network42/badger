@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-from .models import Scan, Event, Mode
+from .models import Scan, Event, Mode, Amount, Type
 from .forms import EventForm
 from badges.models import Student
 from badges.forms import StudentForm
