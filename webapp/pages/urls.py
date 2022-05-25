@@ -27,3 +27,7 @@ urlpatterns = [
 	path('update_event/<int:event_id>/', update_event, name = 'update_event'),
     path('add_event/', add_event, name = 'add_event'),
 ]
+
+# admin.site.site_heard = "Badger Administration"
+# admin.site.site_title = "YO"
+# admin.site.index_title = "What are you doing here?"

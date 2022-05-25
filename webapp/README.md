@@ -17,5 +17,5 @@ $ pip install -r requirements.txt
 ```
 - Create and populate a `.env` file from the template:
 ```sh
-$ cp .env.template .env
+$ cp template.env .env
 ```
