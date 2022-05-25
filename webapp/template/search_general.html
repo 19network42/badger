@@ -8,12 +8,12 @@
 		<h1>You searched for {{ searched }}</h1>
 		<br/>
 		{% for event in events %}
-			<a href="{% url 'pages:events' %}">{{ event.name}} - {{ event.date }} </a><br/>
+			<a href="{% url 'pages:one_event' event.pk%}">{{ event.name }} - {{ event.date }} </a><br/>
 
 		{% endfor %}
 
-		{% for scan in users %}
-			<a href="{% url 'pages:scan' %}">{{ scan.uid}} - {{ scan.date }} </a><br/>
+		{% for student in students %}
+			<a href="{% url 'badges:one_student' student.pk%}">{{ student.intra_id }} - {{ student.login }} </a><br/>
 
 		{% endfor %}
 		
