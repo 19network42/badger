@@ -17,7 +17,7 @@
 			</tr>
 			{% for student in students %}
 			<tr>
-				<td>{{ student.intra_id }}</td>
+				<td><a class="link_student" href="{% url 'badges:one_student' student.pk %}">{{ student.intra_id }}</a></td>
 				<td>{{ student.login }}</td>
 				<td>{{ student.email }}</td>
 				<td>{{ student.displayname }}</td>
