@@ -57,6 +57,7 @@ void loop() {
 	int len = 0;
 	char id[20];
   String uid;
+  String mode = "default";
   
    uid = readCardUID();
    if (strcmp("ERROR", uid.c_str()) == 0)
@@ -66,7 +67,7 @@ void loop() {
    }
    else
    {
-      createAndSendHTTPRequest(String(uid));
+      createAndSendHTTPRequest(uid, mode);
       if (isResponseFromWebAppOK())
       {
           getDataFromWebApp();
@@ -181,11 +182,11 @@ bool  isResponseFromWebAppOK()
 
 /*
  * Send HTTP POST request to the webApp using a JSON object to send data.
- * @param String uid ; the uid of the card scanned
+ * @param String uid, String mode ; the uid of the card scanned, the actual mode for drinks
  */
-void  createAndSendHTTPRequest(String uid)
+void  createAndSendHTTPRequest(String uid, String mode)
 {
-  String postData = "{\"id\":\"" + uid + "\"}";
+  String postData = "{\"id\":\"" + uid + "\",\"mode\":\"" + mode + "\"}";
   client.print(
     String("POST ") + TARGET_URL + " HTTP/1.1\r\n" +
     "Content-Type: application/json\r\n" +
