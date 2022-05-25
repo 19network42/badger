@@ -8,6 +8,7 @@ import json
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
+from .tasks import update_students
 
 def	students(request, *args, **kwargs):
 	context = {
@@ -36,3 +37,7 @@ def	update_student(request, student_id):
 		return redirect('badges:students')
 	return render(request, "update_student.html", {'student': student, 'form': form})
 
+# Create your views her
+def testing_student(request):
+	update_students()
+	return HttpResponse("tested")
