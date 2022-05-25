@@ -2,7 +2,7 @@
 
 {% block content %}
 <div id="one_event_page">
-	<h1 id="one_event_title">{{one_event.name}}</h1>
+	<h1 id="one_event_title">{{event.name}}</h1>
 	<table class="scan_table">
 		<tr>
 			<th>Login</th>
@@ -14,8 +14,8 @@
 		<tr>
 			<td>{{ scan.uid }}</td>
 			<td>{{ scan.date }}</td>
-			<td>{{ one_event.drinks }}</td>
-			<td align="center"><a href="{% url 'pages:update_event' event.id %}"
+			<td>{{ event.drinks }}</td>
+			<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
 		{% endfor %}

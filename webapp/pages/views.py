@@ -28,17 +28,16 @@ def events_page(request, *args, **kwargs):
 
 	context = {
 		'scans': Scan.objects.all(),
-		'events': Event.objects.all(),
+		'events': Event.objects.all()
 	}
 	return render(request, "events.html", context)
 
 @csrf_exempt
 def	one_event(request, event_id, *args, **kwargs):
-	one_event = Event.objects.get(id=event_id)
-	print(one_event)
+	event = Event.objects.get(pk=event_id)
 	context = {
 		'scans': Scan.objects.all(),
-		'one_event' : one_event,
+		'event' : event
 	}
 	return render(request, "one_event.html", context)
 
@@ -97,7 +96,12 @@ def	update_event(request, event_id):
 	if form.is_valid():
 		form.save()
 		return redirect('pages:events')
-	return render(request, "update_event.html", {'event': event, 'form': form})
+	context = {
+		'scans': Scan.objects.all(),
+		'event': event,
+		'form': form,
+	}
+	return render(request, "update_event.html", context)
 
 def	add_event(request):
 	submitted = False
