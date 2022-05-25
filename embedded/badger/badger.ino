@@ -5,6 +5,8 @@
 #include <Adafruit_PN532.h>
 #include <WiFiNINA.h>
 #include <ArduinoJson.h>
+#include <utility/wifi_drv.h>
+#include <LiquidCrystal.h>
 
 #include "arduino_secrets.h" 
 
@@ -17,6 +19,17 @@ int status = WL_IDLE_STATUS;
 #define PN532_SS   4
 #define PN532_MISO 5
 #define BUZZER A1
+#define RED 25
+#define GREEN 26
+#define BLUE 27
+#define LCD_RS 7
+#define LCD_EN 8
+#define LCD_D4 9
+#define LCD_D5 10
+#define LCD_D6 11
+#define LCD_D7 12
+
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
 Adafruit_PN532 nfc(PN532_SCK, PN532_MISO, PN532_MOSI, PN532_SS);
 
@@ -26,8 +39,10 @@ void setup() {
 	while (!Serial) {
 		; // Wait for serial port to connect. Needed for native USB port only
 	}
-  pinMode(BUZZER, OUTPUT);
-	
+
+  //  Setup pin for hardware use.
+  setupPin();
+  
   //  Identifying nfc reader
   setupNfcReader();
   
@@ -42,45 +57,77 @@ void loop() {
 	int len = 0;
 	char id[20];
   String uid;
-  const char * login;
   
    uid = readCardUID();
    if (strcmp("ERROR", uid.c_str()) == 0)
    {
       Serial.println("ERROR reading card");
+      lcd.print("Error card");
    }
    else
    {
       createAndSendHTTPRequest(String(uid));
       if (isResponseFromWebAppOK())
       {
-          login = getDataFromWebApp();
-          if (login)
-          {
-              Serial.println(login);
-          }
+          getDataFromWebApp();
       }
    }
-
 	  // if the server's disconnected, stop the client:
-	  if (!client.connected()) {
+	  clientIsConnected();
+  delay(3000);
+}
+
+/*
+ * Check if the client is connected.
+ * @error : If the client isn't connected anymore : infinite loop
+ * to restart the arduino and server.
+ */
+void  clientIsConnected(void)
+{
+  if (!client.connected()) {
 		  Serial.println();
 		  Serial.println("Disconnected from server.");
+      lcd.clear();
+      lcd.print("Server connect.");
+      lcd.setCursor(0,1);
+      lcd.print("lost...");
 		  client.stop();
 
 		  // do nothing forevermore:
 		  while (true)
 			;
 	  }
-  delay(3000);
 }
 
+
+/*
+ * Setup pin to use method and hardware.
+ */
+void  setupPin(void)
+{
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2); 
+  //Initialize pins
+  pinMode(BUZZER, OUTPUT);
+	WiFiDrv::pinMode(GREEN, OUTPUT);
+  WiFiDrv::pinMode(RED, OUTPUT);
+  WiFiDrv::pinMode(BLUE, OUTPUT);
+}
+
+/*
+ * Retrieve the JSON object and return the message to print. Turn on the led and make a sound
+ * with the buzzer.
+ * @return const char * : the message to print on the screen.
+ */
 const char * getDataFromWebApp(void)
 {
   //Change the capacity if more or less data are added or deleted
-  int capacity = 16 + 60;
-  
+  int capacity = 128;
+  uint8_t red, green, blue;
+  const char *msg;
+  JsonArray led;
   DynamicJsonDocument doc(capacity);
+  
   DeserializationError error = deserializeJson(doc, client);
   
   if (error)
@@ -89,7 +136,21 @@ const char * getDataFromWebApp(void)
     Serial.println(error.c_str());
     return (NULL);
   }
-  return (doc["login"]);
+  led = doc["led"];
+  red = led[0];
+  green = led[1];
+  blue = led[2];
+  turnOnLed(red,green,blue);
+  bool buzzer = doc["buzzer"];
+  if (buzzer)
+    playSuccessBuzzer();
+  else
+    playFailureBuzzer();
+  delay(200);
+  turnOnLed(0,0,255);
+  msg = doc["msg"];
+  Serial.println(msg);
+  lcd.print(msg);
 }
 
 /*
@@ -102,6 +163,7 @@ bool  isResponseFromWebAppOK()
   char status[32] = {0};
     client.readBytesUntil('\r', status, sizeof(status));
     // It should be "HTTP/1.1 201 CREATED"
+    Serial.println(status);
     if (strcmp(status + 9, "201 Created") != 0) {
       Serial.print(F("Unexpected response: "));
       Serial.println(status);
@@ -144,13 +206,22 @@ void  connectToWebApp(void)
   if (client.connect(IPADDRESS_SERVER, PORT))
   {
     Serial.println("Connected to server");
+    lcd.print("Connect. server");
+    lcd.setCursor(0,1);
+    lcd.print("OK!");
+    
   }
   else
   {
     Serial.println("Failed to connect to the server");
+    lcd.print("Connect. server");
+    lcd.setCursor(0,1);
+    lcd.print("KO!");
     while(1);
   }
-  delay(1000);
+  delay(1500);
+  lcd.clear();
+  turnOnLed(0,0,255);
 }
 
 /*
@@ -161,8 +232,8 @@ void  setupAndConnectWifi(void)
 {
   char ssid[] = SECRET_SSID;
   char pass[] = SECRET_PASS;
-
   String fv = WiFi.firmwareVersion();
+  
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
@@ -173,7 +244,12 @@ void  setupAndConnectWifi(void)
     delay(100);
   }
   Serial.println("Connected to WiFi");
-  playSuccessBuzzer();
+  lcd.print("Wifi connect.");
+  lcd.setCursor(0,1);
+  lcd.print("OK!");
+  delay(1500);
+  lcd.clear();
+//  playSuccessBuzzer();
   printWiFiStatus();
 }
 
@@ -194,6 +270,9 @@ void setupNfcReader(void)
 
   if (!versiondata) {
     Serial.println("Failed to find PN53x board.");
+    lcd.print("NFC Reader");
+    lcd.setCursor(0,1);
+    lcd.print("KO!");
     while(1);
   }
 
@@ -212,6 +291,11 @@ void setupNfcReader(void)
 
   // configure board to read RFID tags
   nfc.SAMConfig();
+  lcd.print("NFC reader");
+  lcd.setCursor(0,1);
+  lcd.print("OK!");
+  delay(1500);
+  lcd.clear();
 }
 
 
@@ -236,16 +320,42 @@ void printWiFiStatus() {
 }
 
 /*
+ * Turn on the builtin led.
+ * @param uint8_t, uint8_t, uint8_t : red color, green color, blue color
+ */
+void  turnOnLed(uint8_t red, uint8_t green, uint8_t blue)
+{
+  WiFiDrv::analogWrite(RED, red);
+  WiFiDrv::analogWrite(GREEN, green);
+  WiFiDrv::analogWrite(BLUE, blue);
+}
+
+/*
  * Play a success sound on the piezzo buzzer
  */
 void  playSuccessBuzzer(void)
 {
-  tone(BUZZER, 100);
+  tone(BUZZER, 987);
   delay(100);
-  tone(BUZZER, 1000);
-  delay(600);
+  tone(BUZZER, 1318);
+  delay(300);
   noTone(BUZZER);
 }
+
+/*
+ * Play a fail sound on the piezzo buzzer.
+ */
+void  playFailureBuzzer(void)
+{
+  tone(BUZZER, 100);
+  delay(200);
+  noTone(BUZZER);
+  delay(100);
+  tone(BUZZER, 100);
+  delay(200);
+  noTone(BUZZER);
+}
+ 
 
 /*
  * Read card and return into a String the UID of it.
@@ -263,6 +373,10 @@ String  readCardUID(void)
   //  Waiting for a card to be scanned
   delay(1000);
   Serial.println("Waiting for an ISO14443A card");
+  lcd.clear();
+  lcd.print("Scan a badge...");
+  lcd.setCursor(0,1);
+  lcd.print("mode = default");
   success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
   if (success) {
     Serial.println("Found a card!");
@@ -273,7 +387,11 @@ String  readCardUID(void)
     sprintf(id + len, "%X", uid[uidLength - 1]);
     Serial.print("UID Value: ");
     Serial.println(id);
+    lcd.clear();
     return (String(id));
   }
+  turnOnLed(255,0,0);
+  delay(200);
+  turnOnLed(0,0,255);
   return ("ERROR");
 }
