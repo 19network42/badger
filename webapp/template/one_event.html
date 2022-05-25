@@ -7,14 +7,12 @@
 		<tr>
 			<th>Login</th>
 			<th>Date</th>
-				<th>{{ event.mode.type }}</th>
 			<th></th>
 		</tr>
 		{% for scan in scans %}
 		<tr>
 			<td>{{ scan.uid }}</td>
 			<td>{{ scan.date }}</td>
-				<td>{{ event.mode.amount }}</td>
 			<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
