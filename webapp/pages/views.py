@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-from .models import Scan, Event
+from .models import Scan, Event, Mode
 from .forms import EventForm
 from accounts.models import User
 import json
@@ -28,7 +28,7 @@ def events_page(request, *args, **kwargs):
 
 	context = {
 		'scans': Scan.objects.all(),
-		'events': Event.objects.all()
+		'events': Event.objects.all(),
 	}
 	return render(request, "events.html", context)
 
