@@ -10,8 +10,6 @@
 
 
 WiFiClient client;
-IPAddress server(10,40,3,104); 
-int port = 8000;
 int status = WL_IDLE_STATUS;
 
 #define PN532_SCK  2
@@ -127,9 +125,10 @@ void  createAndSendHTTPRequest(String uid)
 {
   String postData = "{\"id\":\"" + uid + "\"}";
   client.print(
-    String("POST ") + "/scan/" + " HTTP/1.1\r\n" +
+    String("POST ") + TARGET_URL + " HTTP/1.1\r\n" +
     "Content-Type: application/json\r\n" +
     "Content-Length: " + postData.length() + "\r\n" +
+    "X-Secret: " + TOKEN_POST + "\r\n" +
     "\r\n" +
     postData
     );
@@ -142,7 +141,7 @@ void  createAndSendHTTPRequest(String uid)
 void  connectToWebApp(void)
 {
   Serial.println("\nStarting connection to server...");
-  if (client.connect(server, port))
+  if (client.connect(IPADDRESS_SERVER, PORT))
   {
     Serial.println("Connected to server");
   }
@@ -151,6 +150,7 @@ void  connectToWebApp(void)
     Serial.println("Failed to connect to the server");
     while(1);
   }
+  delay(1000);
 }
 
 /*
@@ -261,6 +261,7 @@ String  readCardUID(void)
   char id[20];
   
   //  Waiting for a card to be scanned
+  delay(1000);
   Serial.println("Waiting for an ISO14443A card");
   success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
   if (success) {
