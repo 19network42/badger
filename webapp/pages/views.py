@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-=======
-from django.shortcuts import redirect, render
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
->>>>>>> 9389e351597d9d72771abb8fe9bc800fd928ca44
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Event
 from .forms import EventForm
@@ -63,7 +58,10 @@ def scan_page(request, *args, **kwargs):
 		d = json.loads(res)
 		scan = Scan(uid = d['id'])
 		scan.save()
-
+		response_data = {}
+		response_data['result'] = True
+		response_data['led'] = True
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
 	context = {
 		'scans': Scan.objects.all()
 	}
