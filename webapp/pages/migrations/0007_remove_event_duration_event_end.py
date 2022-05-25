@@ -6,19 +6,19 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('pages', '0006_delete_participant'),
-    ]
+	dependencies = [
+		('pages', '0006_delete_participant'),
+	]
 
-    operations = [
-        migrations.RemoveField(
-            model_name='event',
-            name='duration',
-        ),
-        migrations.AddField(
-            model_name='event',
-            name='end',
-            field=models.DateTimeField(default=django.utils.timezone.now),
-            preserve_default=False,
-        ),
-    ]
+	operations = [
+		migrations.RemoveField(
+			model_name='event',
+			name='duration',
+		),
+		migrations.AddField(
+			model_name='event',
+			name='end',
+			field=models.DateTimeField(default=django.utils.timezone.now),
+			preserve_default=False,
+		),
+	]

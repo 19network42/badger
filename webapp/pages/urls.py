@@ -7,7 +7,7 @@ from pages.views import (
 							events_page,
 							user_page,
 							one_event,
-							search_general, 
+							search_general,
 							calendar_page,
 							update_event,
 							add_event,
@@ -16,18 +16,14 @@ from pages.views import (
 app_name = 'pages'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home_page, name = 'home'),
-    path('user/', user_page, name = 'user'),
-    path('scan/', scan_page, name = 'scan'),
-    path('events/', events_page, name = 'events'),
-    path('events/<int:event_id>/', one_event, name = 'one_event'),
-    path('search_general/', search_general, name = 'search_general'),
-    path('calendar/', calendar_page, name = 'calendar'),
-    path('update_event/<int:event_id>/', update_event, name = 'update_event'),
-    path('add_event/', add_event, name = 'add_event'),
+	path('admin/', admin.site.urls),
+	path('', home_page, name = 'home'),
+	path('user/', user_page, name = 'user'),
+	path('scan/', scan_page, name = 'scan'),
+	path('events/', events_page, name = 'events'),
+	path('events/<int:event_id>/', one_event, name = 'one_event'),
+	path('search_general/', search_general, name = 'search_general'),
+	path('calendar/', calendar_page, name = 'calendar'),
+	path('update_event/<int:event_id>/', update_event, name = 'update_event'),
+	path('add_event/', add_event, name = 'add_event'),
 ]
-
-# admin.site.site_heard = "Badger Administration"
-# admin.site.site_title = "YO"
-# admin.site.index_title = "What are you doing here?"
