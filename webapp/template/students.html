@@ -1,33 +1,48 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<center>
-	<div id="student_page">
-		<br/><br/><br/>
-		<h1 id="title">Student info</h1>
-		<br/><br/><br/>
-		<table id="table">
-			<tr class="first_part">
-				<th>intra_id</th>
-				<th>login</th>
-				<th>email</th>
-				<th>name</th>
-				<th>staff</th>
-				<th></th>
-			</tr>
-			{% for student in students %}
-			<tr>
-				<td><a class="link_student" href="{% url 'badges:one_student' student.pk %}">{{ student.intra_id }}</a></td>
-				<td>{{ student.login }}</td>
-				<td>{{ student.email }}</td>
-				<td>{{ student.displayname }}</td>
-				<td>{{ student.is_staff }}</td>
-				<td align="center"><a href="{% url 'badges:update_student' student.intra_id %}"
-					class="btn btn-outline-secondary btn-sm">Update</a></td>
-			</tr>
-			{% endfor %}
-		</table>
-		<div class="white_cube"> .</div>
-	</div>
-</center>
+
+<style>
+	body {
+		text-align: center;
+	}
+	table, th, td {
+		border: 1px solid black;
+	}
+	td {
+		width : 18%;
+	}
+	img {
+		width : auto;
+		height : 75px;
+		padding : 3px;
+
+	}
+</style>
+
+<div id="students">
+	<a id="students" href="badges:students">Students</a>	
+</div>
+
+<table styleborder: 1px solid black;>
+	<tr class="first_part">
+		<th>Image</th>
+		<th>Id</th>
+		<th>Login</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Staff</th>
+	</tr>
+{% for student in students %}
+	<tr>
+		<td><img src="{{ student.image_url }}"> </td>
+		<td>{{ student.intra_id }}</td>
+		<td>{{ student.login }}</td>
+		<td>{{ student.displayname }}</td>
+		<td>{{ student.email }}</td>
+		<td>{{ student.is_staff }}</td>
+	</tr>
+{% endfor %}
+</table>
 {% endblock %}

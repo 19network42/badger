@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Scan, Event, Mode, Amount, Type
 from .forms import EventForm
 from badges.models import Student
@@ -21,6 +23,7 @@ def	home_page(request, *args, **kwargs):
 	return render(request, "home.html", context)
 
 @csrf_exempt
+@login_required(login_url='accounts:login')
 def events_page(request, *args, **kwargs):
 	if request.method == 'POST':
 		res = request.body
@@ -34,6 +37,7 @@ def events_page(request, *args, **kwargs):
 	}
 	return render(request, "events.html", context)
 
+@login_required(login_url='accounts:login')
 @csrf_exempt
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(id=event_id)
@@ -43,6 +47,7 @@ def	one_event(request, event_id, *args, **kwargs):
 	}
 	return render(request, "one_event.html", context)
 
+@login_required(login_url='accounts:login')
 @csrf_exempt
 def user_page(request, *args, **kwargs):
 	context = {
@@ -51,6 +56,7 @@ def user_page(request, *args, **kwargs):
 	}
 	return render(request, "user.html", context)
 
+@login_required(login_url='accounts:login')
 @csrf_exempt
 def scan_page(request, *args, **kwargs):
 	#Scan.objects.all().delete()
@@ -68,12 +74,14 @@ def scan_page(request, *args, **kwargs):
 	}
 	return render(request, "scan.html", context)
 
+@login_required(login_url='accounts:login')
 @csrf_exempt
 def	search_general(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
-		students = Student.objects.filter(intra_id__contains=searched)
+		# students = Student.objects.filter(login__contains=searched, displayname__contains=searched)
+		students = Student.objects.filter(Q(login=searched) | Q(displayname__contains=searched))
 		return render(request, 'search_general.html', 
 			{'searched': searched, 'events': events, 'students': students})
 	else:
@@ -92,6 +100,7 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 		"month_number": month_number, "cal": cal, "now": now, 
 		"current_year": current_year, "time": time, "day": day})
 
+@login_required(login_url='accounts:login')
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	form = EventForm(request.POST or None, instance=event)
@@ -105,6 +114,7 @@ def	update_event(request, event_id):
 	}
 	return render(request, "update_event.html", context)
 
+@login_required(login_url='accounts:login')
 def	add_event(request):
 	submitted = False
 	if request.method == "POST":

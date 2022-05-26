@@ -13,7 +13,7 @@
 		{% endfor %}
 
 		{% for student in students %}
-			<a href="{% url 'badges:one_student' student.pk%}">{{ student.intra_id }} - {{ student.login }} </a><br/>
+			<a href="{% url 'badges:one_student' student.pk%}">{{ student.intra_id }}</a> - <a href="https://profile.intra.42.fr/users/{{ student.login }}">{{ student.login }}</a> - {{ student.displayname }}<br/>
 
 		{% endfor %}
 		
