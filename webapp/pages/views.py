@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Event, Mode
-from .forms import EventForm
+from .forms import EventForm, ModelForm
 from badges.models import Student
 from badges.forms import StudentForm
 from accounts.models import User
@@ -36,9 +36,10 @@ def events_page(request, *args, **kwargs):
 @login_required(login_url='accounts:login')
 @csrf_exempt
 def	one_event(request, event_id, *args, **kwargs):
-	event = Event.objects.get(id=event_id)
+	event = Event.objects.get(pk=event_id)
 	context = {
-		'event' : event,
+		'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
+		'event' : event
 	}
 	return render(request, "one_event.html", context)
 
@@ -76,15 +77,30 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 		"current_year": current_year, "time": time, "day": day})
 
 @login_required(login_url='accounts:login')
+def update_mode(request, event_id):
+	event = Event.objects.get(pk=event_id)
+	mode_form = ModeForm()
+
+	if mode_form.is_valid():
+		mode_form.save()
+		return redirect('pages:events/<int:event_id>/')
+	context = {
+		'event': event,
+		'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
+		'mode_form': mode_form
+	}
+	return render(request, "update_mode.html", context)
+
+@login_required(login_url='accounts:login')
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
-	form = EventForm(request.POST or None, instance=event)
-	if form.is_valid():
-		form.save()
+	event_form = EventForm(request.POST or None, instance=event)
+	if event_form.is_valid():
+		event_form.save()
 		return redirect('pages:events')
 	context = {
 		'event': event,
-		'form': form,
+		'event_form': event_form,
 	}
 	return render(request, "update_event.html", context)
 

@@ -4,12 +4,17 @@
 {% block content %}
 	<center>
 	<br/><br/><br/>
-	<h1>Update {{ event.name }}</h1>
+	<h1>Update {{ event.name }} and its mode</h1>
 	<br/>
 	<form action="" method=POST>
 		<br/>
 		{% csrf_token %}
-		{{ event_form.as_p}}
+			Name: {{ event.name }}<br/>
+   			Mode: <br/>
+			   {% for mode in modes %}
+			   {{ mode_form.as_p}}
+			   <br/>
+			   {% endfor %}
 		<input type="submit" value="Update" class="btn btn-success">
 	</form>
 	</center>
