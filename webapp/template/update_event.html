@@ -9,7 +9,8 @@
 	<form action="" method=POST>
 		<br/>
 		{% csrf_token %}
-		{{ form.as_p}}
+		{{ event_form.as_p}}
+		{{ mode_form.as_p}}
 		<input type="submit" value="Update" class="btn btn-success">
 	</form>
 	</center>
