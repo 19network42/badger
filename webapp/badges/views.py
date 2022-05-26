@@ -44,7 +44,12 @@ def	one_student(request, student_id, *args, **kwargs):
 	}
 	return render(request, "one_event.html", context)
 
-# Create your views her
 def testing_student(request):
-	update_students()
-	return HttpResponse("tested")
+    test = update_students()
+    return HttpResponse(str(test))
+
+def list_student(request):
+    context = {
+		'students': Student.objects.all(),
+	}
+    return render(request, "student.html", context)
