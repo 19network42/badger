@@ -38,7 +38,6 @@ def events_page(request, *args, **kwargs):
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(id=event_id)
 	context = {
-		'scans': Scan.objects.all(),
 		'event' : event,
 	}
 	return render(request, "one_event.html", context)

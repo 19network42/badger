@@ -5,32 +5,23 @@
 	<h1 id="one_event_title">{{event.name}}</h1>
 	<table class="scan_table">
 		<tr>
-			<th>Login</th>
+			<th>Name</th>
 			<th>Date</th>
+			<th>End</th>
+			<th>Type</th>
+			<th>Amount</th>
 			<th></th>
 		</tr>
-		{% for scan in scans %}
 		<tr>
-			<td>{{ scan.uid }}</td>
-			<td>{{ scan.date }}</td>
+			<td>{{ event.name }}</td>
+			<td>{{ event.date }}</td>
+			<td>{{ event.end }}</td>
+			<td></td>
+			<td></td>
 			<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
-		{% endfor %}
 	</table>
-	<table class="scan_table">
-		<tr>
-			<th>Mode</th>
-			<th>Amount</th>
-		</tr>
-		{% for mode in event.mode.all %}
-		<tr>
-				<td>{{ mode.type }}</td>
-				<td>{{ mode.amount }}</td>
-			</tr>
-			{% endfor %}
-	</table>
-	<div class="blue_cube"> .</div>
 </div>
 {% endblock %}
 
