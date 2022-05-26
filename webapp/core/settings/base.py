@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'accounts',
     'badges',
     'pages',
+    'api',
 ]
 
 MIDDLEWARE = [
