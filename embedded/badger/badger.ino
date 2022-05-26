@@ -28,6 +28,7 @@ int status = WL_IDLE_STATUS;
 #define LCD_D5 10
 #define LCD_D6 11
 #define LCD_D7 12
+#define BUTTON 0
 
 LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
@@ -51,34 +52,78 @@ void setup() {
 
 	//	Connecting to webapp
 	connectToWebApp();
+  
 }
 
 void loop() {
 	int len = 0;
 	char id[20];
   String uid;
-  String mode = "default";
-
-  clientIsConnected(false);  
-  uid = readCardUID();
+  
+  String modeDisplay = "default";
+  clientIsConnected(false);
+ 
+  uid = readCardUID(modeDisplay);
    if (strcmp("ERROR", uid.c_str()) == 0)
    {
+      lcd.clear();
       Serial.println("ERROR reading card");
       lcd.print("Error card");
    }
    else
    {
-      createAndSendHTTPRequest(uid, mode);
+      createAndSendHTTPRequestUser(uid, modeDisplay);
       if (isResponseFromWebAppOK())
       {
-          getDataFromWebApp();
+          getDataFromWebAppUser();
       }
    }
+   //If there isn't wifi connection try to reconnect.
+   isConnectedToWifi();
+   
 	  // if the server's disconnected, try to reconnect
 	 clientIsConnected(true);
-  delay(3000);
-}
+   delay(3000);
+  }
 
+
+/*
+ * Check if there is a wifi connection anymore.
+ * If it's not the case try to reconnect to the wifi every 5 seconds.
+ */
+ void isConnectedToWifi(void)
+ {
+  char ssid[] = SECRET_SSID;
+  char pass[] = SECRET_PASS;
+
+  //If everything good do nothing.
+  if (WiFi.status() == WL_CONNECTED) return;
+
+  lcd.clear();
+  lcd.print("Wifi connect.");
+  lcd.setCursor(0,1);
+  lcd.print("lost...");
+  delay(2000);
+  Serial.print("Attempting to connect to SSID: ");
+  Serial.println(ssid);
+  lcd.clear();
+  lcd.print("Reconnect. to");
+  lcd.setCursor(0,1);
+  lcd.print("wifi");
+  while (WiFi.status() != WL_CONNECTED) {
+    status = WiFi.begin(ssid, pass);
+    delay(5000);
+  }
+  Serial.println("Connected to WiFi");
+  lcd.clear();
+  lcd.print("Wifi connect.");
+  lcd.setCursor(0,1);
+  lcd.print("OK!");
+  delay(1500);
+  lcd.clear();
+  printWiFiStatus();
+ }
+ 
 /*
  * Check if the client is connected.
  * @error : If the client isn't connected anymore : Try to
@@ -125,6 +170,7 @@ void  setupPin(void)
   lcd.begin(16, 2); 
   //Initialize pins
   pinMode(BUZZER, OUTPUT);
+  pinMode(BUTTON, INPUT);
 	WiFiDrv::pinMode(GREEN, OUTPUT);
   WiFiDrv::pinMode(RED, OUTPUT);
   WiFiDrv::pinMode(BLUE, OUTPUT);
@@ -133,9 +179,8 @@ void  setupPin(void)
 /*
  * Retrieve the JSON object and return the message to print. Turn on the led and make a sound
  * with the buzzer.
- * @return const char * : the message to print on the screen.
  */
-const char * getDataFromWebApp(void)
+void getDataFromWebAppUser(void)
 {
   //Change the capacity if more or less data are added or deleted
   int capacity = 128;
@@ -150,7 +195,6 @@ const char * getDataFromWebApp(void)
   {
     Serial.print("deserializeJson() failed: ");
     Serial.println(error.c_str());
-    return (NULL);
   }
   led = doc["led"];
   red = led[0];
@@ -199,11 +243,11 @@ bool  isResponseFromWebAppOK()
  * Send HTTP POST request to the webApp using a JSON object to send data.
  * @param String uid, String mode ; the uid of the card scanned, the actual mode for drinks
  */
-void  createAndSendHTTPRequest(String uid, String mode)
+void  createAndSendHTTPRequestUser(String uid, String mode)
 {
   String postData = "{\"id\":\"" + uid + "\",\"mode\":\"" + mode + "\"}";
   client.print(
-    String("POST ") + TARGET_URL + " HTTP/1.1\r\n" +
+    String("POST ") + SCAN_URL + " HTTP/1.1\r\n" +
     "Content-Type: application/json\r\n" +
     "Content-Length: " + postData.length() + "\r\n" +
     "X-Secret: " + TOKEN_POST + "\r\n" +
@@ -243,7 +287,7 @@ void  connectToWebApp()
 
 /*
  * Setup and connect To the wifi which is define in arduinoSecret.h
- * It will die and try until the connection is established.
+ * It will try every 5 seconds until the connection is established.
  */
 void  setupAndConnectWifi(void)
 {
@@ -258,7 +302,7 @@ void  setupAndConnectWifi(void)
   Serial.println(ssid);
   while (status != WL_CONNECTED) {
     status = WiFi.begin(ssid, pass);
-    delay(100);
+    delay(5000);
   }
   Serial.println("Connected to WiFi");
   lcd.print("Wifi connect.");
@@ -381,7 +425,7 @@ void  playFailureBuzzer(void)
  * @return : String corresponding to the UID of the card
  * @error : Return "ERROR" if something went wrong with the NFC Reader (PN532)
  */
-String  readCardUID(void)
+String  readCardUID(String mode)
 {
   boolean success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
@@ -395,7 +439,7 @@ String  readCardUID(void)
   lcd.clear();
   lcd.print("Scan a badge...");
   lcd.setCursor(0,1);
-  lcd.print("mode = default");
+  lcd.print("mode = " + mode);
   success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
   if (success) {
     Serial.println("Found a card!");
