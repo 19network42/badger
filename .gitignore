@@ -1,6 +1,7 @@
 # general
 *.swp
 venv/
+.venv/
 .vscode/
 .DS_Store
 __pycache__/
