@@ -1,3 +1,4 @@
+from email.mime import image
 import logging
 from time import sleep
 from authlib.integrations.requests_client import OAuth2Session
@@ -15,6 +16,7 @@ client = OAuth2Session(
 	token_endpoint='https://api.intra.42.fr/oauth/token',
 	scope='public'
 )
+
 
 @app.task
 def update_users():
@@ -47,13 +49,33 @@ def update_users():
 			logger.warning(
 				'User {} could not be queried from the API'.format(user.user_id))
 
+
 @app.task
 def update_students():
 	try:
 		client.fetch_token()
 	except:
 		logger.critical('Could not authenticate to the API')
+	page = 0
+	student_list = []
+	while True:
+		req = client.get(
+			f'https://api.intra.42.fr/v2/campus/12/users?page[size]=100&page[number]={page}')
+		if len(req.json()):
+			student_list += req.json()
+			page += 1
+			sleep(1)
+		else:
+			break
+	for i in student_list:
+		if not i['image_url']:
+			i['image_url'] = "https://cdn.intra.42.fr/users/default.jpg"
+		obj, created = Student.objects.update_or_create(intra_id = i['id'],
+														login = i['login'],
+														email = i['email'],
+														displayname = i['displayname'],
+														image_url = i['image_url'],
+														is_staff = i['staff?'],
+														)
 
-	req = client.get('https://api.intra.42.fr/v2/campus/12/users?page[size]=100')
-	print(req.json())
-	return
+	return student_list
