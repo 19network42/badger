@@ -45,11 +45,11 @@ def	one_student(request, student_id, *args, **kwargs):
 	return render(request, "one_event.html", context)
 
 def testing_student(request):
-    test = update_students()
-    return HttpResponse(str(test))
+	test = update_students()
+	return HttpResponse(str(test))
 
 def list_student(request):
-    context = {
+	context = {
 		'students': Student.objects.all(),
 	}
-    return render(request, "student.html", context)
+	return render(request, "student.html", context)
