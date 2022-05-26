@@ -90,7 +90,7 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 	day = now.strftime('%j')
 	return render(request, 'calendar.html', {"year": year, "month": month,
 		"month_number": month_number, "cal": cal, "now": now, 
-		"current_year": current_year, "time": time,})
+		"current_year": current_year, "time": time, "day": day})
 
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
