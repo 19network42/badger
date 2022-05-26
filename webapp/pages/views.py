@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Scan, Event, Mode
+from .models import Event, Mode
 from .forms import EventForm
 from badges.models import Student
 from badges.forms import StudentForm
@@ -17,8 +17,7 @@ from datetime import datetime
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
 	context = {
-		'scans': Scan.objects.all(),
-		'current_event': [ev for ev in Event.objects.all() if ev.is_current()]
+		'events' : [ev for ev in Event.objects.all() if ev.is_current()]
 	}
 	return render(request, "home.html", context)
 
@@ -28,11 +27,8 @@ def events_page(request, *args, **kwargs):
 	if request.method == 'POST':
 		res = request.body
 		d = json.loads(res)
-		participant = Participant(participant = d['id'])
-		participant.save()
 
 	context = {
-		'scans': Scan.objects.all(),
 		'events': Event.objects.all(),
 	}
 	return render(request, "events.html", context)
@@ -51,28 +47,9 @@ def	one_event(request, event_id, *args, **kwargs):
 @csrf_exempt
 def user_page(request, *args, **kwargs):
 	context = {
-		'scans': Scan.objects.all(),
 		'users': User.objects.all(),
 	}
 	return render(request, "user.html", context)
-
-@login_required(login_url='accounts:login')
-@csrf_exempt
-def scan_page(request, *args, **kwargs):
-	#Scan.objects.all().delete()
-	if request.method == 'POST':
-		res = request.body
-		d = json.loads(res)
-		scan = Scan(uid = d['id'])
-		scan.save()
-		response_data = {}
-		response_data['result'] = True
-		response_data['led'] = True
-		return HttpResponse(json.dumps(response_data), content_type="application/json")
-	context = {
-		'scans': Scan.objects.all()
-	}
-	return render(request, "scan.html", context)
 
 @login_required(login_url='accounts:login')
 @csrf_exempt
