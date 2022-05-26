@@ -21,6 +21,19 @@
 			<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
+		{% endfor %}
+	</table>
+	<table class="scan_table">
+		<tr>
+			<th>Mode</th>
+			<th>Amount</th>
+		</tr>
+		{% for mode in modes %}
+		<tr>
+			<td>{{ mode.type }}</td>
+			<td>{{ mode.amount }}</td>
+		</tr>
+		{% endfor %}
 	</table>
 </div>
 {% endblock %}
