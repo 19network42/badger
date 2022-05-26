@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Scan, Event, Mode, Amount, Type
-from .forms import EventForm, ModeForm
+from .models import Scan, Event, Mode
+from .forms import EventForm
 from badges.models import Student
 from badges.forms import StudentForm
 from accounts.models import User
@@ -80,7 +80,6 @@ def	search_general(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
-		# students = Student.objects.filter(login__contains=searched, displayname__contains=searched)
 		students = Student.objects.filter(Q(login=searched) | Q(displayname__contains=searched))
 		return render(request, 'search_general.html', 
 			{'searched': searched, 'events': events, 'students': students})
@@ -103,16 +102,13 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 @login_required(login_url='accounts:login')
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
-	event_form = EventForm(request.POST or None, instance=event)
-	mode_form = ModeForm(request.POST or None, instance=event)
-	if event_form.is_valid() and mode_form.is_valid():
-		event_form.save()
-		mode_form.save()
+	form = EventForm(request.POST or None, instance=event)
+	if form.is_valid():
+		form.save()
 		return redirect('pages:events')
 	context = {
 		'event': event,
-		'event_form': event_form,
-		'mode_form': mode_form,
+		'form': form,
 	}
 	return render(request, "update_event.html", context)
 
