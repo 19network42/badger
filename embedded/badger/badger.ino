@@ -74,7 +74,7 @@ void loop() {
           getDataFromWebApp();
       }
    }
-	  // if the server's disconnected, stop the client:
+	  // if the server's disconnected, try to reconnect
 	 clientIsConnected(true);
   delay(3000);
 }
@@ -87,20 +87,22 @@ void loop() {
  */
 void  clientIsConnected(bool reconnection)
 {
-  lcd.clear();
   if (reconnection && !client.connected()) {
 		  Serial.println();
 		  Serial.println("Disconnected from server.");
+      lcd.clear();
       lcd.print("Server connect.");
       lcd.setCursor(0,1);
       lcd.print("lost...");
+      delay(1000);
 		  client.stop();
 	 }
-   lcd.print("Retry connect.");
-    lcd.setCursor(0,1);
-    lcd.print("to server...");
    while (!client.connected())
    {
+      lcd.clear();
+      lcd.print("Retry connect.");
+      lcd.setCursor(0,1);
+      lcd.print("to server...");
       connectToWebApp();
       if (!client.connected())
       {
@@ -283,12 +285,14 @@ void setupNfcReader(void)
     versiondata = nfc.getFirmwareVersion();
   }
 
-  if (!versiondata) {
+  while (!versiondata) {
     Serial.println("Failed to find PN53x board.");
     lcd.print("NFC Reader");
     lcd.setCursor(0,1);
     lcd.print("KO!");
+//    delay(1000);
     while(1);
+//    lcd.clear();
   }
 
   //Print data of chip PN5
