@@ -34,8 +34,7 @@ def scan_page(request, *args, **kwargs):
 	if request.method == 'POST':
 		res = request.body
 		d = json.loads(res)
-		scan = Scan(uid = d['id'])
-		scan = Scan(type = d['mode'])
+		scan = Scan(uid = d['id'], type = d['mode'])
 		scan.save()
 		response_data = {}
 		response_data['msg'] = "Prout test !"
@@ -47,7 +46,7 @@ def scan_page(request, *args, **kwargs):
 		modes = [mo for mo in Mode.objects.all() if mo.event.id == event.id]
 		current_mode = [mo for mo in modes if mo.type == scan.type][0]
 		scans = [sca for sca in Scan.objects.all() if sca.type == scan.type and sca.uid == scan.uid and event.date < sca.date < event.end]
-		if len(scans) < current_mode.amount:
+		if len(scans) <= current_mode.amount:
 			print ('gg !!!!!!')
 		else :
 			print ('prout')

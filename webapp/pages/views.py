@@ -48,7 +48,7 @@ def events_page(request, *args, **kwargs):
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(pk=event_id)
 	context = {
-		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end ],
+		'scans' : [sca for sca in Scan.objects.all() if event.date < sca.date < event.end ],
 		'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
 		'event' : event
 	}
