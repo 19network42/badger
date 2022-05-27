@@ -1,30 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+	body {
+		text-align: center;
+	}
+	table, th, td {
+		border: 1px solid black;
+	}
+	td {
+		width : 18%;
+	}
+	img {
+		width : auto;
+		height : 75px;
+		padding : 3px;
+
+	}
+</style>
+
 <div id="one_student_page">
 	<h1 id="one_student_title">{{one_event.name}}</h1>
 	<table class="scan_table">
 		<tr>
+			<th>Image</th>
 			<th>Id</th>
 			<th>Login</th>
-			<th>Email</th>
 			<th>Name</th>
+			<th>Email</th>
 			<th>Staff</th>
 			<th></th>
 		</tr>
-		{% for student in students %}
 		<tr>
+			<td><img src="{{ student.image_url }}"> </td>
 			<td>{{ student.intra_id }}</td>
 			<td>{{ student.login }}</td>
+			<td>{{ student.displayname }}</td>
 			<td>{{ student.email }}</td>
-			<td>{{ student.name }}</td>
 			<td>{{ student.is_staff }}</td>
 			<td align="center"><a href="{% url 'badges:update_student' student.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
-		{% endfor %}
 	</table>
-	<div class="blue_cube"> .</div>
 </div>
 {% endblock %}
 

@@ -2,14 +2,15 @@
 {% load static %}
 
 {% block content %}
+
 <center>
 	<div id="home_event">
 		<a id="events" href="events/">EVENTS</a>	
 	</div>
+	{% for event in events %}
+	{% endfor %}
 	<div id="home_user">
 		<a :link id="user" href="students/">STUDENT INFOS</a>	
 	</div>
 </center>
-<!-- <h2><a :link href="drinks/">DRINKS</a></h2>
-	{% include 'scan.html' %} -->
 {% endblock %}
