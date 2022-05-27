@@ -47,7 +47,7 @@ def	one_student(request, student_id, *args, **kwargs):
 @login_required(login_url='accounts:login')
 def testing_student(request):
 	update_students()
-	return HttpResponse("tested")
+	return HttpResponse(str(update_students()))
 from badges.models import Student
 
 @login_required(login_url='accounts:login')

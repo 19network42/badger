@@ -5,9 +5,15 @@ from badges.models import Badge, StudentBadge
 class Scan(models.Model):
 	uid = models.CharField(max_length=15)
 	date = models.DateTimeField(default=timezone.now)
-	type = models.CharField(max_length=15)
+	mode = models.CharField(max_length=15)
 
-	def find_badge():
-		pass
+
+	def find_badge(self):
+		badges = [badge for badge in StudentBadge.objects.all()]
+		for badge in badges:
+			if badge.badge.serial == int(self.uid):
+				return badge
+		return None
+
 	def __str__(self):
 		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
