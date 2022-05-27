@@ -2,13 +2,18 @@
 
 {% block content %}
 <center>
-	<div id="event_page">
-		<h1 id="title">EVENTS</h1>
+{% if submitted %}
+<div id="event_page">
+	<h1 id="title">EVENTS</h1>
+	<br/><br/><br/>
+	The event was added!
+	<br/><br/><br/>
 		<table id="table">
 			<tr class="first_part">
 				<th>Name</th>
 				<th>Date</th>
 				<th>End</th>
+				<th></th>
 				<th></th>
 			</tr>
 			{% for event in events %}
@@ -19,10 +24,39 @@
 					<td>{{ event.end }}</td>
 					<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
 						class="btn btn-outline-secondary btn-sm">Update</a></td>
+					<td align="center"><a href="{% url 'pages:delete_event' event.pk %}"
+						class="btn btn-outline-danger btn-sm">Delete</a></td>
 					</tr>
 			{% endfor %}
 		</table>
 		<div class="white_cube"> .</div>
 	</div>
+{% else %}
+	<div id="event_page">
+		<h1 id="title">EVENTS</h1>
+		<table id="table">
+			<tr class="first_part">
+				<th>Name</th>
+				<th>Date</th>
+				<th>End</th>
+				<th></th>
+				<th></th>
+			</tr>
+			{% for event in events %}
+			<tr>
+				<td><a class="link_event" href="{% url 'pages:one_event' event.pk %}">
+					{{ event.name }}</a></td>
+					<td>{{ event.date }}</td>
+					<td>{{ event.end }}</td>
+					<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
+						class="btn btn-outline-secondary btn-sm">Update</a></td>
+					<td align="center"><a href="{% url 'pages:delete_event' event.pk %}"
+						class="btn btn-outline-danger btn-sm">Delete</a></td>
+					</tr>
+			{% endfor %}
+		</table>
+		<div class="white_cube"> .</div>
+	</div>
+{% endif %}
 </center>
 {% endblock %}
