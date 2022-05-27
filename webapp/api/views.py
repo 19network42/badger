@@ -1,4 +1,5 @@
 from asyncio import events
+import re
 from django.shortcuts import render
 from django.http import HttpResponse
 from pages.models import Event, get_current_event
@@ -26,8 +27,6 @@ Sends the data back to the arduino under json format.
 # 		response_data.append(mode)
 # 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-
-@login_required(login_url='accounts:login')
 @csrf_exempt
 def scan_page(request, *args, **kwargs):
 	#Scan.objects.all().delete()
@@ -35,11 +34,16 @@ def scan_page(request, *args, **kwargs):
 		res = request.body
 		d = json.loads(res)
 		scan = Scan(uid = d['id'])
+		scan.type = d['mode']
 		scan.save()
+
+		badge = scan.find_badge()
 		response_data = {}
-		response_data['result'] = True
-		response_data['led'] = True
-		return HttpResponse(json.dumps(response_data), content_type="application/json")
+		response_data['msg'] = f"Scanned {badge.student}'s badge"
+		response_data['led'] = [48,194,123]
+		response_data['mode'] = "Default"
+
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	context = {
 		'scans': Scan.objects.all()
 	}
