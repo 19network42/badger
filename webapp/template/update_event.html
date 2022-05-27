@@ -9,8 +9,28 @@
 	<form action="" method=POST>
 		<br/>
 		{% csrf_token %}
+
 		{{ event_form.as_p}}
-		<input type="submit" value="Update" class="btn btn-success">
+
+		{{ mode_form.as_p}}
+
+		<button name="action" value="add">Add</button>
+
+		<br/><br/>Modes: <br/>
+
+		{% for mode in modes %}
+			{% csrf_token %}
+			Type : {{ mode.type }},
+			Amount : {{ mode.amount }} 
+			<button name="delete" value={{mode.pk}}>delete</button>
+		<br/>
+		{% endfor %}
+
+		{% if error == "Already exist" %}
+			The type already exist!
+			<br/>
+		{% endif %}
+		<button name="action" value="submit">Submit</button>
 	</form>
 	</center>
 {% endblock %}

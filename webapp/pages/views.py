@@ -109,16 +109,40 @@ def update_mode(request, event_id):
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	event_form = EventForm(request.POST or None, instance=event)
-	if event_form.is_valid():
-		event_form.save()
-		return redirect('pages:events')
+	mode_form = ModeForm(request.POST or None)
+	error = ""
+	mode_form.instance.event = event
+
+	if request.method == "POST":		
+		action = request.POST.get("action")
+		delete = request.POST.get("delete")
+
+		if action == "add":
+			mode_form.save()
+			if mode_form.instance.type in [mo.type for mo in Mode.objects.filter(event=event) if mo != mode_form.instance]:
+				error = "Already exist"
+				mode_form.instance.delete()
+		if action == "submit":
+			event_form.save()
+			return redirect('pages:events')
+
+		if delete:
+			Mode.objects.filter(id=delete).delete()
+
 	context = {
-		'event': event,
-		'event_form': event_form,
+	'event': event,
+	'event_form': event_form,
+	'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
+	'mode_form': mode_form,
+	'error': error,
 	}
+
 	return render(request, "update_event.html", context)
 
 @login_required(login_url='accounts:login')
+def delete_mode(request, mode_id):
+	Mode.objects.filter(id=mode_id).delete()
+
 def	add_event(request):
 	submitted = False
 	if request.method == "POST":

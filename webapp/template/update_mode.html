@@ -10,11 +10,11 @@
 		<br/>
 		{% csrf_token %}
 			Name: {{ event.name }}<br/>
-   			Mode: <br/>
-			   {% for mode in modes %}
-			   {{ mode_form.as_p}}
-			   <br/>
-			   {% endfor %}
+				Mode: <br/>
+				{% for mode in modes %}
+				{{ mode_form.as_p}}
+				<br/>
+				{% endfor %}
 		<input type="submit" value="Update" class="btn btn-success">
 	</form>
 	</center>
