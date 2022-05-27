@@ -13,7 +13,7 @@ import json
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
-
+from api.models import Scan
 
 
 @csrf_exempt
@@ -40,6 +40,7 @@ def events_page(request, *args, **kwargs):
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(pk=event_id)
 	context = {
+		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end ],
 		'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
 		'event' : event
 	}
@@ -65,6 +66,14 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 	return render(request, 'calendar.html', {"year": year, "month": month,
 		"month_number": month_number, "cal": cal, "now": now, 
 		"current_year": current_year, "time": time, "day": day})
+
+# def conso_page(request, event_id):
+# 	event = Event.objects.get(pk=event_id)
+# 	conso = [co for co in Mode.objects.all() if co.event.id == event_id],
+# 	context = {
+# 		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end],
+# 		'event' : event
+# 	}
 
 #-----------------------------------#
 #			SEARCH					#
