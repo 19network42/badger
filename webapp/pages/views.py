@@ -1,20 +1,28 @@
 from django.shortcuts import render
+from django.db import models
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Event, Mode
-from .forms import EventForm, ModelForm
+from .forms import EventForm, ModeForm
 from badges.models import Student
 from badges.forms import StudentForm
 from accounts.models import User
 import json
 import calendar
+import time
 from calendar import HTMLCalendar
 from datetime import datetime
 from api.models import Scan
 
+
+#-----------------------------------#
+#									#
+#				PAGES				#
+#									#
+#-----------------------------------#
 
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
@@ -128,9 +136,18 @@ def	add_event(request):
 		form = EventForm(request.POST)
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect('/add_event?submitted=True')
+			return HttpResponseRedirect('/events?submitted=True')
+			# return HttpResponseRedirect('/add_event?submitted=True')
 	else:
 		form = EventForm()
 		if 'submitted' in request.GET:
 			submitted = True
 	return render(request, "add_event.html", {'form': form, 'submitted': submitted})
+
+@login_required(login_url='accounts:login')
+def	delete_event(request, event_id):
+	event = Event.objects.get(pk=event_id)
+	if request.method == "POST":
+		event.delete()
+		return redirect('pages:events')
+	return render(request, 'delete_event.html', {'event': event})
