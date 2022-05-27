@@ -136,5 +136,7 @@ def	add_event(request):
 @login_required(login_url='accounts:login')
 def	delete_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
-	event.delete()
-	return redirect('pages:events')
+	if request.method == "POST":
+		event.delete()
+		return redirect('pages:events')
+	return render(request, 'delete_event.html', {'event': event})
