@@ -12,6 +12,12 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 
+#-----------------------------------#
+#									#
+#				PAGES				#
+#									#
+#-----------------------------------#
+
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
 	context = {
@@ -69,17 +75,6 @@ def scan_page(request, *args, **kwargs):
 	}
 	return render(request, "scan.html", context)
 
-@csrf_exempt
-def	search_general(request):
-	if request.method == "POST":
-		searched = request.POST['searched']
-		events = Event.objects.filter(name__contains=searched)
-		students = Student.objects.filter(intra_id__contains=searched)
-		return render(request, 'search_general.html', 
-			{'searched': searched, 'events': events, 'students': students})
-	else:
-		return render(request, 'search_general.html', {})
-
 def	calendar_page(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
 	month = month.capitalize()
 	month_number = list(calendar.month_name).index(month)
@@ -92,6 +87,23 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 	return render(request, 'calendar.html', {"year": year, "month": month,
 		"month_number": month_number, "cal": cal, "now": now, 
 		"current_year": current_year, "time": time, "day": day})
+
+#-----------------------------------#
+#			SEARCH					#
+#				UPDATE				#
+#					ADD	EVENT		#
+#-----------------------------------#
+
+@csrf_exempt
+def	search_general(request):
+	if request.method == "POST":
+		searched = request.POST['searched']
+		events = Event.objects.filter(name__contains=searched)
+		students = Student.objects.filter(intra_id__contains=searched)
+		return render(request, 'search_general.html', 
+			{'searched': searched, 'events': events, 'students': students})
+	else:
+		return render(request, 'search_general.html', {})
 
 def update_mode(request, event_id):
 	event = Event.objects.get(pk=event_id)
