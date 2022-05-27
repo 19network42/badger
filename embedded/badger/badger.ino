@@ -13,7 +13,9 @@
 
 WiFiClient client;
 int status = WL_IDLE_STATUS;
-
+const int maxMode = 3;
+String modes[maxMode] = {"default", "alcohol", "soft"};
+int currentMode = 0;
 #define PN532_SCK  2
 #define PN532_MOSI 3
 #define PN532_SS   4
@@ -52,6 +54,7 @@ void setup() {
 
 	//	Connecting to webapp
 	connectToWebApp();
+
   
 }
 
@@ -59,34 +62,70 @@ void loop() {
 	int len = 0;
 	char id[20];
   String uid;
+ 
   
   String modeDisplay = "default";
   clientIsConnected(false);
- 
-  uid = readCardUID(modeDisplay);
-   if (strcmp("ERROR", uid.c_str()) == 0)
-   {
-      lcd.clear();
-      Serial.println("ERROR reading card");
-      lcd.print("Error card");
-   }
-   else
-   {
+
+    uid = readCardUID(modes, currentMode);
+    if (strcmp("ERROR", uid.c_str()) == 0)
+    {
+//      lcd.clear();
+//      Serial.println("ERROR reading card");
+//      lcd.print("Error card");
+    }
+    else
+    {
       createAndSendHTTPRequestUser(uid, modeDisplay);
       if (isResponseFromWebAppOK())
       {
           getDataFromWebAppUser();
       }
-   }
+    }
+
+    onMode();
    //If there isn't wifi connection try to reconnect.
    isConnectedToWifi();
    
 	  // if the server's disconnected, try to reconnect
 	 clientIsConnected(true);
-   delay(3000);
+//   delay(2000);
+ }
+
+/*
+ * Change the mode when the button is remaining pushed.
+ */
+void onMode()
+{
+  int buttonState = digitalRead(BUTTON);
+  if (buttonState == LOW)
+  {
+    lcd.clear();
+    if (currentMode == maxMode - 1)
+      currentMode = 0;
+     else
+      currentMode++;
+     delay(200);
+     lcd.clear();
+     lcd.print("mode :");
+     lcd.setCursor(0,1);
+     lcd.print(modes[currentMode]);
   }
-
-
+}
+/*
+ * Change the current mode.
+ * @param : int, int : cuurentMode the current mode, nbrMode the nbr max of mode
+ * @return int : the current mode changed.
+ */
+ int changeMode(int currentMode, int nbrMode)
+ {
+    if (currentMode == nbrMode - 1)
+      currentMode = 0;
+    else
+      currentMode++;
+     
+     return (currentMode);
+ }
 /*
  * Check if there is a wifi connection anymore.
  * If it's not the case try to reconnect to the wifi every 5 seconds.
@@ -183,7 +222,7 @@ void  setupPin(void)
 void getDataFromWebAppUser(void)
 {
   //Change the capacity if more or less data are added or deleted
-  int capacity = 128;
+  int capacity = 256;
   uint8_t red, green, blue;
   const char *msg;
   JsonArray led;
@@ -207,10 +246,13 @@ void getDataFromWebAppUser(void)
   else
     playFailureBuzzer();
   delay(200);
+  turnOnLed(red,green,blue);
+  delay(300);
   turnOnLed(0,0,255);
   msg = doc["msg"];
   Serial.println(msg);
   lcd.print(msg);
+  delay(1000);
 }
 
 /*
@@ -220,7 +262,7 @@ void getDataFromWebAppUser(void)
  */
 bool  isResponseFromWebAppOK()
 {
-  char status[32] = {0};
+    char status[64] = {0};
     client.readBytesUntil('\r', status, sizeof(status));
     // It should be "HTTP/1.1 201 CREATED"
     Serial.println(status);
@@ -302,7 +344,7 @@ void  setupAndConnectWifi(void)
   Serial.println(ssid);
   while (status != WL_CONNECTED) {
     status = WiFi.begin(ssid, pass);
-    delay(5000);
+    delay(100);
   }
   Serial.println("Connected to WiFi");
   lcd.print("Wifi connect.");
@@ -354,6 +396,7 @@ void setupNfcReader(void)
 
   // configure board to read RFID tags
   nfc.SAMConfig();
+  attachInterrupt(0, onMode, RISING);
   lcd.print("NFC reader");
   lcd.setCursor(0,1);
   lcd.print("OK!");
@@ -425,7 +468,7 @@ void  playFailureBuzzer(void)
  * @return : String corresponding to the UID of the card
  * @error : Return "ERROR" if something went wrong with the NFC Reader (PN532)
  */
-String  readCardUID(String mode)
+String  readCardUID(String modes[], int currentMode)
 {
   boolean success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
@@ -434,13 +477,13 @@ String  readCardUID(String mode)
   char id[20];
   
   //  Waiting for a card to be scanned
-  delay(1000);
   Serial.println("Waiting for an ISO14443A card");
   lcd.clear();
   lcd.print("Scan a badge...");
   lcd.setCursor(0,1);
-  lcd.print("mode = " + mode);
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
+  lcd.print("mode = " + modes[currentMode]);
+//  delay(1000);
+  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, 1000);
   if (success) {
     Serial.println("Found a card!");
     for (uint8_t i=0; i < uidLength - 1; i++) 
@@ -453,7 +496,7 @@ String  readCardUID(String mode)
     lcd.clear();
     return (String(id));
   }
-  turnOnLed(255,0,0);
+  turnOnLed(0,0,0);
   delay(200);
   turnOnLed(0,0,255);
   return ("ERROR");
