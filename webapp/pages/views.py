@@ -91,21 +91,6 @@ def	search_general(request):
 		return render(request, 'search_general.html', {})
 
 @login_required(login_url='accounts:login')
-def update_mode(request, event_id):
-	event = Event.objects.get(pk=event_id)
-	mode_form = ModeForm()
-
-	if mode_form.is_valid():
-		mode_form.save()
-		return redirect('pages:events/<int:event_id>/')
-	context = {
-		'event': event,
-		'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
-		'mode_form': mode_form
-	}
-	return render(request, "update_mode.html", context)
-
-@login_required(login_url='accounts:login')
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	event_form = EventForm(request.POST or None, instance=event)
