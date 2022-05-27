@@ -5,7 +5,7 @@ from badges.models import Badge, StudentBadge
 class Scan(models.Model):
 	uid = models.CharField(max_length=15)
 	date = models.DateTimeField(default=timezone.now)
-
+	type = models.CharField(max_length=15)
 
 	def find_badge():
 		pass
