@@ -8,6 +8,13 @@ Communication protocol between the embedded reader and the web application.
 ## Support
 Communication will be done through HTTP**S** `POST` requests from the reader to the webapp.
 
+## Launch
+
+### Launch description
+The microcontroller verify the connection with the reader, connects to the wifi and the webapp's server.
+When connected, it sends a first request to get the different mode depending on the current event
+(Exemples; mode 1 : Presence, mode 2 : Drinks, ...).
+
 ## Request
 
 ### Authentication
@@ -23,6 +30,10 @@ The request will send the following JSON values:
 
 Epoch time of the request, in seconds.
 
+- `mode`: int
+
+Current Arduino's mode, matching the Webapp modes requested at launch.
+
 ### Example
 
 ```
@@ -33,6 +44,7 @@ Content-Type: application/json
 
 {
     "uid": "ED:40:9A:F8",
+    "mode": "1",
     "timestamp": 1653032868233
 }
 ```

@@ -6,12 +6,12 @@ from .models import User
 oauth = OAuth()
 
 oauth.register(
-    name='api42',
-    client_id=settings.API42_UID,
-    client_secret=settings.API42_SECRET,
-    access_token_url='https://api.intra.42.fr/oauth/token',
-    authorize_url='https://api.intra.42.fr/oauth/authorize',
-    api_base_url='https://api.intra.42.fr',
+	name='api42',
+	client_id=settings.API42_UID,
+	client_secret=settings.API42_SECRET,
+	access_token_url='https://api.intra.42.fr/oauth/token',
+	authorize_url='https://api.intra.42.fr/oauth/authorize',
+	api_base_url='https://api.intra.42.fr',
 )
 
 

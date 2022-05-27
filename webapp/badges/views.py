@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from .models import Student, Badge, StudentBadge
 from .forms import StudentForm
+from accounts import urls
 from accounts.models import User
 import json
 import calendar
@@ -10,12 +12,7 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from .tasks import update_students
 
-def	students(request, *args, **kwargs):
-	context = {
-		'students': Student.objects.all(),
-	}
-	return render(request, "students.html", context)
-
+@login_required(login_url='accounts:login')
 def	add_student(request):
 	submitted = False
 	if request.method == "POST":
@@ -29,6 +26,7 @@ def	add_student(request):
 			submitted = True
 	return render(request, "add_student.html", {'form': form, 'submitted': submitted})
 
+@login_required(login_url='accounts:login')
 def	update_student(request, student_id):
 	student = Student.objects.get(pk=student_id)
 	form = StudentForm(request.POST or None, instance=student)
@@ -37,19 +35,23 @@ def	update_student(request, student_id):
 		return redirect('badges:students')
 	return render(request, "update_student.html", {'student': student, 'form': form})
 
+@login_required(login_url='accounts:login')
 def	one_student(request, student_id, *args, **kwargs):
 	student = Student.objects.get(pk=student_id)
 	context = {
 		'student' : student,
 	}
-	return render(request, "one_event.html", context)
+	return render(request, "one_student.html", context)
 
+@login_required(login_url='accounts:login')
 def testing_student(request):
-	test = update_students()
-	return HttpResponse(str(test))
+	update_students()
+	return HttpResponse("tested")
+from badges.models import Student
 
+@login_required(login_url='accounts:login')
 def list_student(request):
 	context = {
 		'students': Student.objects.all(),
 	}
-	return render(request, "student.html", context)
+	return render(request, "students.html", context)
