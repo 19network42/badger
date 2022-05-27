@@ -22,6 +22,8 @@ def	get_current_event():
 	for ev in Event.objects.all():
 		if ev.is_current():
 			events.append(ev)
+	# Should we prioritize one event over another if two events overlap?
+	# How do we handle this ?
 	if len(events) > 1:
 		print("Error, multiple events found")
 	return events[0]
