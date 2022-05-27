@@ -19,7 +19,8 @@ def	add_student(request):
 		form = StudentForm(request.POST)
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect('/add_student?submitted=True')
+			return HttpResponseRedirect('/students?submitted=True')
+			# return HttpResponseRedirect('/add_student?submitted=True')
 	else:
 		form = StudentForm()
 		if 'submitted' in request.GET:

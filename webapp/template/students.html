@@ -21,28 +21,60 @@
 	}
 </style>
 
-<div id="students">
-	<a id="students" href="badges:students">Students</a>	
-</div>
+{% if submitted %}
 
-<table styleborder: 1px solid black;>
-	<tr class="first_part">
-		<th>Image</th>
-		<th>Id</th>
-		<th>Login</th>
-		<th>Name</th>
-		<th>Email</th>
-		<th>Staff</th>
-	</tr>
-{% for student in students %}
-	<tr>
-		<td><img src="{{ student.image_url }}"> </td>
-		<td>{{ student.intra_id }}</td>
-		<td><a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student.login }}</u></a></td>
-		<td>{{ student.displayname }}</td>
-		<td>{{ student.email }}</td>
-		<td>{{ student.is_staff }}</td>
-	</tr>
-{% endfor %}
-</table>
+	<br/><br/><br/>
+	The event was added!
+	<br/><br/><br/>
+
+	<div id="students">
+		<a id="students" href="badges:students">Students</a>	
+	</div>
+
+	<table styleborder: 1px solid black;>
+		<tr class="first_part">
+			<th>Image</th>
+			<th>Id</th>
+			<th>Login</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Staff</th>
+		</tr>
+	{% for student in students %}
+		<tr>
+			<td><img src="{{ student.image_url }}"> </td>
+			<td>{{ student.intra_id }}</td>
+			<td><a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student.login }}</u></a></td>
+			<td>{{ student.displayname }}</td>
+			<td>{{ student.email }}</td>
+			<td>{{ student.is_staff }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<div id="students">
+		<a id="students" href="badges:students">Students</a>	
+	</div>
+
+	<table styleborder: 1px solid black;>
+		<tr class="first_part">
+			<th>Image</th>
+			<th>Id</th>
+			<th>Login</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Staff</th>
+		</tr>
+	{% for student in students %}
+		<tr>
+			<td><img src="{{ student.image_url }}"> </td>
+			<td>{{ student.intra_id }}</td>
+			<td><a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student.login }}</u></a></td>
+			<td>{{ student.displayname }}</td>
+			<td>{{ student.email }}</td>
+			<td>{{ student.is_staff }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endif %}
 {% endblock %}
