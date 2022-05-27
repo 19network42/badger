@@ -70,12 +70,13 @@ def update_students():
 	for i in student_list:
 		if not i['image_url']:
 			i['image_url'] = "https://cdn.intra.42.fr/users/default.jpg"
-		obj, created = Student.objects.update_or_create(intra_id = i['id'],
-														login = i['login'],
-														email = i['email'],
-														displayname = i['displayname'],
-														image_url = i['image_url'],
-														is_staff = i['staff?'],
-														)
 
+		obj, created = Student.objects.update_or_create(intra_id = i['id'], defaults = {
+														"login" : i['login'],
+														"email" : i['email'],
+														"displayname" : i['displayname'],
+														"image_url" : i['image_url'],
+														"is_staff" : i['staff?']
+															}
+														)
 	return student_list
