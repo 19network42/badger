@@ -10,7 +10,6 @@ from pages.views import (
 							calendar_page,
 							update_event,
 							add_event,
-							update_mode,
 							delete_event
 						)
 
@@ -26,6 +25,5 @@ urlpatterns = [
 	path('calendar/', calendar_page, name = 'calendar'),
 	path('update_event/<int:event_id>/', update_event, name = 'update_event'),
 	path('add_event/', add_event, name = 'add_event'),
-	path('update_mode/<int:event_id>/', update_mode, name = 'update_mode'),
 	path('delete_event/<int:event_id>/', delete_event, name = 'delete_event'),
 ]
