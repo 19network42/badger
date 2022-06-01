@@ -33,21 +33,20 @@ def scan_page(request, *args, **kwargs):
 	if request.method == 'POST':
 		res = request.body
 		d = json.loads(res)
-		scan = Scan(uid = d['id'], type = d['mode'])
+		scan = Scan(uid = d['id'], mode = d['mode'])
 		scan.save()
 
 		badge = scan.find_badge()
 		response_data = {}
-		response_data['msg'] = f"Scanned {badge.student}'s badge"
+		# response_data['msg'] = f"Scanned {badge.student}'s badge"
 		response_data['led'] = [200, 50, 103]
 		response_data['buzzer'] = True
 		response_data['mode'] = "Default"
 
 		event = get_current_event()
-		print(event.name)
-		modes = [mo for mo in Mode.objects.all() if mo.event.id == event.id]
-		current_mode = [mo for mo in modes if mo.type == scan.type][0]
-		scans = [sca for sca in Scan.objects.all() if sca.type == scan.type and sca.uid == scan.uid and event.date < sca.date < event.end]
+		current_mode = Mode.objects.filter(event__id = event.id, type = scan.mode)[0]
+		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])
+		
 		if len(scans) <= current_mode.amount:
 			print ('gg !!!!!!')
 		else :
@@ -57,7 +56,8 @@ def scan_page(request, *args, **kwargs):
 
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	context = {
-		'scans': Scan.objects.all()
+		'scans': Scan.objects.all(),
+		'current_scan': Scan.objects.last()
 	}
 	return render(request, "scans.html", context)
 
