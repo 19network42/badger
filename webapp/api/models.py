@@ -8,12 +8,12 @@ class Scan(models.Model):
 	mode = models.CharField(max_length=15)
 
 
-	def find_badge(self):
-		badges = [badge for badge in StudentBadge.objects.all()]
-		for badge in badges:
-			if badge.badge.serial == int(self.uid):
-				return badge
-		return None
+	# def find_badge(self):
+	# 	badges = [badge for badge in StudentBadge.objects.all()]
+	# 	for badge in badges:
+	# 		if badge.badge.serial == int(self.uid):
+	# 			return badge
+	# 	return None
 
 	def __str__(self):
 		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
