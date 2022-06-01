@@ -1,0 +1,13 @@
+error messages:
+101		scan error (uid is not in the database/technical problem)
+202		event has not yet started 
+303		event already finished 
+404		page not found
+505		uid has been already scanned (when there is more than one scan attempt during the same event)
+777		too many drinks/snacks
+
+
+other messages:
+0		the device is off/connection loss
+19		the device is on
+1		successful scan

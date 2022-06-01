@@ -15,6 +15,8 @@ import calendar
 import time
 from calendar import HTMLCalendar
 from datetime import datetime
+from api.models import Scan
+
 
 #-----------------------------------#
 #									#
@@ -46,6 +48,7 @@ def events_page(request, *args, **kwargs):
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(pk=event_id)
 	context = {
+		'scans' : [sca for sca in Scan.objects.all() if event.date < sca.date < event.end ],
 		'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
 		'event' : event
 	}
@@ -71,6 +74,14 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 	return render(request, 'calendar.html', {"year": year, "month": month,
 		"month_number": month_number, "cal": cal, "now": now, 
 		"current_year": current_year, "time": time, "day": day})
+
+# def conso_page(request, event_id):
+# 	event = Event.objects.get(pk=event_id)
+# 	conso = [co for co in Mode.objects.all() if co.event.id == event_id],
+# 	context = {
+# 		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end],
+# 		'event' : event
+# 	}
 
 #-----------------------------------#
 #			SEARCH					#
@@ -107,6 +118,9 @@ def	update_event(request, event_id):
 			if mode_form.instance.type in [mo.type for mo in Mode.objects.filter(event=event) if mo != mode_form.instance]:
 				error = "Already exist"
 				mode_form.instance.delete()
+			if mode_form.instance.type == "" or mode_form.instance.amount == None:
+				error = "Fill out mode field"
+				mode_form.instance.delete()
 		if action == "submit":
 			event_form.save()
 			return redirect('pages:events')
@@ -125,9 +139,6 @@ def	update_event(request, event_id):
 	return render(request, "update_event.html", context)
 
 @login_required(login_url='accounts:login')
-def delete_mode(request, mode_id):
-	Mode.objects.filter(id=mode_id).delete()
-
 def	add_event(request):
 	submitted = False
 	if request.method == "POST":
