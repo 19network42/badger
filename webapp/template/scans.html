@@ -12,7 +12,11 @@
 		</tr>
 		<tr>
 			<td>{{ current_scan.uid }}</td>
-			<td>{{ current_scan.login }}</td>
+			{% if not error %}
+				<td><input type="text" name="uid"></td>
+			{% else %}
+				<td>{{ current_scan.login }}</td>
+			{% endif %}
 			<td>{{ current_scan.date }}</td>
 		</tr>
 	</table>

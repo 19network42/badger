@@ -10,7 +10,6 @@ from .models import Scan
 from pages.models import Event, Mode
 from badges.models import StudentBadge
 from django.db.models import Q
-
 import json, sys
 
 # Create your views here.
@@ -30,6 +29,25 @@ Sends the data back to the arduino under json format.
 # 		response_data.append(mode)
 # 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+def response(msg, led, buzzer, mode):
+	response_data = {}
+	response_data['msg'] = msg
+	response_data['led'] = led
+	response_data['buzzer'] = buzzer
+	response_data['mode'] = mode
+	return response_data
+
+
+def new_uid(request, uid):
+	print(uid)
+	context = {
+		'error': "uid",
+		'scans': Scan.objects.all(),
+		'current_scan': Scan.objects.last()
+	}
+	return render(request, "scans.html", context)
+
+
 @csrf_exempt
 def scan_page(request, *args, **kwargs):
 	#Scan.objects.all().delete()
@@ -39,34 +57,11 @@ def scan_page(request, *args, **kwargs):
 		scan = Scan(uid = d['id'], mode = d['mode'])
 		scan.save()
 
-		response_data = {}
-		response_data['msg'] = "Badge was scanned"
-		response_data['led'] = [200, 50, 103]
-		response_data['buzzer'] = True
-		response_data['mode'] = "Default"
-
-		badge = Badge.objects.filter(uid = scan.uid)
-		if not (badge):
-			response_data['msg'] = "Scan error"
-			response_data['led'] = [255, 0, 0]
-			response_data['buzzer'] = True
-			response_data['mode'] = "Default"
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=102)
+		response_data = response("Badge was scanned", [200, 50, 103], True, "Default")
 
 		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
-		if not (student):
-			response_data['msg'] = "Scan error"
-			response_data['led'] = [255, 0, 0]
-			response_data['buzzer'] = True
-			response_data['mode'] = "Default"
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=102)
-		
-		if len(badge) > 1 or len(student) > 1:
-			response_data['msg'] = "Uid duplication"
-			response_data['led'] = [255, 0, 0]
-			response_data['buzzer'] = True
-			response_data['mode'] = "Default"
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=103)
+		if len(student_badge) == 0:
+			return new_uid(request, scan.uid)
 
 		login = student_badge[0].student.login
 		scan.login = login
@@ -74,35 +69,27 @@ def scan_page(request, *args, **kwargs):
 
 		event = get_current_event()
 		if not (event):
-			response_data['msg'] = "No current event"
-			response_data['led'] = [255, 0, 0]
-			response_data['buzzer'] = True
-			response_data['mode'] = "Default"
+			response_data = response("No current event", [255, 0, 0], True, "Default")
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=204)
 	
 		current_mode = Mode.objects.filter(Q(event = event) & Q(type = scan.mode))
-		if not (current_mode):
-			response_data['msg'] = "No such mode for this event"
-			response_data['led'] = [255, 0, 0]
-			response_data['buzzer'] = True
-			response_data['mode'] = "Default"
+		if len(current_mode) == 0:
+			response_data = response("No such mode for this event", [255, 0, 0], True, "Default")
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
-		if len(current_mode) == 1:
-			scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])	
-			if len(scans) <= current_mode.amount:
-				print ('gg !!!!!!')
-			else :
-				print ('prout')
-		
-		# if len(scans) <= current_mode.amount:
-		# 	print ('gg !!!!!!')
-		# else :
-		# 	print ('prout')
+
+		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])	
+		if len(scans) <= current_mode.amount:
+			response_data = response("OK :)", [0, 255, 0], True, "Default")
+			print ('gg !!!!!!')
+		else :
+			response_data = response("NO MORE LEFT :( BYE noob", [255, 0, 0], True, "Default")
+			print ('prout')
 
 		print(json.dumps(response_data))
 
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=100)
 	context = {
+		'error' : "",
 		'scans': Scan.objects.all(),
 		'current_scan': Scan.objects.last()
 	}
