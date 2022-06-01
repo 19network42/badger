@@ -211,12 +211,6 @@ a:active { text-decoration: none; color: black; }
 	font-size: larger;
 }
 
-.blue_cube {
-	background-color: rgb(25, 28, 202);
-	color: rgb(25, 28, 202);
-	margin: 400px;
-}
-
 .eventbtn {
 	margin-top: 30px;
 	margin-left: 45%;
@@ -228,22 +222,34 @@ a:active { text-decoration: none; color: black; }
 .eventbtn:hover {
 	background-color: rgb(123, 219, 150);
 }
+
 #update_one_event {
 	padding: 10px;
 	color: white;
 	font-size: larger;
 }
 
-/* ----------------------------------------------------------- */
+.blue_cube {
+	background-color: rgb(25, 28, 202);
+	color: rgb(25, 28, 202);
+	margin: 400px;
+}
 
-/*				ONE EVENT PAGE					 */
+/* --------------------------------------------------------- */
 
-/* ----------------------------------------------------------- */
+/*						SCAN PAGE							 */
+
+/* --------------------------------------------------------- */
+
+#scan_page {
+	background-color: rgb(187, 246, 246);
+}
 
 .last_scan {
 	border-collapse: collapse;
 	margin: 5%;
 	width: 75vw;
+	background-color: rgb(154, 228, 238);
 }
 
 #title_last_scan {
@@ -252,6 +258,43 @@ a:active { text-decoration: none; color: black; }
 
 .last_scan td, .last_scan th {
 	width: 50%;
-	border: 3px solid black;
+	border: 2px	solid black;
 	padding: 8px;
+}
+
+.scan_page_table {
+	border: 1px solid white;
+	margin-top: 40px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.scan_page_table td, .scan_page_table th {
+	width: 50%;
+	border: 1px solid white;
+	padding: 8px;
+}
+
+.scan_page_table tr:nth-child(even) {
+	background-color: rgb(123, 208, 219);
+}
+
+.scan_page_table tr:hover {
+	background-color: rgb(154, 228, 238);
+	color: rgb(255, 255, 255);
+}
+
+
+.scan_page_table th {
+	background-color : rgb(154, 228, 238);
+	color: white;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+.light_cube {
+	background-color: rgb(187, 246, 246);
+	color: rgb(187, 246, 246);
+	margin: 400px;
 }
