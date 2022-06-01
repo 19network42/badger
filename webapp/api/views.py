@@ -52,14 +52,14 @@ def scan_page(request, *args, **kwargs):
 			response_data['mode'] = "Default"
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=1)
 
-		student = StudentBadge.objects.get(badge = badge)
+		student = StudentBadge.objects.get(badge__uid = scan.uid)
 		if not (student):
 			response_data['msg'] = "Scan error"
 			response_data['led'] = [255, 0, 0]
 			response_data['buzzer'] = True
 			response_data['mode'] = "Default"
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=101)
-
+		
 		event = get_current_event()
 		if not (event):
 			response_data['msg'] = "No current event"
