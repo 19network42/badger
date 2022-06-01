@@ -6,11 +6,13 @@
 	<h1>LAST SCAN</h1>
 	<table class="last_scan">
 		<tr>
+			<th>Badge UID</th>
 			<th>Student name</th>
 			<th>Time of scan</th>
 		</tr>
 		<tr>
 			<td>{{ current_scan.uid }}</td>
+			<td>{{ current_scan.login }}</td>
 			<td>{{ current_scan.date }}</td>
 		</tr>
 	</table>
@@ -18,11 +20,13 @@
 	<table class="scan_page_table">
 		<tr>
 			<th>UID</th>
+			<th>Login</th>
 			<th>Date</th>
 		</tr>
-		{% for scan in scans %}
+		{% for scan in scans reversed %}
 		<tr>
 			<td>{{ scan.uid }}</td>
+			<td>{{ scan.login }}</td>
 			<td>{{ scan.date }}</td>
 		</tr>
 		{% endfor %}

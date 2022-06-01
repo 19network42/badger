@@ -153,7 +153,7 @@ a:active { text-decoration: none; color: black; }
 /* ----------------------------------------------------------- */
 
 #one_event_page {
-	background-color: rgb(25, 28, 202);
+	background-color: blue;
 	color: white;
 	height: 100vh;
 	font-family: 'Raleway-Regular', serif;
@@ -176,7 +176,7 @@ a:active { text-decoration: none; color: black; }
 }
 
 .scan_table td, .scan_table th {
-	width: 50%;
+	width: 33%;
 	border: 1px solid white;
 	padding: 8px;
 }
@@ -192,7 +192,7 @@ a:active { text-decoration: none; color: black; }
 
 
 .scan_table th {
-	background-color : rgb(25, 28, 202);
+	background-color : blue;
 	color: white;
 	padding-top: 12px;
 	padding-bottom: 12px;
@@ -231,8 +231,8 @@ a:active { text-decoration: none; color: black; }
 }
 
 .blue_cube {
-	background-color: rgb(25, 28, 202);
-	color: rgb(25, 28, 202);
+	background-color: blue;
+	color: blue;
 	margin: 400px;
 }
 
@@ -267,7 +267,6 @@ a:active { text-decoration: none; color: black; }
 }
 
 .last_scan td, .last_scan th {
-	width: 50%;
 	border: 1px	solid black;
 	padding: 8px;
 }
@@ -280,7 +279,7 @@ a:active { text-decoration: none; color: black; }
 }
 
 .scan_page_table td, .scan_page_table th {
-	width: 50%;
+	/* width: 50%; */
 	border: 1px solid black;
 	padding: 8px;
 }

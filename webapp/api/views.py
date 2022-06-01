@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan
 from pages.models import Event, Mode
+from badges.models import StudentBadge
 
 import json, sys
 
@@ -36,6 +37,11 @@ def scan_page(request, *args, **kwargs):
 		scan = Scan(uid = d['id'], mode = d['mode'])
 		scan.save()
 
+		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
+		if len(student_badge) == 1:
+			login = student_badge[0].student.login
+			scan.login = login
+			scan.save()
 		badge = scan.find_badge()
 		response_data = {}
 		# response_data['msg'] = f"Scanned {badge.student}'s badge"
@@ -47,13 +53,13 @@ def scan_page(request, *args, **kwargs):
 		if not (event):
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 			# HANDLE ERRORS
-		current_mode = Mode.objects.filter(event__id = event.id, type = scan.mode)[0]
-		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])
-		
-		if len(scans) <= current_mode.amount:
-			print ('gg !!!!!!')
-		else :
-			print ('prout')
+		current_mode = Mode.objects.filter(event__id = event.id, type = scan.mode)
+		if len(current_mode) == 1:
+			scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])	
+			if len(scans) <= current_mode.amount:
+				print ('gg !!!!!!')
+			else :
+				print ('prout')
 
 		print(json.dumps(response_data))
 
