@@ -30,7 +30,8 @@ def	get_current_event():
 	# How do we handle this ?
 	if len(events) > 1:
 		print("Error, multiple events found")
-	return events[0]
+	if len(events) == 1:
+		return events[0]
 
 class Mode(models.Model):
 	amount = models.IntegerField(null=True)
