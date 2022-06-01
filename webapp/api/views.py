@@ -44,21 +44,21 @@ def scan_page(request, *args, **kwargs):
 		response_data['buzzer'] = True
 		response_data['mode'] = "Default"
 
-		badge = Badge.objects.get(uid = scan.uid)
+		badge = Badge.objects.filter(uid = scan.uid)
 		if not (badge):
 			response_data['msg'] = "Scan error"
 			response_data['led'] = [255, 0, 0]
 			response_data['buzzer'] = True
 			response_data['mode'] = "Default"
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=1)
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=102)
 
-		student = StudentBadge.objects.get(badge__uid = scan.uid)
+		student = StudentBadge.objects.filter(badge__uid = scan.uid)
 		if not (student):
 			response_data['msg'] = "Scan error"
 			response_data['led'] = [255, 0, 0]
 			response_data['buzzer'] = True
 			response_data['mode'] = "Default"
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=101)
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=102)
 		
 		event = get_current_event()
 		if not (event):
@@ -84,7 +84,7 @@ def scan_page(request, *args, **kwargs):
 
 		print(json.dumps(response_data))
 
-		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=100)
 	context = {
 		'scans': Scan.objects.all(),
 		'current_scan': Scan.objects.last()

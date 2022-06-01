@@ -1,5 +1,5 @@
 error messages:
-101		scan error (uid is not in the database/technical problem)
+102		scan error (uid is not in the database/technical problem)
 201		event has not yet started 
 202		event already finished 
 203		too many drinks/snacks
@@ -11,6 +11,6 @@ error messages:
 
 
 other messages:
-0		the device is off/connection loss
-19		the device is on
-1		successful scan
+101		the device is off/connection loss
+119		the device is on
+100		successful scan
