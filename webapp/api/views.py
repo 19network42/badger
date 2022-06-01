@@ -2,12 +2,14 @@ from asyncio import events
 import re
 from django.shortcuts import render
 from django.http import HttpResponse
+from badges.models import Badge, Student, StudentBadge
 from pages.models import Event, get_current_event
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan
 from pages.models import Event, Mode
 from badges.models import StudentBadge
+from django.db.models import Q
 
 import json, sys
 
@@ -37,33 +39,69 @@ def scan_page(request, *args, **kwargs):
 		scan = Scan(uid = d['id'], mode = d['mode'])
 		scan.save()
 
-		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
-		if len(student_badge) == 1:
-			login = student_badge[0].student.login
-			scan.login = login
-			scan.save()
-		badge = scan.find_badge()
 		response_data = {}
-		# response_data['msg'] = f"Scanned {badge.student}'s badge"
+		response_data['msg'] = "Badge was scanned"
 		response_data['led'] = [200, 50, 103]
 		response_data['buzzer'] = True
 		response_data['mode'] = "Default"
 
+		badge = Badge.objects.filter(uid = scan.uid)
+		if not (badge):
+			response_data['msg'] = "Scan error"
+			response_data['led'] = [255, 0, 0]
+			response_data['buzzer'] = True
+			response_data['mode'] = "Default"
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=102)
+
+		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
+		if not (student):
+			response_data['msg'] = "Scan error"
+			response_data['led'] = [255, 0, 0]
+			response_data['buzzer'] = True
+			response_data['mode'] = "Default"
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=102)
+		
+		if len(badge) > 1 or len(student) > 1:
+			response_data['msg'] = "Uid duplication"
+			response_data['led'] = [255, 0, 0]
+			response_data['buzzer'] = True
+			response_data['mode'] = "Default"
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=103)
+
+		login = student_badge[0].student.login
+		scan.login = login
+		scan.save()
+
 		event = get_current_event()
 		if not (event):
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
-			# HANDLE ERRORS
-		current_mode = Mode.objects.filter(event__id = event.id, type = scan.mode)
+			response_data['msg'] = "No current event"
+			response_data['led'] = [255, 0, 0]
+			response_data['buzzer'] = True
+			response_data['mode'] = "Default"
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=204)
+	
+		current_mode = Mode.objects.filter(Q(event = event) & Q(type = scan.mode))
+		if not (current_mode):
+			response_data['msg'] = "No such mode for this event"
+			response_data['led'] = [255, 0, 0]
+			response_data['buzzer'] = True
+			response_data['mode'] = "Default"
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
 		if len(current_mode) == 1:
 			scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])	
 			if len(scans) <= current_mode.amount:
 				print ('gg !!!!!!')
 			else :
 				print ('prout')
+		
+		# if len(scans) <= current_mode.amount:
+		# 	print ('gg !!!!!!')
+		# else :
+		# 	print ('prout')
 
 		print(json.dumps(response_data))
 
-		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=100)
 	context = {
 		'scans': Scan.objects.all(),
 		'current_scan': Scan.objects.last()

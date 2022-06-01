@@ -1,0 +1,17 @@
+error messages:
+102		scan error (uid is not in the database/technical problem)
+103		uid duplication
+201		event has not yet started 
+202		event already finished 
+203		too many drinks/snacks
+204		no current event
+205		no such mode for this event
+404		page not found
+505		uid has been already scanned (when there is more than one scan attempt during the same event)
+506		socket error (?)
+
+
+other messages:
+101		the device is off/connection loss
+119		the device is on
+100		successful scan
