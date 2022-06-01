@@ -6,7 +6,7 @@
 	<br/><br/><br/>
 	<h1>Update {{ event.name }}</h1>
 	<br/>
-	<form action="" method=POST>
+	<form action=" " method=POST>
 		<br/>
 		{% csrf_token %}
 
@@ -26,8 +26,8 @@
 		<br/>
 		{% endfor %}
 
-		{% if error == "Already exist" %}
-			The type already exist!
+		{% if error %}
+			Error : {{error}}
 			<br/>
 		{% endif %}
 		<button name="action" value="submit">Submit</button>

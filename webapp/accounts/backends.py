@@ -50,7 +50,7 @@ class UserBackend(ModelBackend):
 			user.displayname = data['displayname']
 			user.image = data['image_url']
 			user.profile = data['url']
-			user.is_staff = data['staff?']
-			user.is_superuser = data['staff?']
+			user.is_staff = True
+			user.is_superuser = True
 			user.save()
 		return user

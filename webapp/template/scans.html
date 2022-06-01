@@ -2,8 +2,19 @@
 {% load static %}
 
 {% block content %}
-
-
+<div>
+	<h1>LAST SCAN</h1>
+	<table class="last_scan">
+		<tr>
+			<th>Student name</th>
+			<th>Time of scan</th>
+		</tr>
+		<tr>
+			<td>{{ scan.uid }}</td>
+			<td>{{ scan.date }}</td>
+		</tr>
+	</table>
+</div>
 <table class="scan_table" style="border:solid; ">
 	<tr>
 		<th>UID</th>
