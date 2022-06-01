@@ -1,5 +1,6 @@
 error messages:
 102		scan error (uid is not in the database/technical problem)
+103		uid duplication
 201		event has not yet started 
 202		event already finished 
 203		too many drinks/snacks
