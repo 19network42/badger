@@ -15,7 +15,7 @@ WiFiClient client;
 int status = WL_IDLE_STATUS;
 const int maxMode = 3;
 String modes[maxMode] = {"default", "alcohol", "soft"};
-int currentMode = 0;
+volatile int currentMode = 0;
 #define PN532_SCK  2
 #define PN532_MOSI 3
 #define PN532_SS   4
@@ -46,6 +46,7 @@ void setup() {
   //  Setup pin for hardware use.
   setupPin();
   
+  
   //  Identifying nfc reader
   setupNfcReader();
   
@@ -54,8 +55,8 @@ void setup() {
 
 	//	Connecting to webapp
 	connectToWebApp();
-
-  
+  pinMode(BUTTON, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
 }
 
 void loop() {
@@ -82,49 +83,33 @@ void loop() {
           getDataFromWebAppUser();
       }
     }
-
-    onMode();
    //If there isn't wifi connection try to reconnect.
    isConnectedToWifi();
    
 	  // if the server's disconnected, try to reconnect
 	 clientIsConnected(true);
+   interrupts();
 //   delay(2000);
  }
 
-/*
- * Change the mode when the button is remaining pushed.
- */
-void onMode()
-{
-  int buttonState = digitalRead(BUTTON);
-  if (buttonState == LOW)
-  {
-    lcd.clear();
-    if (currentMode == maxMode - 1)
-      currentMode = 0;
-     else
-      currentMode++;
-     delay(200);
-     lcd.clear();
-     lcd.print("mode :");
-     lcd.setCursor(0,1);
-     lcd.print(modes[currentMode]);
-  }
-}
 /*
  * Change the current mode.
  * @param : int, int : cuurentMode the current mode, nbrMode the nbr max of mode
  * @return int : the current mode changed.
  */
- int changeMode(int currentMode, int nbrMode)
+ void changeMode()
  {
-    if (currentMode == nbrMode - 1)
+   
+    if (currentMode == maxMode - 1)
       currentMode = 0;
     else
       currentMode++;
-     
-     return (currentMode);
+     lcd.clear();
+     lcd.print("mode :");
+     lcd.setCursor(0,1);
+     lcd.print(modes[currentMode]);
+     for (int i = 0; i < 10000000; i++)
+     {}
  }
 /*
  * Check if there is a wifi connection anymore.
@@ -209,7 +194,7 @@ void  setupPin(void)
   lcd.begin(16, 2); 
   //Initialize pins
   pinMode(BUZZER, OUTPUT);
-  pinMode(BUTTON, INPUT);
+//  pinMode(BUTTON, INPUT);
 	WiFiDrv::pinMode(GREEN, OUTPUT);
   WiFiDrv::pinMode(RED, OUTPUT);
   WiFiDrv::pinMode(BLUE, OUTPUT);
@@ -396,7 +381,6 @@ void setupNfcReader(void)
 
   // configure board to read RFID tags
   nfc.SAMConfig();
-  attachInterrupt(0, onMode, RISING);
   lcd.print("NFC reader");
   lcd.setCursor(0,1);
   lcd.print("OK!");
@@ -477,13 +461,18 @@ String  readCardUID(String modes[], int currentMode)
   char id[20];
   
   //  Waiting for a card to be scanned
+//  noInterrupts();
   Serial.println("Waiting for an ISO14443A card");
   lcd.clear();
   lcd.print("Scan a badge...");
   lcd.setCursor(0,1);
   lcd.print("mode = " + modes[currentMode]);
-//  delay(1000);
+  delay(1000);
+  nfc.AsTarget();
+//  nfc.startPassiveTargetIDDetection(PN532_MIFARE_ISO14443A);
+//  success = nfc.readDetectedPassiveTargetID(&uid[0], &uidLength);
   success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, 1000);
+
   if (success) {
     Serial.println("Found a card!");
     for (uint8_t i=0; i < uidLength - 1; i++) 
