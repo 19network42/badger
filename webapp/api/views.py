@@ -44,6 +44,9 @@ def scan_page(request, *args, **kwargs):
 		response_data['mode'] = "Default"
 
 		event = get_current_event()
+		if not (event):
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
+			# HANDLE ERRORS
 		current_mode = Mode.objects.filter(event__id = event.id, type = scan.mode)[0]
 		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])
 		

@@ -171,7 +171,8 @@ a:active { text-decoration: none; color: black; }
 .scan_table {
 	margin-top: 40px;
 	border-collapse: collapse;
-	width: 100%;
+	margin-left: 10vw;
+	width: 75vw;
 }
 
 .scan_table td, .scan_table th {
@@ -243,11 +244,20 @@ a:active { text-decoration: none; color: black; }
 
 #scan_page {
 	background-color: rgb(187, 246, 246);
+	height: 100vh;
+}
+
+#scan_page h1 {
+	font-size: 70pt;
+	padding-top: 50px;
+	padding-left: 10vw;
 }
 
 .last_scan {
 	border-collapse: collapse;
-	margin: 5%;
+	margin-left: 10vw;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	width: 75vw;
 	background-color: rgb(154, 228, 238);
 }
@@ -258,20 +268,20 @@ a:active { text-decoration: none; color: black; }
 
 .last_scan td, .last_scan th {
 	width: 50%;
-	border: 2px	solid black;
+	border: 1px	solid black;
 	padding: 8px;
 }
 
 .scan_page_table {
-	border: 1px solid white;
-	margin-top: 40px;
+	margin-top: 30px;
+	margin-left: 10vw;
 	border-collapse: collapse;
-	width: 100%;
+	width: 75vw;
 }
 
 .scan_page_table td, .scan_page_table th {
 	width: 50%;
-	border: 1px solid white;
+	border: 1px solid black;
 	padding: 8px;
 }
 
@@ -287,7 +297,7 @@ a:active { text-decoration: none; color: black; }
 
 .scan_page_table th {
 	background-color : rgb(154, 228, 238);
-	color: white;
+	color: black;
 	padding-top: 12px;
 	padding-bottom: 12px;
 	text-align: left;
