@@ -4,6 +4,7 @@ error messages:
 303		event already finished 
 404		page not found
 505		uid has been already scanned (when there is more than one scan attempt during the same event)
+606		socket error (?)
 777		too many drinks/snacks
 
 
