@@ -17,8 +17,8 @@ class Event(models.Model):
 		return (self.date < now < self.end)
 
 class Mode(models.Model):
-	amount = models.IntegerField()
-	type = models.CharField(max_length=100)
+	amount = models.IntegerField(null=True)
+	type = models.CharField(max_length=100, null=True)
 	event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event')
 
 class Scan(models.Model):
