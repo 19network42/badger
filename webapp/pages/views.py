@@ -118,6 +118,9 @@ def	update_event(request, event_id):
 			if mode_form.instance.type in [mo.type for mo in Mode.objects.filter(event=event) if mo != mode_form.instance]:
 				error = "Already exist"
 				mode_form.instance.delete()
+			if mode_form.instance.type == "" or mode_form.instance.amount == None:
+				error = "Fill out mode field"
+				mode_form.instance.delete()
 		if action == "submit":
 			event_form.save()
 			return redirect('pages:events')

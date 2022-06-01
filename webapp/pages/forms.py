@@ -3,8 +3,8 @@ from django.forms import ModelForm
 from .models import Event, Mode
 
 class ModeForm(ModelForm):
-	type = forms.CharField()
-	amount = forms.CharField()
+	type = forms.CharField(required=False)
+	amount = forms.IntegerField(required=False)
 	class Meta:
 		model = Mode
 		fields = ('type', 'amount')

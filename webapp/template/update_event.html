@@ -26,8 +26,8 @@
 		<br/>
 		{% endfor %}
 
-		{% if error == "Already exist" %}
-			The type already exist!
+		{% if error %}
+			Error : {{error}}
 			<br/>
 		{% endif %}
 		<button name="action" value="submit">Submit</button>
