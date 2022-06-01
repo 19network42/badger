@@ -101,15 +101,12 @@ def	search_general(request):
 	else:
 		return render(request, 'search_general.html', {})
 
-@login_required(login_url='accounts:login')
-def	update_event(request, event_id):
-	event = Event.objects.get(pk=event_id)
-	event_form = EventForm(request.POST or None, instance=event)
+def mode_page(request, event, context):
 	mode_form = ModeForm(request.POST or None)
 	error = ""
 	mode_form.instance.event = event
 
-	if request.method == "POST":		
+	if request.method == "POST":
 		action = request.POST.get("action")
 		delete = request.POST.get("delete")
 
@@ -121,37 +118,46 @@ def	update_event(request, event_id):
 			if mode_form.instance.type == "" or mode_form.instance.amount == None:
 				error = "Fill out mode field"
 				mode_form.instance.delete()
-		if action == "submit":
-			event_form.save()
-			return redirect('pages:events')
-
 		if delete:
 			Mode.objects.filter(id=delete).delete()
 
+	context['modes'] = [mo for mo in Mode.objects.all() if mo.event == event]
+	context['mode_form'] = mode_form
+	context['mode_error'] = error
+
+@login_required(login_url='accounts:login')
+def	update_event(request, event_id):
+	event = Event.objects.get(pk=event_id)
+	event_form = EventForm(request.POST or None, instance=event)
+
+	if request.method == "POST":
+		submit = request.POST.get("submit")		
+		if submit == "submitted":
+			event_form.save()
+			return redirect('pages:events')
+	
 	context = {
 	'event': event,
 	'event_form': event_form,
-	'modes' : [mo for mo in Mode.objects.all() if mo.event.id == event_id],
-	'mode_form': mode_form,
-	'error': error,
 	}
+	mode_page(request, event, context)
 
 	return render(request, "update_event.html", context)
 
 @login_required(login_url='accounts:login')
 def	add_event(request):
-	submitted = False
+	form = EventForm(request.POST or None)
+
 	if request.method == "POST":
-		form = EventForm(request.POST)
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect('/events?submitted=True')
-			# return HttpResponseRedirect('/add_event?submitted=True')
-	else:
-		form = EventForm()
-		if 'submitted' in request.GET:
-			submitted = True
-	return render(request, "add_event.html", {'form': form, 'submitted': submitted})
+		submit = request.POST.get("submit")
+		form.save()
+		if submit == "first":
+			return HttpResponseRedirect('/update_event/' + str(form.instance.id))
+
+	context = {
+		'form': form,
+	}
+	return render(request, "add_event.html", context)
 
 @login_required(login_url='accounts:login')
 def	delete_event(request, event_id):

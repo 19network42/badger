@@ -12,25 +12,11 @@
 
 		{{ event_form.as_p}}
 
-		{{ mode_form.as_p}}
-
-		<button name="action" value="add">Add</button>
-
-		<br/><br/>Modes: <br/>
-
-		{% for mode in modes %}
-			{% csrf_token %}
-			Type : {{ mode.type }},
-			Amount : {{ mode.amount }} 
-			<button name="delete" value={{mode.pk}}>delete</button>
 		<br/>
-		{% endfor %}
+			{% include 'mode_management.html' %}
+		<br/>
 
-		{% if error %}
-			Error : {{error}}
-			<br/>
-		{% endif %}
-		<button name="action" value="submit">Submit</button>
+		<button name="submit" value="submitted">Submit</button>
 	</form>
 	</center>
 {% endblock %}
