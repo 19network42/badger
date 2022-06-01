@@ -5,12 +5,14 @@
 	<h1 id="one_event_title">{{event.name}}</h1>
 	<table class="scan_table">
 		<tr>
+			<th>Badge UID</th>
 			<th>Student name</th>
 			<th>Time of scan</th>
 		</tr>
 		{% for scan in scans %}
 		<tr>
 			<td>{{ scan.uid }}</td>
+			<td>{{ scan.login }}</td>
 			<td>{{ scan.date }}</td>
 		</tr>
 		{% endfor %}

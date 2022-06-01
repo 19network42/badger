@@ -6,12 +6,12 @@ class Scan(models.Model):
 	uid = models.CharField(max_length=15)
 	date = models.DateTimeField(default=timezone.now)
 	mode = models.CharField(max_length=15)
-
+	login = models.CharField(max_length=15)
 
 	def find_badge(self):
-		badges = [badge for badge in StudentBadge.objects.all()]
+		badges = StudentBadge.objects.all()
 		for badge in badges:
-			if badge.badge.serial == int(self.uid):
+			if badge.badge.uid == self.uid:
 				return badge
 		return None
 
