@@ -1,10 +1,11 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Student, StudentBadge
+from api.models import Scan
 
 class ScanForm(ModelForm):
 	class Meta:
-		model = StudentBadge
+		model = Scan
 		fields = "__all__"
 
 class StudentForm(ModelForm):

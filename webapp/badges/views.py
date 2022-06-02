@@ -63,7 +63,7 @@ def update_studentbadge(request, scan_id):
 	form = ScanForm(request.POST or None, instance=scan)
 	if request.method == "POST":
 		form.save()
-		return redirect('badges:scan')
+		return redirect('api:scan')
 	context = {
 		'scan': scan,
 		'form': form,
