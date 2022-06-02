@@ -87,24 +87,15 @@ a:active { text-decoration: none; color: black; }
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding-top: 40px;
-	line-height: 90%;
+	padding-top: 5vh;
+	padding-bottom: 2vh;
 	font-family: 'Blazed', serif;
-	font-size: 125px;
-}
-
-#event_page #info {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 60px;
-	font-size: 35px;
+	font-size: 100px;
 }
 
 #event_page #table {
-	margin-top: 40px;
 	border-collapse: collapse;
-	width: 100%;
+	width: 75vw;
 }
 
 #table td, #table th {
@@ -153,23 +144,31 @@ a:active { text-decoration: none; color: black; }
 /* ----------------------------------------------------------- */
 
 #one_event_page {
-	background-color: blue;
-	color: white;
+	background-color: rgb(226, 195, 244);
+	color: black;
 	height: 100vh;
 	font-family: 'Raleway-Regular', serif;
 }
 
-#one_event_title {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#one_event_page h1 {
+	margin-left: 10vw;
+	padding-top: 6vh;
+	padding-bottom: 3vh;
 	font-family: 'Retrolight';
-	font-size: 175px;
+	font-size: 150px;
+	font-weight: 100;
+}
+
+#one_event_page h2 {
+	margin-left: 10vw;
+	padding-top: 4vh;
+	padding-bottom: 2vh;
+	font-family: 'Retrolight';
+	font-size: 100px;
 	font-weight: 100;
 }
 
 .scan_table {
-	margin-top: 40px;
 	border-collapse: collapse;
 	margin-left: 10vw;
 	width: 75vw;
@@ -177,31 +176,26 @@ a:active { text-decoration: none; color: black; }
 
 .scan_table td, .scan_table th {
 	width: 33%;
-	border: 1px solid white;
+	border: 1px solid black;
 	padding: 8px;
 }
 
 .scan_table tr:nth-child(even) {
-	background-color: rgb(211, 104, 230);
+	background-color: rgb(204, 149, 236);
 }
 
 .scan_table tr:hover {
-	background-color: rgb(123, 219, 150);
-	color: rgb(27, 27, 27);
+	background-color: rgb(209, 167, 233);
+	color: white;
 }
 
 
 .scan_table th {
-	background-color : blue;
-	color: white;
+	background-color : rgb(209, 167, 233);
+	color: black;
 	padding-top: 12px;
 	padding-bottom: 12px;
 	text-align: left;
-}
-
-.link_one_event {
-	color: white !important;
-	font-style: italic;
 }
 
 #one_event_page p {
@@ -217,22 +211,22 @@ a:active { text-decoration: none; color: black; }
 	margin-left: 45%;
 	height: 50px;
 	padding : 0px;
-	background-color: rgb(211, 104, 230);
-	border-color: white;
+	background-color: rgb(204, 149, 236);
+	border-color: black;
 }
 .eventbtn:hover {
-	background-color: rgb(123, 219, 150);
+	background-color: rgb(209, 167, 233);
 }
 
 #update_one_event {
 	padding: 10px;
-	color: white;
+	color: black;
 	font-size: larger;
 }
 
 .blue_cube {
-	background-color: blue;
-	color: blue;
+	background-color: rgb(226, 195, 244);
+	color: rgb(226, 195, 244);
 	margin: 400px;
 }
 
@@ -249,15 +243,14 @@ a:active { text-decoration: none; color: black; }
 
 #scan_page h1 {
 	font-size: 70pt;
-	padding-top: 50px;
-	padding-left: 10vw;
+	padding-top: 5vh;
+	padding-bottom: 2vh;
+	padding-left: 12vw;
 }
 
 .last_scan {
 	border-collapse: collapse;
-	margin-left: 10vw;
-	margin-top: 30px;
-	margin-bottom: 30px;
+	margin-left: 12vw;
 	width: 75vw;
 	background-color: rgb(154, 228, 238);
 }
@@ -272,8 +265,7 @@ a:active { text-decoration: none; color: black; }
 }
 
 .scan_page_table {
-	margin-top: 30px;
-	margin-left: 10vw;
+	margin-left: 12vw;
 	border-collapse: collapse;
 	width: 75vw;
 }
