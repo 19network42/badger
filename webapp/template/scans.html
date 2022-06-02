@@ -13,6 +13,7 @@
 			<th></th>
 		</tr>
 		<tr>
+			{% if current_scan %}
 			<td>{{ current_scan.uid }}</td>
 			<td>{{ current_scan.login }}</td>
 			<td>{{ current_scan.date }}</td>
@@ -20,7 +21,8 @@
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 			<td align="center"><a href="{% url 'api:delete_scan' current_scan.id %}"
 				class="btn btn-outline-danger btn-sm">Delete</a></td>
-			</tr>
+			{% endif %}
+		</tr>
 		</table>
 		<h1>ALL SCANS</h1>
 		<table class="scan_page_table">

@@ -70,8 +70,11 @@ def update_studentbadge(request, scan_id):
 		elif student_badge[0].badge.uid != None:
 			error = "Login is already assigned uid"
 		else:
-			#student_badge.badge.uid = form.instance.uid
+			student_badge[0].badge.uid = form.instance.uid
+			student_badge[0].badge.save()
 			return redirect('api:scan')
+		form.instance.login = ""
+		form.save()
 	context = {
 		'form': form,
 		'error':error,
