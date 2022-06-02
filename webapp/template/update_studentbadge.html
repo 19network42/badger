@@ -12,6 +12,10 @@
 			{{ form.as_p}}
 			
 			<button name="submit" value="add">submit</button>
+			{% if error %}
+				Error : {{ error }}
+				<br/>
+			{% endif %}
 		</form>
 
 	</center>

@@ -10,21 +10,22 @@
 			<th>Student name</th>
 			<th>Time of scan</th>
 			<th></th>
-			<th></th>
 		</tr>
 		<tr>
 			<td>{{ current_scan.uid }}</td>
 			<td>{{ current_scan.login }}</td>
 			<td>{{ current_scan.date }}</td>
-
-		</tr>
-	</table>
-	<h1>ALL SCANS</h1>
-	<table class="scan_page_table">
-		<tr>
-			<th>UID</th>
-			<th>Login</th>
-			<th>Date</th>
+			<td align="center"><a href="{% url 'badges:update_studentbadge' current_scan.pk %}"
+				class="btn btn-outline-secondary btn-sm">Update</a></td>
+			</tr>
+		</table>
+		<h1>ALL SCANS</h1>
+		<table class="scan_page_table">
+			<tr>
+				<th>UID</th>
+				<th>Login</th>
+				<th>Date</th>
+				<th></th>
 		</tr>
 		{% for scan in scans reversed %}
 		<tr>
