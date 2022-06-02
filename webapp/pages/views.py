@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Event, Mode
 from .forms import EventForm, ModeForm
-from badges.models import Student
+from badges.models import Student, StudentBadge, Badge
 from badges.forms import StudentForm
 from accounts.models import User
 import json
@@ -95,9 +95,9 @@ def	search_general(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
-		students = Student.objects.filter(Q(login=searched) | Q(displayname__contains=searched))
+		student_bgs = StudentBadge.objects.filter(Q(student__login__contains=searched) | Q(student__displayname__contains=searched))
 		return render(request, 'search_general.html', 
-			{'searched': searched, 'events': events, 'students': students})
+			{'searched': searched, 'events': events, 'student_bgs': student_bgs})
 	else:
 		return render(request, 'search_general.html', {})
 
