@@ -173,7 +173,7 @@ void  getInitDataFromWebApp(void)
 
   //If everything's good do nothing.
   if (WiFi.status() == WL_CONNECTED) return;
-  noInterrupts();
+  detachInterrupt(BUTTON);
   lcd.clear();
   lcd.print("Wifi connect.");
   lcd.setCursor(0,1);
@@ -195,7 +195,7 @@ void  getInitDataFromWebApp(void)
   delay(1500);
   lcd.clear();
   printWiFiStatus();
-  interrupts();
+  attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
  }
  
 /*
@@ -208,7 +208,7 @@ void  getInitDataFromWebApp(void)
  */
 void  clientIsConnected(bool reconnection)
 {
-  noInterrupts();
+  detachInterrupt(BUTTON);
   if (reconnection && !client.connected()) {
 		  Serial.println();
 		  Serial.println("Disconnected from server.");
@@ -234,7 +234,7 @@ void  clientIsConnected(bool reconnection)
         delay(5000);
       }
    }
-   interrupts();
+   attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
 }
 
 
@@ -311,11 +311,14 @@ void  scrollingMessage(const char * msg)
   delay(300);
   messageLength = strlen(msg);
   totalScroll = messageLength - lcdLength;
+  Serial.println(totalScroll);
+  detachInterrupt(BUTTON);
   for (int i = totalScroll; i >= 0; i--)
   {
     lcd.scrollDisplayLeft();
     delay(250);
   }
+  attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
 }
  
 /*
