@@ -7,8 +7,9 @@
 	<table class="last_scan">
 		<tr>
 			<th>Badge UID</th>
-			<th>Student name</th>
-			<th>Time of scan</th>
+			<th>Login</th>
+			<th>Date</th>
+			<th></th>
 			<th></th>
 		</tr>
 		<tr>
@@ -17,23 +18,28 @@
 			<td>{{ current_scan.date }}</td>
 			<td align="center"><a href="{% url 'badges:update_studentbadge' current_scan.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
+			<td align="center"><a href="{% url 'api:delete_scan' current_scan.id %}"
+				class="btn btn-outline-danger btn-sm">Delete</a></td>
 			</tr>
 		</table>
 		<h1>ALL SCANS</h1>
 		<table class="scan_page_table">
 			<tr>
-				<th>UID</th>
+				<th>Badge UID</th>
 				<th>Login</th>
 				<th>Date</th>
 				<th></th>
-		</tr>
-		{% for scan in scans reversed %}
-		<tr>
-			<td>{{ scan.uid }}</td>
-			<td>{{ scan.login }}</td>
-			<td>{{ scan.date }}</td>
-			<td align="center"><a href="{% url 'badges:update_studentbadge' scan.pk %}"
-				class="btn btn-outline-secondary btn-sm">Update</a></td>
+				<th></th>
+			</tr>
+			{% for scan in scans reversed %}
+			<tr>
+				<td>{{ scan.uid }}</td>
+				<td>{{ scan.login }}</td>
+				<td>{{ scan.date }}</td>
+				<td align="center"><a href="{% url 'badges:update_studentbadge' scan.pk %}"
+					class="btn btn-outline-secondary btn-sm">Update</a></td>
+				<td align="center"><a href="{% url 'api:delete_scan' scan.id %}"
+					class="btn btn-outline-danger btn-sm">Delete</a></td>
 		</tr>
 		{% endfor %}
 	</table>
