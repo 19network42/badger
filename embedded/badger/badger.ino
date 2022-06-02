@@ -13,9 +13,7 @@
 
 WiFiClient client;
 int status = WL_IDLE_STATUS;
-int maxMode;
-String modes[NBR_MODE] = {"default", "alcohol", "soft"};
-volatile int currentMode = 0;
+
 #define PN532_SCK  2
 #define PN532_MOSI 3
 #define PN532_SS   4
@@ -32,6 +30,9 @@ volatile int currentMode = 0;
 #define LCD_D7 12
 #define BUTTON 0
 #define NBR_MODE 10
+int maxMode = 3;
+String modes[NBR_MODE] = {"default", "alcohol", "soft"};
+volatile int currentMode = 0;
 
 LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
@@ -71,7 +72,7 @@ void loop() {
   if (strcmp("ERROR", uid.c_str()) == 0)  {}
   else
   {
-    createAndSendHTTPRequestUser(uid, modes[currentMode]);
+    createAndSendHttpRequestUser(uid, modes[currentMode]);
     if (isResponseFromWebAppOK())
     {
         getDataFromWebAppUser();
@@ -84,9 +85,58 @@ void loop() {
 	 clientIsConnected(true);
  }
 
-void  initMode(void)
+/*
+ * Send a basic HTTP request with no body to get the initial modes.
+ */
+void  createAndSendHttpRequestInit(void)
 {
+  client.print(
+    String("POST ") + INIT_URL + " HTTP/1.1\r\n" +
+    "Content-Type: application/json\r\n" +
+    "X-Secret: " + TOKEN_POST + "\r\n" +
+    "\r\n"
+   );
+}
+
+/*
+ * Initialise the global modes and the number of mode
+ *  with the response got by server.
+ */
+void  initModes(void)
+{
+   createAndSendHttpRequestInit();
+   if (isResponseFromWebAppOK())
+   {
+      getInitDataFromWebApp();
+   }
+    
+}
+
+/*
+ * Get the reponse from the server to initialise mode.
+ * The response is deserialize from JSON and put in global variables.
+ */
+void  getInitDataFromWebApp(void)
+{
+  int capacity = 256;
+  JsonArray modesFromApp;
+  const char * tmp;
+  DynamicJsonDocument doc(capacity);
   
+  DeserializationError error = deserializeJson(doc, client);
+  
+  if (error)
+  {
+    Serial.print("deserializeJson() failed: ");
+    Serial.println(error.c_str());
+  }
+  modesFromApp = doc["modes"];
+  maxMode = doc["nbrModes"]; //change to exact name
+  for (int i = 0; i < maxMode; i++)
+  {
+    tmp = modesFromApp[i];
+    modes[i] = tmp;
+  }
 }
 
 /*
@@ -242,10 +292,32 @@ void getDataFromWebAppUser(void)
   msg = doc["msg"];
   Serial.println(msg);
   lcd.clear();
-  lcd.print(msg);
-  delay(1500);
+//  lcd.print(msg);
+  scrollingMessage(msg);
+  delay(500);
 }
 
+
+/*
+ * Utils method to display a message with scrolling view.
+ */
+void  scrollingMessage(const char * msg)
+{
+  uint8_t messageLength;
+  uint8_t lcdLength = 15;
+  uint8_t totalScroll;
+
+  lcd.print(msg);
+  delay(300);
+  messageLength = strlen(msg);
+  totalScroll = messageLength - lcdLength;
+  for (int i = totalScroll; i >= 0; i--)
+  {
+    lcd.scrollDisplayLeft();
+    delay(250);
+  }
+}
+ 
 /*
  * Check if the response from the webApp is good to continue
  * process of the program.
@@ -275,7 +347,7 @@ bool  isResponseFromWebAppOK()
  * @param String uid : the uid of the card scanned.
  * @param String mode : the actual mode for drinks.
  */
-void  createAndSendHTTPRequestUser(String uid, String mode)
+void  createAndSendHttpRequestUser(String uid, String mode)
 {
   String postData = "{\"id\":\"" + uid + "\",\"mode\":\"" + mode + "\"}";
   client.print(
