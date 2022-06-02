@@ -9,9 +9,10 @@
 	}
 	table, th, td {
 		border: 1px solid black;
+		text-align: center;
 	}
 	td {
-		width : 18%;
+		width : 10%;
 	}
 	img {
 		width : auto;
@@ -20,16 +21,12 @@
 
 	}
 </style>
-
-{% if submitted %}
-
+<center>
 	<br/><br/><br/>
-	The event was added!
-	<br/><br/><br/>
-
 	<div id="students">
-		<a id="students" href="badges:students">Students</a>	
+		<a id="students" href="badges:students">Students</a>
 	</div>
+	<br/>
 
 	<table styleborder: 1px solid black;>
 		<tr class="first_part">
@@ -37,44 +34,22 @@
 			<th>Id</th>
 			<th>Login</th>
 			<th>Name</th>
+			<th>Badge</th>
 			<th>Email</th>
 			<th>Staff</th>
 		</tr>
-	{% for student in students %}
+	{% for student_bg in student_bgs %}
 		<tr>
-			<td><img src="{{ student.image_url }}"> </td>
-			<td>{{ student.intra_id }}</td>
-			<td><a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student.login }}</u></a></td>
-			<td>{{ student.displayname }}</td>
-			<td>{{ student.email }}</td>
-			<td>{{ student.is_staff }}</td>
+			<td><img src="{{ student_bg.student.image_url }}"> </td>
+			<td>{{ student_bg.student.intra_id }}</td>
+			<td><a href="https://profile.intra.42.fr/users/{{ student_bg.student.login }}"><u>{{ student_bg.student.login }}</u></a></td>
+			<td>{{ student_bg.student.displayname }}</td>
+			<td><a href="{% url 'badges:one_student' student_bg.pk %}">
+			<u>{{ student_bg.badge.serial }}</u></a></td>
+			<td>{{ student_bg.student.email }}</td>
+			<td>{{ student_bg.student.is_staff }}</td>
 		</tr>
 	{% endfor %}
 	</table>
-{% else %}
-	<div id="students">
-		<a id="students" href="badges:students">Students</a>	
-	</div>
-
-	<table styleborder: 1px solid black;>
-		<tr class="first_part">
-			<th>Image</th>
-			<th>Id</th>
-			<th>Login</th>
-			<th>Name</th>
-			<th>Email</th>
-			<th>Staff</th>
-		</tr>
-	{% for student in students %}
-		<tr>
-			<td><img src="{{ student.image_url }}"> </td>
-			<td>{{ student.intra_id }}</td>
-			<td><a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student.login }}</u></a></td>
-			<td>{{ student.displayname }}</td>
-			<td>{{ student.email }}</td>
-			<td>{{ student.is_staff }}</td>
-		</tr>
-	{% endfor %}
-	</table>
-{% endif %}
+</center>
 {% endblock %}

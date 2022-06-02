@@ -16,5 +16,5 @@ urlpatterns = [
 	path('update_student/<int:student_id>/', update_student, name = 'update_student'),
 	path('test_student/', testing_student, name = 'test_student'),
 	path('students/<int:student_id>/', one_student, name = 'one_student'),
-	path('students/', list_student, name = 'students')
+	path('students/', list_student, name = 'students'),
 ]
