@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import Student, Badge, StudentBadge
-from .forms import StudentForm, StudentBadgeForm
+from .forms import StudentForm, ScanForm
 from accounts import urls
 from accounts.models import User
 import json
@@ -11,6 +11,7 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .tasks import update_students
+from api.models import Scan
 
 @login_required(login_url='accounts:login')
 def	add_student(request):
@@ -57,9 +58,9 @@ def list_student(request):
 	}
 	return render(request, "students.html", context)
 
-def update_studentbadge(request, student_badge_id):
-	student_badge = Student.objects.get(pk=student_badge_id)
-	form = StudentBadgeForm(request.POST or None, instance=student_badge)
+def update_studentbadge(request, scan_id):
+	scan = Scan.objects.get(pk=scan_id)
+	form = ScanForm(request.POST or None, instance=scan)
 	if request.method == "POST":
 		form.save()
 		return redirect('badges:scan')
