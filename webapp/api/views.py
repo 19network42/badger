@@ -1,6 +1,6 @@
 from asyncio import events
 import re
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from badges.models import Badge, Student, StudentBadge
 from pages.models import Event, get_current_event
@@ -97,3 +97,11 @@ def scan_history(request, *args, **kwargs):
 		'scans': Scan.objects.all()
 	}
 	return render(request, "scan.html", context)
+
+@login_required(login_url='accounts:login')
+def	delete_scan(request, scan_id):
+	scan = Scan.objects.get(pk=scan_id)
+	if request.method == "POST":
+		scan.delete()
+		return redirect('api:scan')
+	return render(request, 'delete_event.html', {'scan': scan})
