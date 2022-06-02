@@ -1,6 +1,10 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Student
+from .models import Student, StudentBadge
+
+class StudentBadgeForm(ModelForm):
+	class Meta:
+		model = StudentBadge
 
 class StudentForm(ModelForm):
 	class Meta:
