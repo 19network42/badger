@@ -12,9 +12,6 @@ from badges.models import StudentBadge
 from django.db.models import Q
 import json, sys
 
-# Create your views here.
-
-
 """
 Upon request from the arduino : 
 Parse the events in database to find the current one. 

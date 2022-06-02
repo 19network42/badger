@@ -5,6 +5,7 @@ from .models import Student, StudentBadge
 class StudentBadgeForm(ModelForm):
 	class Meta:
 		model = StudentBadge
+		fields = "__all__"
 
 class StudentForm(ModelForm):
 	class Meta:

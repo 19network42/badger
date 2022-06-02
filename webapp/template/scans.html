@@ -9,15 +9,17 @@
 			<th>Badge UID</th>
 			<th>Student name</th>
 			<th>Time of scan</th>
+			<th></th>
+			<th></th>
 		</tr>
 		<tr>
 			<td>{{ current_scan.uid }}</td>
-			{% if not error %}
-				<td><input type="text" name="uid"></td>
-			{% else %}
-				<td>{{ current_scan.login }}</td>
-			{% endif %}
+			<td>{{ current_scan.login }}</td>
 			<td>{{ current_scan.date }}</td>
+			<td align="center"><a href="{% url 'pages:update_studentbadge' %}"
+				class="btn btn-outline-secondary btn-sm">Update</a></td>
+			<td align="center"><a href="{% url 'pages:delete_studentbadge' %}"
+				class="btn btn-outline-danger btn-sm">Delete</a></td>
 		</tr>
 	</table>
 	<h1>ALL SCANS</h1>
