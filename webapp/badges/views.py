@@ -61,11 +61,19 @@ def list_student(request):
 def update_studentbadge(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
 	form = ScanForm(request.POST or None, instance=scan)
+	error = ""
 	if request.method == "POST":
 		form.save()
-		return redirect('badges:scan')
+		student_badge = StudentBadge.objects.filter(student__login=form.instance.login)
+		if len(student_badge) == 0:
+			error = "Login not found"
+		elif student_badge[0].badge.uid != None:
+			error = "Login is already assigned uid"
+		else:
+			#student_badge.badge.uid = form.instance.uid
+			return redirect('api:scan')
 	context = {
-		'scan': scan,
 		'form': form,
+		'error':error,
 	}
 	return render(request, "update_studentbadge.html", context)
