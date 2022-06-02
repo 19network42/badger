@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<center>
+	<br/><br/><br/>
+	<h1>Add a valid login for the user</h1>
+	<br/><br/><br/>
+
+		<form action="" method=POST>
+			{% csrf_token %}
+			
+			{{ form.as_p}}
+			
+			<button name="submit" value="add">submit</button>
+		</form>
+
+	</center>
+{% endblock %}
