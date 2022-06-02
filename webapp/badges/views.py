@@ -65,6 +65,7 @@ def update_studentbadge(request, scan_id):
 		form.save()
 		return redirect('badges:scan')
 	context = {
+		'scan': scan,
 		'form': form,
 	}
 	return render(request, "update_studentbadge.html", context)
