@@ -26,18 +26,11 @@ from api.models import Scan
 
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
-	context = {
-		'events' : [ev for ev in Event.objects.all() if ev.is_current()]
-	}
-	return render(request, "home.html", context)
+	return render(request, "home.html")
 
 @csrf_exempt
 @login_required(login_url='accounts:login')
 def events_page(request, *args, **kwargs):
-	if request.method == 'POST':
-		res = request.body
-		d = json.loads(res)
-
 	context = {
 		'events': Event.objects.all(),
 	}
@@ -75,14 +68,6 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 		"month_number": month_number, "cal": cal, "now": now, 
 		"current_year": current_year, "time": time, "day": day})
 
-# def conso_page(request, event_id):
-# 	event = Event.objects.get(pk=event_id)
-# 	conso = [co for co in Mode.objects.all() if co.event.id == event_id],
-# 	context = {
-# 		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end],
-# 		'event' : event
-# 	}
-
 #-----------------------------------#
 #			SEARCH					#
 #				UPDATE				#
@@ -98,8 +83,6 @@ def	search_general(request):
 		student_bgs = StudentBadge.objects.filter(Q(student__login__contains=searched) | Q(student__displayname__contains=searched))
 		return render(request, 'search_general.html', 
 			{'searched': searched, 'events': events, 'student_bgs': student_bgs})
-	else:
-		return render(request, 'search_general.html', {})
 
 def mode_page(request, event, context):
 	mode_form = ModeForm(request.POST or None)
@@ -117,6 +100,9 @@ def mode_page(request, event, context):
 				mode_form.instance.delete()
 			if mode_form.instance.type == "" or mode_form.instance.amount == None:
 				error = "Fill out mode field"
+				mode_form.instance.delete()
+			if mode_form.instance.amount <= 0:
+				error = "Incorrect amount"
 				mode_form.instance.delete()
 		if delete:
 			Mode.objects.filter(id=delete).delete()
