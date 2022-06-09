@@ -3,7 +3,6 @@ from plistlib import UID
 from django.db import models
 from django.utils import timezone
 from datetime import datetime
-from badges.models import Student
 
 #Quick fix for dealing with timezone difference.. should probably find a better solution 
 def two_hours_hence():
@@ -47,8 +46,3 @@ class Scan(models.Model):
 
 	def __str__(self):
 		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
-
-# class Conso(models.Model):
-# 	conso = models.OneToOneField(Mode, on_delete = models.CASCADE, primary_key = True)
-# 	uid = models.ForeignKey(Scan, on_delete=models.CASCADE, related_name='uid_conso')
-	# student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student')

@@ -3,7 +3,8 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import Student, Badge, StudentBadge
-from .forms import StudentForm, StudentBadgeForm, ScanForm
+from .forms import StudentForm, StudentBadgeForm
+from api.forms import ScanForm
 from accounts import urls
 from accounts.models import User
 import json

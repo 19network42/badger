@@ -75,6 +75,19 @@ def	calendar_page(request, year=datetime.now().year, month=datetime.now().strfti
 		"month_number": month_number, "cal": cal, "now": now, 
 		"current_year": current_year, "time": time, "day": day})
 
+# def	calendar_page(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
+# 	month = month.capitalize()
+# 	month_number = list(calendar.month_name).index(month)
+# 	month_number = int(month_number)
+# 	cal = HTMLCalendar().formatmonth(year, month_number)
+# 	now = datetime.now()
+# 	current_year = now.year
+# 	time = now.strftime('%H:%M %p')
+# 	day = now.strftime('%j')
+# 	return render(request, 'calendar.html', {"year": year, "month": month,
+# 		"month_number": month_number, "cal": cal, "now": now, 
+# 		"current_year": current_year, "time": time, "day": day})
+
 # def conso_page(request, event_id):
 # 	event = Event.objects.get(pk=event_id)
 # 	conso = [co for co in Mode.objects.all() if co.event.id == event_id],

@@ -29,9 +29,9 @@ class Badge(models.Model):
 
 
 class StudentBadge(models.Model):
-	student = models.ForeignKey(
+	student = models.OneToOneField(
 		Student, on_delete=models.DO_NOTHING, related_name='students_badges')
-	badge = models.ForeignKey(
+	badge = models.OneToOneField(
 		Badge, on_delete=models.DO_NOTHING, related_name='students_badges')
 	start_at = models.DateTimeField()
 	end_at = models.DateTimeField(null=True, blank=True)
