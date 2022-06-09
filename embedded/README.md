@@ -15,7 +15,8 @@ ToDo
 
 ### Wiring
 
-TODO
+<img width="1524" alt="Badger" src="https://user-images.githubusercontent.com/16177499/172823822-bb1925d0-d1c0-4e64-81d3-928273e0b057.png">
+
 
 ## Software
 
