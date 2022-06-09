@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <style>
@@ -7,9 +8,10 @@
 	}
 	table, th, td {
 		border: 1px solid black;
+		text-align: center;
 	}
 	td {
-		width : 18%;
+		width : 10%;
 	}
 	img {
 		width : auto;
@@ -18,9 +20,11 @@
 
 	}
 </style>
-
-<div id="one_student_page">
-	<h1 id="one_student_title">{{one_event.name}}</h1>
+<center>
+	<br/><br/>
+	<div id="one_student_page">
+		<h1 id="one_student_title">{{ student_bg.student.login}}</h1>
+	</div>
 	<table class="scan_table">
 		<tr>
 			<th>Login</th>
@@ -50,5 +54,5 @@
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
 	</table>
-</div>
+</center>
 {% endblock %}
