@@ -26,11 +26,8 @@ The request will send the following JSON values:
 - `uid`: string
 
 4 bytes UID of a badge, in uppercase hexadecimal, each bytes separated by a semicolon.
-- `timestamp`: int
 
-Epoch time of the request, in seconds.
-
-- `mode`: int
+- `mode`: String
 
 Current Arduino's mode, matching the Webapp modes requested at launch.
 
@@ -44,15 +41,14 @@ Content-Type: application/json
 
 {
     "uid": "ED:40:9A:F8",
-    "mode": "1",
-    "timestamp": 1653032868233
+    "mode": "Default",
 }
 ```
 
 ## Response
 
 ### Return code
-If the server could process the request, it will return the `200 OK` status code.
+If the server could process the request, it will return the `201 Created` status code.
 
 ### Content
 The content of the response will be formated in JSON.
@@ -64,14 +60,19 @@ String message to output on the LCD screen.
 
 Code of the sound to play with the piezo buzzer.
 
+- `led`: int[]
+
+Array of int with RGB value inside.
+
 ### Example
 ```
-HTTP/1.1 200 OK
+HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
     "message": "hello marvin",
-    "sound": 1
+    "sound": 1,
+    "led": [0,255,0]
 }
 ```
 
