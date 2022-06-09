@@ -1,13 +1,50 @@
-{% extends 'base.html' %}
+<style>
+
+	.cal {
+		width: 98%;
+		margin: auto;
+		font-size: 13px;
+	}
+	
+	.cal tr, .cal td {
+		border: 1px solid black;
+	}
+	
+	.cal th {
+		padding: 10px;
+		text-align: center;
+		font-size: 18px;
+	}
+	
+	.cal td {
+		width: 200px;
+		height: 150px;
+		padding: 20px 0px 0px 5px;
+	}
+	
+	.month {
+		font-size: 25px;
+	}
+	
+	.date {
+		font-size: 16px;
+	}
+	
+	ul {
+		height: 100%;
+		padding: 0px 5px 0px 20px;
+	}
+	
+	a {
+		color: #17a2b8;
+	}
+	</style>
+
+{% extends 'cal_base.html' %}
 
 {% block content %}
-<center>
-
-	<br><br><br>
-	Day {{ day}}, {{ time }}
-	<br><br><br>
-	{{ cal|safe }}
-	<br><br><br>
-
-</center>
+<br><br><br>
+{{ cal|safe }}
+<br><br><br>
 {% endblock %}
+
