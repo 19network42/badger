@@ -27,18 +27,15 @@ def response(msg, led, buzzer, mode):
 	response_data['mode'] = mode
 	return response_data
 
-def specific_response(data_response, login, mode):
+def specific_response(data_response, login):
 	if login == "tamighi":
-		if mode.lower() == "alcool" or mode.lower() == "soft" or mode.lower() == "drink":
-			data_response = response("Welcome, Tamighi. My servant will serve you.", [240, 240, 23], True, "Default")
-		else:
-			data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, "Default")
+		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, "Default")
 	elif login == "zeno":
-		data_response = response("I am darkness ... BOUH !", [0, 0, 0], True, "Default")
+		data_response = response("* insert funny joke here *", [153, 0, 153], True, "Default")
 	elif login == "Suske":
 		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, "Default")
 	elif login == "skip":
-		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, "Default")
+		data_response = response("-> Next", [204, 255, 204], True, "Default")
 	elif login == "archimède":
 		data_response = response("scan .. for ..* PANIC *", [255, 128, 0], True, "Default")
 	return data_response
@@ -96,7 +93,7 @@ def scan_page(request, *args, **kwargs):
 				response_data = response("Scan ok", [0, 255, 0], True, "Default")
 
 				#	Modify response message if specific login (Please do not remove this line!)
-				response_data = specific_response(response_data, login, current_mode[0].type)
+				response_data = specific_response(response_data, login)
 
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
 	
