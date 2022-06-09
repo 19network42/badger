@@ -121,6 +121,30 @@ def scan_page(request, *args, **kwargs):
 	}
 	return render(request, "scans.html", context)
 
+def search_scan_page(request):
+	if request.method == 'GET':
+		return render(request, "search_scans.html", {})
+
+	login = request.POST.get("login")
+	event_name = request.POST.get("event")
+	scans = Scan.objects.all()
+	if event_name:
+		event = event.last()
+	else:
+		event = None
+
+	event = Event.objects.filter(name = event_name)
+	if event:
+		scans = scans.filter(event = event)
+	if login:
+		scans = scans.filter(login = login)
+
+	context = {
+		'scans': scans,
+		'current_scan': scans.last()
+	}
+	return render(request, "scans.html", context)
+
 def scan_history(request, *args, **kwargs):
 	context = {
 		'scans': Scan.objects.all()
