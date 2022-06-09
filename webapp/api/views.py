@@ -77,7 +77,7 @@ def scan_page(request, *args, **kwargs):
 			response_data = response("No such mode for this event", [255, 0, 0], True, "Default")
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
 
-		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])	
+		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])
 		if len(scans) <= current_mode.amount:
 			response_data = response("OK :)", [0, 255, 0], True, "Default")
 			print ('gg !!!!!!')
