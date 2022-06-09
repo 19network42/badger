@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Event, Mode
 from .forms import EventForm, ModeForm
+from .utils import Calendar
 from badges.models import Student, StudentBadge, Badge
 from badges.forms import StudentForm
 from accounts.models import User
@@ -14,8 +15,13 @@ import json
 import calendar
 import time
 from calendar import HTMLCalendar
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from api.models import Scan
+from django.utils.safestring import mark_safe
+from datetime import datetime
+from django.views import generic
+from django.utils.safestring import mark_safe
+
 
 
 #-----------------------------------#
@@ -56,45 +62,64 @@ def	one_event(request, event_id, *args, **kwargs):
 
 @login_required(login_url='accounts:login')
 @csrf_exempt
-def user_page(request, *args, **kwargs):
+def user_page():
 	context = {
 		'users': User.objects.all(),
 	}
 	return render(request, "user.html", context)
 
-def	calendar_page(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
-	month = month.capitalize()
-	month_number = list(calendar.month_name).index(month)
-	month_number = int(month_number)
-	cal = HTMLCalendar().formatmonth(year, month_number)
-	now = datetime.now()
-	current_year = now.year
-	time = now.strftime('%H:%M %p')
-	day = now.strftime('%j')
-	return render(request, 'calendar.html', {"year": year, "month": month,
-		"month_number": month_number, "cal": cal, "now": now, 
-		"current_year": current_year, "time": time, "day": day})
+def conso_page(request, event_id):
+	event = Event.objects.get(pk=event_id)
+	conso = [co for co in Mode.objects.all() if co.event.id == event_id],
+	context = {
+		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end],
+		'event' : event
+	}
 
-# def	calendar_page(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
-# 	month = month.capitalize()
-# 	month_number = list(calendar.month_name).index(month)
-# 	month_number = int(month_number)
-# 	cal = HTMLCalendar().formatmonth(year, month_number)
-# 	now = datetime.now()
-# 	current_year = now.year
-# 	time = now.strftime('%H:%M %p')
-# 	day = now.strftime('%j')
-# 	return render(request, 'calendar.html', {"year": year, "month": month,
-# 		"month_number": month_number, "cal": cal, "now": now, 
-# 		"current_year": current_year, "time": time, "day": day})
+#-----------------------------------#
+#									#
+#				PAGES				#
+#									#
+#-----------------------------------#
+#credits to Hui Wen https://github.com/huiwenhw
 
-# def conso_page(request, event_id):
-# 	event = Event.objects.get(pk=event_id)
-# 	conso = [co for co in Mode.objects.all() if co.event.id == event_id],
-# 	context = {
-# 		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end],
-# 		'event' : event
-# 	}
+
+class CalendarView(generic.ListView):
+	model = Event
+	template_name = 'calendar.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		d = get_date(self.request.GET.get('month', None))
+
+		# Instantiate our calendar class with today's year and date
+		cal = Calendar(d.year, d.month)
+
+		# Call the formatmonth method, which returns our calendar as a table
+		html_cal = cal.formatmonth(withyear=True)
+		context['calendar'] = mark_safe(html_cal)
+		context['prev_month'] = prev_month(d)
+		context['next_month'] = next_month(d)
+		return context
+
+def prev_month(d):
+	first = d.replace(day=1)
+	prev_month = first - timedelta(days=1)
+	month = 'month=' + str(prev_month.year) + '-' + str(prev_month.month)
+	return month
+
+def next_month(d):
+	days_in_month = calendar.monthrange(d.year, d.month)[1]
+	last = d.replace(day=days_in_month)
+	next_month = last + timedelta(days=1)
+	month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
+	return month
+
+def get_date(req_day):
+	if req_day:
+		year, month = (int(x) for x in req_day.split('-'))
+		return date(year, month, day=1)
+	return datetime.today()
 
 #-----------------------------------#
 #			SEARCH					#
