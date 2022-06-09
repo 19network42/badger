@@ -132,8 +132,8 @@ void  getInitDataFromWebApp(void)
     Serial.print("deserializeJson() failed: ");
     Serial.println(error.c_str());
   }
-  modesFromApp = doc["modes"];
-  maxMode = doc["nbrModes"]; //change to exact name
+  modesFromApp = doc["mode"];
+  maxMode = doc["mode_amount"]; //change to exact name
   for (int i = 0; i < maxMode; i++)
   {
     tmp = modesFromApp[i];
