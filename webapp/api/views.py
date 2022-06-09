@@ -25,19 +25,21 @@ def response(msg, led, buzzer, mode):
 	response_data['led'] = led
 	response_data['buzzer'] = buzzer
 	response_data['mode'] = mode
+	response_data['mode_amount'] = mode_amount 
 	return response_data
 
 def specific_response(data_response, login):
+	mode = ['default']
 	if login == "tamighi":
-		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, "Default")
+		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, mode, len(mode))
 	elif login == "zeno":
-		data_response = response("* insert funny joke here *", [153, 0, 153], True, "Default")
+		data_response = response("* insert funny joke here *", [153, 0, 153], True, mode, len(mode))
 	elif login == "Suske":
-		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, "Default")
+		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, mode, len(mode))
 	elif login == "skip":
-		data_response = response("-> Next", [204, 255, 204], True, "Default")
+		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
 	elif login == "archimède":
-		data_response = response("scan .. for ..* PANIC *", [255, 128, 0], True, "Default")
+		data_response = response("scan .. for ..* PANIC *", [255, 128, 0], True, mode, len(mode))
 	return data_response
 
 
@@ -58,7 +60,7 @@ def init_page(request, *args, **kwargs):
 			return HttpResponse("", content_type="application/json", status=404)
 		else:
 			modes = [mo.type for mo in Mode.objects.all() if mo.event.id == event.id]
-			response_data = response("Event init", [0, 0, 255], True, modes)
+			response_data = response("Event init", [0, 0, 255], True, modes, len(modes))
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	return HttpResponse("", content_type="application/json", status=404)
 	
@@ -95,7 +97,7 @@ def scan_page(request, *args, **kwargs):
 		current_mode = Mode.objects.filter(event=event, type=scan.mode)	
 
 		if len(all_scans) >= current_mode[0].amount:
-			response_data = response("Scan capacity reached.", [255, 0, 0], True, "Default")
+			response_data = response("Scan capacity reached.", [255, 0, 0], True, "Default", 1)
 			scan.save()
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
 
@@ -104,9 +106,9 @@ def scan_page(request, *args, **kwargs):
 			scan.validity = True
 			student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
 			if login == "UNDEFINED":
-				response_data = response("Badge is not linked to an user", [0, 0, 255], True, "Default")
+				response_data = response("Badge is not linked to an user", [0, 0, 255], True, "Default", 1)
 			else:
-				response_data = response("Scan ok", [0, 255, 0], True, "Default")
+				response_data = response("Scan ok", [0, 255, 0], True, "Default", 1)
 
 				#	Modify response message if specific login (Please do not remove this line!)
 				response_data = specific_response(response_data, login)
