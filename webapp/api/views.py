@@ -52,6 +52,19 @@ def specific_response(data_response, login, mode):
 # 		response_data.append(mode)
 # 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+
+@csrf_exempt
+def init_page(request, *args, **kwargs):
+	if request.method == 'POST':
+		event = get_current_event()
+		if not (event):
+			return HttpResponse("", content_type="application/json", status=404)
+		else:
+			modes = [mo.type for mo in Mode.objects.all() if mo.event.id == event.id]
+			response_data = response("Event init", [0, 0, 255], True, modes)
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
+	return HttpResponse("", content_type="application/json", status=404)
+	
 @csrf_exempt
 def scan_page(request, *args, **kwargs):
 	if request.method == 'POST':

@@ -14,6 +14,7 @@ class Event(models.Model):
 	date = models.DateTimeField(default=timezone.now)
 	name = models.CharField(max_length = 100)
 	end = models.DateTimeField(default=two_hours_hence)
+
 	def is_current(self):
 		now = datetime.now()
 		return (self.date < now < self.end)
