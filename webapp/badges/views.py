@@ -3,7 +3,8 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import Student, Badge, StudentBadge
-from .forms import StudentForm, ScanForm
+from .forms import StudentForm, StudentBadgeForm
+from api.forms import ScanForm
 from accounts import urls
 from accounts.models import User
 import json
@@ -17,30 +18,31 @@ from api.models import Scan
 def	add_student(request):
 	submitted = False
 	if request.method == "POST":
-		form = StudentForm(request.POST)
+		form = StudentBadgeForm(request.POST)
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect('/students')
 	else:
-		form = StudentForm()
+		form = StudentBadgeForm()
 		if 'submitted' in request.GET:
 			submitted = True
 	return render(request, "add_student.html", {'form': form, 'submitted': submitted})
 
 @login_required(login_url='accounts:login')
 def	update_student(request, student_id):
-	student = Student.objects.get(pk=student_id)
-	form = StudentForm(request.POST or None, instance=student)
+	student_bg = StudentBadge.objects.get(pk=student_id)
+	form = StudentBadgeForm(request.POST or None, instance=student_bg)
 	if form.is_valid():
 		form.save()
+		# return redirect('badges:one_student', student_id=student_id)
 		return redirect('badges:students')
-	return render(request, "update_student.html", {'student': student, 'form': form})
+	return render(request, "update_student.html", {'student_bg': student_bg, 'form': form})
 
 @login_required(login_url='accounts:login')
 def	one_student(request, student_id, *args, **kwargs):
-	student = Student.objects.get(pk=student_id)
+	student_bg = StudentBadge.objects.get(pk=student_id)
 	context = {
-		'student' : student,
+		'student_bg' : student_bg,
 	}
 	return render(request, "one_student.html", context)
 
@@ -53,7 +55,7 @@ from badges.models import Student
 @login_required(login_url='accounts:login')
 def list_student(request):
 	context = {
-		'students': Student.objects.all(),
+		'student_bgs': StudentBadge.objects.all(),
 	}
 	return render(request, "students.html", context)
 

@@ -51,41 +51,44 @@ def specific_response(data_response, login):
 
 @csrf_exempt
 def scan_page(request, *args, **kwargs):
+
+	#	POST management
 	if request.method == 'POST':
 		res = request.body
 		d = json.loads(res)
 		scan = Scan(uid = d['id'], mode = d['mode'])
 
-		#	Define login for scanned badge.
+		#	Assign a login to the scan if the uid is already assigned. Login is set as "UNDEFINED" if not.
 		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
 		if len(student_badge) == 0:
 			login = "UNDEFINED"
 		else:
 			login = student_badge[0].student.login
 		scan.login = login
-		scan.save()
-
-		#	Check if current event.
+	
+		#	Check if there is a current event. Undefined behavior if there is more than one.
 		event = get_current_event()
 		if not (event):
 			response_data = response("No current event.", [255, 0, 0], True, "Default")
+			scan.save()
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=204)
 
-		#	Check if mode sent is in event.
-		current_mode = Mode.objects.filter(Q(event = event) & Q(type = scan.mode))
-		if len(current_mode) == 0:
-			response_data = response("No such mode for this event.", [255, 0, 0], True, "Default")
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
+		scan.event = event
+
+		#	Undefined behavior if the mode is invalid.
 	
 		#	Check if scan amount is reached for current mode and uid.
-		scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, date__range=[event.date, event.end])
-	
-		if len(scans) > current_mode[0].amount:
-			response_data = response("Scan capacity reached", [255, 0, 0], True, "Default")
+		all_scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, event = scan.event)
+		current_mode = Mode.objects.filter(event=event, type=scan.mode)	
+
+		if len(all_scans) >= current_mode[0].amount:
+			response_data = response("Scan capacity reached.", [255, 0, 0], True, "Default")
+			scan.save()
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
 
 		#	Else check if uid assigned to StudentBadge
 		else :
+			scan.validity = True
 			student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
 			if login == "UNDEFINED":
 				response_data = response("Badge is not linked to an user", [0, 0, 255], True, "Default")
@@ -95,9 +98,10 @@ def scan_page(request, *args, **kwargs):
 				#	Modify response message if specific login (Please do not remove this line!)
 				response_data = specific_response(response_data, login)
 
+		scan.save()
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
 	
-	#	GET page here
+	#	GET management
 	context = {
 		'scans': Scan.objects.all(),
 		'current_scan': Scan.objects.last()
