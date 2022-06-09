@@ -32,8 +32,6 @@ def specific_response(data_response, login):
 		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, "Default")
 	elif login == "zeno":
 		data_response = response("* insert funny joke here *", [153, 0, 153], True, "Default")
-	elif login == "Suske":
-		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, "Default")
 	elif login == "skip":
 		data_response = response("-> Next", [204, 255, 204], True, "Default")
 	elif login == "archimède":
