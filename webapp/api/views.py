@@ -114,7 +114,7 @@ def scan_page(request, *args, **kwargs):
 				response_data = specific_response(response_data, login)
 
 		scan.save()
-		return HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	
 	#	GET management
 	context = {
