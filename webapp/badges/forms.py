@@ -7,7 +7,6 @@ class StudentForm(ModelForm):
 		model = Student
 		fields = ('intra_id', 'login', 'email', 'displayname', 'is_staff')
 
-		#to add some style
 		labels = {
 			'intra_id': '',
 			'login': '',
@@ -32,7 +31,6 @@ class StudentBadgeForm(ModelForm):
 		model = StudentBadge
 		fields = ('student', 'badge', 'start_at', 'end_at', 'caution_paid', 'caution_returned', 'lost')
 
-		#to add some style
 		labels = {
 			'student': 'Student',
 			'badge': 'Badge',
