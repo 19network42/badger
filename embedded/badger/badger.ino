@@ -109,7 +109,9 @@ void  initModes(void)
    {
       getInitDataFromWebApp();
    }
-    
+   lcd.clear();
+   lcd.print("No Event...");
+   while (1){}
 }
 
 /*
