@@ -6,6 +6,7 @@ from badges.views import (
 							testing_student,
 							one_student,
 							list_student,
+							update_studentbadge,
 						)
 
 app_name = 'badges'
@@ -17,4 +18,5 @@ urlpatterns = [
 	path('test_student/', testing_student, name = 'test_student'),
 	path('students/<int:student_id>/', one_student, name = 'one_student'),
 	path('students/', list_student, name = 'students'),
+	path('update_studentbadge/<int:scan_id>/', update_studentbadge, name = 'update_studentbadge'),
 ]
