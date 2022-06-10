@@ -28,6 +28,11 @@
   .date {
 	font-size: 16px;
   }
+
+  .today {
+	  font-size: 16px;
+	  color: #f74d2f;
+  }
   
   ul {
 	height: 100%;
@@ -41,27 +46,35 @@
 	float: left;
   }
 
-.right {
+  .right {
 	float: right;
   }
 
-.btn {
+  .center {
+	position: relative;
+	top: 0%;
+	left: 35%;
+	translate: middle;
+  }
+
+  .btn {
 	outline: none;
 	color: black;
 	background-color: transparent;
 	box-shadow: 0 0 0 0;
   }
 
-.clearfix {
+  .clearfix {
 	margin: 15px;
   }
 </style>
 
 {% extends 'base.html' %}
 {% block content %}
-<br/><br/>
+<br/>
 <div class="clearfix">
 	<a class="btn btn-info left" href="{% url 'pages:calendar' %}?{{ prev_month }}"> Previous Month </a>
+	<a class="position-absolute top-10 start-50 translate-middle btn btn-secondary" href="{% url 'pages:calendar' %}"> Today </a>
 	<a class="btn btn-info right" href="{% url 'pages:calendar' %}?{{ next_month }}"> Next Month </a>
 </div>
 <center>
