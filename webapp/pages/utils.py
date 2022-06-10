@@ -12,11 +12,14 @@ class Calendar(HTMLCalendar):
 	# formats a day as a td
 	# filter events by day
 	def formatday(self, day, events):
+		today = datetime.now()
 		events_per_day = events.filter(date__day=day)
 		d = ''
 		for event in events_per_day:
 			d += f'<li> {event.get_html_url} </li>'
 		if day != 0:
+			if today.day == day:
+				return f"<td><span class='today'>{day}</span><ul> {d} </ul></td>"
 			return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
 		return "<td></td>"
 
