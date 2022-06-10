@@ -62,7 +62,7 @@ def	one_event(request, event_id, *args, **kwargs):
 
 @login_required(login_url='accounts:login')
 @csrf_exempt
-def user_page():
+def user_page(request):
 	context = {
 		'users': User.objects.all(),
 	}
@@ -78,7 +78,7 @@ def conso_page(request, event_id):
 
 #-----------------------------------#
 #									#
-#				PAGES				#
+#				CALENDAR			#
 #									#
 #-----------------------------------#
 #credits to Hui Wen https://github.com/huiwenhw
