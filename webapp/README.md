@@ -97,4 +97,4 @@ Confirmation page to delete the chosen event.
 POST:
 Delete the chosen event and redirect to event_pages.
 
-🔴 Scans pages to add to pages !!
+🔴 Scan pages to add to pages part !!

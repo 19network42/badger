@@ -50,7 +50,6 @@ def	one_student(request, student_id, *args, **kwargs):
 def testing_student(request):
 	update_students()
 	return HttpResponse(str(update_students()))
-from badges.models import Student
 
 @login_required(login_url='accounts:login')
 def list_student(request):
