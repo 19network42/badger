@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+import log
 # from badger.webapp.pages.views import CalendarView
 
 from pages.admin_views import (
@@ -11,7 +12,7 @@ from pages.general_views import (
 							search_general,
 						)
 
-from api.views import scan_post_management
+from api.views import scan_page
 
 from pages.scans_views import (
 							delete_scan,
@@ -62,8 +63,8 @@ urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('user/', user_page, name = 'user'),
 
-	#	Scans
-	path('scan/', scan_post_management, name = 'scan'),
+	#	API
+	path('scan/', scan_page, name = 'scan'),
 	# path('scan_display/', scan_page, name = 'scan_display'),
 	path('init/', init_page, name = 'init'),
 	path('search_scan/', search_scan_page, name='search_scan'),
