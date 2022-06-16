@@ -3,14 +3,13 @@ import re
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from badges.models import Badge, Student, StudentBadge
-from pages.models import Event, get_current_event
+from events.models import Event, get_current_event, Mode
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan
-from pages.models import Event, Mode
 from badges.models import StudentBadge
-from django.db.models import Q
 import json, sys
+from pages.scans_views import scan_page
 
 """
 Upon request from the arduino : 
@@ -19,6 +18,7 @@ Lists the modes for the event (eg. {'soft', 'water', 'alcool'})
 Sends the data back to the arduino under json format.
 """
 
+
 def response(msg, led, buzzer, mode):
 	response_data = {}
 	response_data['msg'] = msg
@@ -26,6 +26,7 @@ def response(msg, led, buzzer, mode):
 	response_data['buzzer'] = buzzer
 	response_data['mode'] = mode
 	return response_data
+
 
 def specific_response(data_response, login):
 	if login == "tamighi":
@@ -39,29 +40,8 @@ def specific_response(data_response, login):
 	return data_response
 
 
-# def initialize_event(request):
-# 	event = get_current_event()
-# 	#modes = events.
-# 	response_data = {}
-# 	for mode in modes:
-# 		response_data.append(mode)
-# 	return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
 @csrf_exempt
-def init_page(request, *args, **kwargs):
-	if request.method == 'POST':
-		event = get_current_event()
-		if not (event):
-			return HttpResponse("", content_type="application/json", status=404)
-		else:
-			modes = [mo.type for mo in Mode.objects.all() if mo.event.id == event.id]
-			response_data = response("Event init", [0, 0, 255], True, modes)
-		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
-	return HttpResponse("", content_type="application/json", status=404)
-	
-@csrf_exempt
-def scan_page(request, *args, **kwargs):
+def scan_post_management(request):
 
 	#	POST management
 	if request.method == 'POST':
@@ -111,48 +91,4 @@ def scan_page(request, *args, **kwargs):
 
 		scan.save()
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
-	
-	#	GET management
-	context = {
-		'scans': Scan.objects.all(),
-		'current_scan': Scan.objects.last()
-	}
-	return render(request, "scans.html", context)
-
-def search_scan_page(request):
-	if request.method == 'GET':
-		return render(request, "search_scans.html", {})
-
-	login = request.POST.get("login")
-	event_name = request.POST.get("event")
-	scans = Scan.objects.all()
-	if event_name:
-		event = event.last()
-	else:
-		event = None
-
-	event = Event.objects.filter(name = event_name)
-	if event:
-		scans = scans.filter(event = event)
-	if login:
-		scans = scans.filter(login = login)
-
-	context = {
-		'scans': scans,
-		'current_scan': scans.last()
-	}
-	return render(request, "scans.html", context)
-
-def scan_history(request, *args, **kwargs):
-	context = {
-		'scans': Scan.objects.all()
-	}
-	return render(request, "scan.html", context)
-
-@login_required(login_url='accounts:login')
-def	delete_scan(request, scan_id):
-	scan = Scan.objects.get(pk=scan_id)
-	if request.method == "POST":
-		scan.delete()
-		return redirect('api:scan')
-	return render(request, 'delete_event.html', {'scan': scan})
+	return scan_page(request)
