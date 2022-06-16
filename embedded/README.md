@@ -44,7 +44,6 @@ $ touch badger/arduino_secrets.h
 #define SCAN_URL ""
 #define INIT_URL ""
 #define TOKEN_POST ""
-#define 
 ```
 
 ## Description of the system
