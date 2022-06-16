@@ -2,19 +2,21 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import Student, Badge, StudentBadge
-from .forms import StudentForm, StudentBadgeForm
+from badges.models import Student, Badge, StudentBadge
+from badges.forms import StudentForm, StudentBadgeForm
 from api.forms import ScanForm
-from accounts import urls
 from accounts.models import User
 import json
-import calendar
-from calendar import HTMLCalendar
-from datetime import datetime
-from .tasks import update_students
+from badges.tasks import update_students
 from api.models import Scan
 
-@login_required(login_url='accounts:login')
+#---------------------------------------#
+#										#
+#				BADGES					#
+#										#
+#---------------------------------------#
+
+@login_required(login_url='pages:login')
 def	add_student(request):
 	submitted = False
 	if request.method == "POST":
@@ -28,7 +30,8 @@ def	add_student(request):
 			submitted = True
 	return render(request, "add_student.html", {'form': form, 'submitted': submitted})
 
-@login_required(login_url='accounts:login')
+
+@login_required(login_url='pages:login')
 def	update_student(request, student_id):
 	student_bg = StudentBadge.objects.get(pk=student_id)
 	form = StudentBadgeForm(request.POST or None, instance=student_bg)
@@ -38,7 +41,8 @@ def	update_student(request, student_id):
 		return redirect('badges:students')
 	return render(request, "update_student.html", {'student_bg': student_bg, 'form': form})
 
-@login_required(login_url='accounts:login')
+
+@login_required(login_url='pages:login')
 def	one_student(request, student_id, *args, **kwargs):
 	student_bg = StudentBadge.objects.get(pk=student_id)
 	context = {
@@ -46,17 +50,20 @@ def	one_student(request, student_id, *args, **kwargs):
 	}
 	return render(request, "one_student.html", context)
 
-@login_required(login_url='accounts:login')
+
+@login_required(login_url='pages:login')
 def testing_student(request):
 	update_students()
 	return HttpResponse(str(update_students()))
 
-@login_required(login_url='accounts:login')
+
+@login_required(login_url='pages:login')
 def list_student(request):
 	context = {
 		'student_bgs': StudentBadge.objects.all(),
 	}
 	return render(request, "students.html", context)
+
 
 def update_studentbadge(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
@@ -73,7 +80,7 @@ def update_studentbadge(request, scan_id):
 			student_badge[0].badge.uid = form.instance.uid
 			student_badge[0].badge.save()
 			return redirect('api:scan')
-		form.instance.login = ""
+		form.instance.login = "UNDEFINED"
 		form.save()
 	context = {
 		'form': form,

@@ -8,11 +8,11 @@
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		{% if user.is_authenticated %}
 			<li class="nav-item">
-				<a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+				<a class="nav-link" href="{% url 'pages:logout' %}">Logout</a>
 		 	 </li>
 		{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+				<a class="nav-link" href="{% url 'pages:login' %}">Login</a>
 		  	</li>
 		{% endif %}
 			<li class="nav-item">
@@ -23,8 +23,8 @@
 				  Users
 				</a>
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="{% url 'badges:students' %}">All users</a></li>
-					<li><a class="dropdown-item" href="{% url 'badges:add_student' %}">Add user</a></li>
+					<li><a class="dropdown-item" href="{% url 'pages:students' %}">All users</a></li>
+					<li><a class="dropdown-item" href="{% url 'pages:add_student' %}">Add user</a></li>
 				</ul>
 			</li>
 			<li class="nav-item dropdown">
@@ -40,7 +40,7 @@
 				  <a class="nav-link" href="{% url 'pages:calendar' %}">Calendar</a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="{% url 'api:scan' %}">Scans</a>
+				  <a class="nav-link" href="{% url 'pages:scan' %}">Scans</a>
 				</li>
 			</ul>
 			<form class="d-flex" role="search" method="POST" action="{% url 'pages:search_general' %}">
