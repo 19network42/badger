@@ -51,3 +51,4 @@ class Scan(models.Model):
 
 	def __str__(self):
 		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
+

@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'badges',
     'pages',
     'api',
+    'events',
 ]
 
 MIDDLEWARE = [
