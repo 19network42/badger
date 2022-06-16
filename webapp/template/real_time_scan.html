@@ -2,6 +2,9 @@
 
 {% block content %}
 <script>
+	function myFunction(data) {
+		document.getElementById("demo").innerHTML = JSON.stringify(data);
+		} 
 
 	const chatSocket = new WebSocket(
 		'ws://'
@@ -11,6 +14,7 @@
 
 	chatSocket.onmessage = function(e) {
 		const data = JSON.parse(e.data);
+		myFunction(data);
 		console.log(data);
 	};
 
@@ -19,5 +23,5 @@
 	};
 
 </script>
-
+<p id="demo">
 {% endblock %}
