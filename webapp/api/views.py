@@ -3,16 +3,15 @@ import re
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from badges.models import Badge, Student, StudentBadge
-from pages.models import Event, get_current_event
+from events.models import Event, get_current_event, Mode
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan
-from pages.models import Event, Mode
 from badges.models import StudentBadge
-from django.db.models import Q
 import json, sys
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from pages.scans_views import scan_page
 
 """
 Upon request from the arduino : 
@@ -30,18 +29,17 @@ def response(msg, led, buzzer, mode, mode_amount):
 	response_data['mode_amount'] = mode_amount 
 	return response_data
 
+
 def specific_response(data_response, login):
 	mode = ['default']
 	if login == "tamighi":
 		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, mode, len(mode))
-	elif login == "zeno":
-		data_response = response("* insert funny joke here *", [153, 0, 153], True, mode, len(mode))
 	elif login == "Suske":
 		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, mode, len(mode))
+	elif login == "Zeno":
+		data_response = response("What is yellow and is waiting?", [153, 0, 153], True, "Default")
 	elif login == "skip":
 		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
-	elif login == "archimède":
-		data_response = response("scan .. for ..* PANIC *", [255, 128, 0], True, mode, len(mode))
 	return data_response
 
 

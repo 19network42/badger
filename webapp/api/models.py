@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from badges.models import Badge, StudentBadge
-from pages.models import Event
-# Create your models here.
+from events.models import Event
+
 class Scan(models.Model):
 
 	uid = models.CharField(max_length=15)
