@@ -139,6 +139,10 @@ def mode_page(request, event, context):
 			if mode_form.instance.type == "" or mode_form.instance.amount == None:
 				error = "Fill out mode field"
 				mode_form.instance.delete()
+			if mode_form.instance.amount == None:
+				context['modes'] = [mo for mo in Mode.objects.all() if mo.event == event]
+				context['mode_form'] = mode_form
+				return render(request, "update_event.html", context)
 			if mode_form.instance.amount <= 0:
 				error = "Incorrect amount"
 				mode_form.instance.delete()

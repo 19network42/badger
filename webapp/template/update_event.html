@@ -11,12 +11,10 @@
 		{% csrf_token %}
 
 		{{ event_form.as_p}}
+				{% include 'mode_management.html' %}
+			<br/>
 
-		<br/>
-			{% include 'mode_management.html' %}
-		<br/>
-
-		<button name="submit" value="submitted">Submit</button>
+		<button name="submit" value="submitted" class="btn btn-success">Submit</button>
 	</form>
 	</center>
 {% endblock %}
