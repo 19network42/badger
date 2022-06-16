@@ -10,7 +10,6 @@ class ScanConsumer(AsyncWebsocketConsumer):
 			"log",
 			self.channel_name
 		)
-
 		await self.accept()
 
 	async def disconnect(self, code):
