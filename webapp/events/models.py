@@ -38,8 +38,8 @@ def	get_current_event():
 		return events[0]
 
 class Mode(models.Model):
-	amount = models.IntegerField(null=True)
-	type = models.CharField(max_length=100, null=True)
+	amount = models.IntegerField(null=True, blank=True)
+	type = models.CharField(max_length=100, null=True, blank=True)
 	event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event', null=True)
 
 	def __str__(self):
