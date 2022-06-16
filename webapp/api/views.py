@@ -43,15 +43,6 @@ def specific_response(data_response, login):
 	return data_response
 
 
-# def initialize_event(request):
-# 	event = get_current_event()
-# 	#modes = events.
-# 	response_data = {}
-# 	for mode in modes:
-# 		response_data.append(mode)
-# 	return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
 @csrf_exempt
 def init_page(request, *args, **kwargs):
 	if request.method == 'POST':

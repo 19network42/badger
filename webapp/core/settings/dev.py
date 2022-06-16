@@ -58,7 +58,11 @@ LOGGING = {
     },
 }
 
-
+CHANNEL_LAYERS={
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+     }
+}
 # API 42
 
 API42_UID = os.getenv('API42_UID')
