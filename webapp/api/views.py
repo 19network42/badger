@@ -11,6 +11,8 @@ from pages.models import Event, Mode
 from badges.models import StudentBadge
 from django.db.models import Q
 import json, sys
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 """
 Upon request from the arduino : 
@@ -19,7 +21,7 @@ Lists the modes for the event (eg. {'soft', 'water', 'alcool'})
 Sends the data back to the arduino under json format.
 """
 
-def response(msg, led, buzzer, mode):
+def response(msg, led, buzzer, mode, mode_amount):
 	response_data = {}
 	response_data['msg'] = msg
 	response_data['led'] = led
@@ -61,9 +63,10 @@ def scan_page(request, *args, **kwargs):
 	#	POST management
 	if request.method == 'POST':
 		res = request.body
+		print(res)
 		d = json.loads(res)
 		scan = Scan(uid = d['id'], mode = d['mode'])
-
+		test_scan(request, scan)
 		#	Assign a login to the scan if the uid is already assigned. Login is set as "UNDEFINED" if not.
 		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
 		if len(student_badge) == 0:
@@ -75,7 +78,7 @@ def scan_page(request, *args, **kwargs):
 		#	Check if there is a current event. Undefined behavior if there is more than one.
 		event = get_current_event()
 		if not (event):
-			response_data = response("No current event.", [255, 0, 0], True, "Default")
+			response_data = response("No current event.", [255, 0, 0], True, "Default", 0)
 			scan.save()
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=204)
 
@@ -103,16 +106,29 @@ def scan_page(request, *args, **kwargs):
 
 				#	Modify response message if specific login (Please do not remove this line!)
 				response_data = specific_response(response_data, login)
-
+		
 		scan.save()
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
-	
 	#	GET management
 	context = {
 		'scans': Scan.objects.all(),
 		'current_scan': Scan.objects.last()
 	}
 	return render(request, "scans.html", context)
+
+def test_scan(request, scan):
+	channel_layer = get_channel_layer()
+	blabla = async_to_sync(channel_layer.group_send)(
+		"log",
+		{
+			'type' : "send.scan",
+			'id' : scan.uid,
+			'mode' : scan.mode,
+		}
+		)
+	print('test', dir(blabla))
+	return render(request, "add_event.html")
+
 
 def scan_history(request, *args, **kwargs):
 	context = {
