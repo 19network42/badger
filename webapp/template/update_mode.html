@@ -10,7 +10,7 @@
 		<br/>
 		{% csrf_token %}
 			Name: {{ event.name }}<br/>
-				Mode: <br/>
+				Mode: <b	r/>
 				{% for mode in modes %}
 				{{ mode_form.as_p}}
 				<br/>
