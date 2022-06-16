@@ -1,4 +1,4 @@
-//  Librairies : Adafruint_PN532, Adafruit_busIO, WiFiNINA
+//  Librairies : Adafruit_PN532, Adafruit_busIO, WiFiNINA, ArduinoJson, LiquidCrystal
 
 #include <Wire.h>
 #include <SPI.h>
@@ -123,7 +123,7 @@ void	initModes(void)
 		lcd.clear();
 		lcd.print("Init. mode");
 		lcd.setCursor(0,1);
-		lcd.print("ok");
+		lcd.print("OK!");
 	}
 	else
 	{
