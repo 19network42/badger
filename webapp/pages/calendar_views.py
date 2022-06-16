@@ -6,7 +6,6 @@ from django.utils.safestring import mark_safe
 
 import calendar
 from calendar import HTMLCalendar
-import time
 from datetime import datetime, timedelta, date
 
 
