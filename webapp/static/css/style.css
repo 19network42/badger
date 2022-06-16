@@ -299,3 +299,15 @@ a:active { text-decoration: none; color: black; }
 	color: rgb(187, 246, 246);
 	margin: 400px;
 }
+.form {
+	margin: auto;
+}
+  
+.form input, .form select, .form textarea {
+	border-radius: 5px;
+	border: 1px solid #17a2b8;
+	outline: none;
+	background: none;
+	padding: 5px;
+	width: 100%;
+}

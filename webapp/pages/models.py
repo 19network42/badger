@@ -3,7 +3,7 @@ from plistlib import UID
 from django.db import models
 from django.utils import timezone
 from datetime import datetime
-from badges.models import Student
+from django.urls import reverse
 
 #Quick fix for dealing with timezone difference.. should probably find a better solution 
 def two_hours_hence():
@@ -14,10 +14,14 @@ class Event(models.Model):
 	date = models.DateTimeField(default=timezone.now)
 	name = models.CharField(max_length = 100)
 	end = models.DateTimeField(default=two_hours_hence)
+
 	def is_current(self):
 		now = datetime.now()
 		return (self.date < now < self.end)
-	
+	@property
+	def get_html_url(self):
+		url = reverse('pages:one_event', args=(self.id,))
+		return f'<a href="{url}"> {self.name} </a>'
 	def __str__(self):
 		return self.name
 
@@ -47,8 +51,3 @@ class Scan(models.Model):
 
 	def __str__(self):
 		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
-
-# class Conso(models.Model):
-# 	conso = models.OneToOneField(Mode, on_delete = models.CASCADE, primary_key = True)
-# 	uid = models.ForeignKey(Scan, on_delete=models.CASCADE, related_name='uid_conso')
-	# student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student')

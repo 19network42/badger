@@ -9,6 +9,8 @@
 			<th>Badge UID</th>
 			<th>Login</th>
 			<th>Date</th>
+			<th>Event</th>
+			<th>Validity</th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -17,6 +19,12 @@
 			<td>{{ current_scan.uid }}</td>
 			<td>{{ current_scan.login }}</td>
 			<td>{{ current_scan.date }}</td>
+			{% if current_scan.event %}
+				<td>{{ current_scan.event.name }}</td>
+			{% else %}
+				<td> Undefined </td>
+			{% endif %}
+			<td> {{ current_scan.validity }} </td>
 			<td align="center"><a href="{% url 'badges:update_studentbadge' current_scan.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 			<td align="center"><a href="{% url 'api:delete_scan' current_scan.id %}"
@@ -30,6 +38,8 @@
 				<th>Badge UID</th>
 				<th>Login</th>
 				<th>Date</th>
+				<th>Event</th>
+				<th>Validity</th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -38,6 +48,12 @@
 				<td>{{ scan.uid }}</td>
 				<td>{{ scan.login }}</td>
 				<td>{{ scan.date }}</td>
+				{% if scan.event %}
+					<td>{{ scan.event.name }}</td>
+				{% else %}
+					<td> Undefined </td>
+				{% endif %}
+				<td> {{ scan.validity }} </td>
 				<td align="center"><a href="{% url 'badges:update_studentbadge' scan.pk %}"
 					class="btn btn-outline-secondary btn-sm">Update</a></td>
 				<td align="center"><a href="{% url 'api:delete_scan' scan.id %}"

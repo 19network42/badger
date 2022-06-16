@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
 <style>
@@ -8,10 +7,9 @@
 	}
 	table, th, td {
 		border: 1px solid black;
-		text-align: center;
 	}
 	td {
-		width : 10%;
+		width : 18%;
 	}
 	img {
 		width : auto;
@@ -20,11 +18,9 @@
 
 	}
 </style>
-<center>
-	<br/><br/>
-	<div id="one_student_page">
-		<h1 id="one_student_title">{{ student_bg.student.login}}</h1>
-	</div>
+
+<div id="one_student_page">
+	<h1 id="one_student_title">{{one_event.name}}</h1>
 	<table class="scan_table">
 		<tr>
 			<th>Login</th>
@@ -50,9 +46,10 @@
 			<td>{{ student_bg.caution_paid }}</td>
 			<td>{{ student_bg.caution_returned }}</td>
 			<td>{{ student_bg.lost }}</td>
-			<td align="center"><a href="{% url 'badges:update_student' student_bg.pk %}"
+			<td align="center"><a href="{% url 'badges:update_badge' student.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
 		</tr>
 	</table>
-</center>
+</div>
 {% endblock %}
+

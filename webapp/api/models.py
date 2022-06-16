@@ -1,12 +1,16 @@
 from django.db import models
 from django.utils import timezone
 from badges.models import Badge, StudentBadge
+from pages.models import Event
 # Create your models here.
 class Scan(models.Model):
+
 	uid = models.CharField(max_length=15)
 	date = models.DateTimeField(default=timezone.now)
 	mode = models.CharField(max_length=15)
 	login = models.CharField(max_length=15)
+	validity = models.BooleanField(default=False)
+	event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True)
 
 	# def find_badge(self):
 	# 	badges = StudentBadge.objects.all()

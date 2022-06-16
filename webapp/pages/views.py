@@ -7,15 +7,21 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Event, Mode
 from .forms import EventForm, ModeForm
-from badges.models import Student
+from .utils import Calendar
+from badges.models import Student, StudentBadge, Badge
 from badges.forms import StudentForm
 from accounts.models import User
 import json
 import calendar
 import time
 from calendar import HTMLCalendar
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from api.models import Scan
+from django.utils.safestring import mark_safe
+from datetime import datetime
+from django.views import generic
+from django.utils.safestring import mark_safe
+
 
 
 #-----------------------------------#
@@ -26,18 +32,11 @@ from api.models import Scan
 
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
-	context = {
-		'events' : [ev for ev in Event.objects.all() if ev.is_current()]
-	}
-	return render(request, "home.html", context)
+	return render(request, "home.html")
 
 @csrf_exempt
 @login_required(login_url='accounts:login')
 def events_page(request, *args, **kwargs):
-	if request.method == 'POST':
-		res = request.body
-		d = json.loads(res)
-
 	context = {
 		'events': Event.objects.all(),
 	}
@@ -56,32 +55,56 @@ def	one_event(request, event_id, *args, **kwargs):
 
 @login_required(login_url='accounts:login')
 @csrf_exempt
-def user_page(request, *args, **kwargs):
+def user_page(request):
 	context = {
 		'users': User.objects.all(),
 	}
 	return render(request, "user.html", context)
 
-def	calendar_page(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
-	month = month.capitalize()
-	month_number = list(calendar.month_name).index(month)
-	month_number = int(month_number)
-	cal = HTMLCalendar().formatmonth(year, month_number)
-	now = datetime.now()
-	current_year = now.year
-	time = now.strftime('%H:%M %p')
-	day = now.strftime('%j')
-	return render(request, 'calendar.html', {"year": year, "month": month,
-		"month_number": month_number, "cal": cal, "now": now, 
-		"current_year": current_year, "time": time, "day": day})
+#-----------------------------------#
+#									#
+#				CALENDAR			#
+#									#
+#-----------------------------------#
+#credits to Hui Wen https://github.com/huiwenhw
 
-# def conso_page(request, event_id):
-# 	event = Event.objects.get(pk=event_id)
-# 	conso = [co for co in Mode.objects.all() if co.event.id == event_id],
-# 	context = {
-# 		'scans' : [scan for scan in Scan.objects.all() if event.date < scan.date < event.end],
-# 		'event' : event
-# 	}
+
+class CalendarView(generic.ListView):
+	model = Event
+	template_name = 'calendar.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		d = get_date(self.request.GET.get('month', None))
+
+		# Instantiate our calendar class with today's year and date
+		cal = Calendar(d.year, d.month)
+
+		# Call the formatmonth method, which returns our calendar as a table
+		html_cal = cal.formatmonth(withyear=True)
+		context['calendar'] = mark_safe(html_cal)
+		context['prev_month'] = prev_month(d)
+		context['next_month'] = next_month(d)
+		return context
+
+def prev_month(d):
+	first = d.replace(day=1)
+	prev_month = first - timedelta(days=1)
+	month = 'month=' + str(prev_month.year) + '-' + str(prev_month.month)
+	return month
+
+def next_month(d):
+	days_in_month = calendar.monthrange(d.year, d.month)[1]
+	last = d.replace(day=days_in_month)
+	next_month = last + timedelta(days=1)
+	month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
+	return month
+
+def get_date(req_day):
+	if req_day:
+		year, month = (int(x) for x in req_day.split('-'))
+		return date(year, month, day=1)
+	return datetime.today()
 
 #-----------------------------------#
 #			SEARCH					#
@@ -95,11 +118,9 @@ def	search_general(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
-		students = Student.objects.filter(Q(login=searched) | Q(displayname__contains=searched))
+		student_bgs = StudentBadge.objects.filter(Q(student__login__contains=searched) | Q(student__displayname__contains=searched))
 		return render(request, 'search_general.html', 
-			{'searched': searched, 'events': events, 'students': students})
-	else:
-		return render(request, 'search_general.html', {})
+			{'searched': searched, 'events': events, 'student_bgs': student_bgs})
 
 def mode_page(request, event, context):
 	mode_form = ModeForm(request.POST or None)
@@ -117,6 +138,9 @@ def mode_page(request, event, context):
 				mode_form.instance.delete()
 			if mode_form.instance.type == "" or mode_form.instance.amount == None:
 				error = "Fill out mode field"
+				mode_form.instance.delete()
+			if mode_form.instance.amount <= 0:
+				error = "Incorrect amount"
 				mode_form.instance.delete()
 		if delete:
 			Mode.objects.filter(id=delete).delete()
