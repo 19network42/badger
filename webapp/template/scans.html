@@ -25,9 +25,9 @@
 				<td> Undefined </td>
 			{% endif %}
 			<td> {{ current_scan.validity }} </td>
-			<td align="center"><a href="{% url 'badges:update_studentbadge' current_scan.pk %}"
+			<td align="center"><a href="{% url 'pages:update_studentbadge' current_scan.pk %}"
 				class="btn btn-outline-secondary btn-sm">Update</a></td>
-			<td align="center"><a href="{% url 'api:delete_scan' current_scan.id %}"
+			<td align="center"><a href="{% url 'pages:delete_scan' current_scan.id %}"
 				class="btn btn-outline-danger btn-sm">Delete</a></td>
 			{% endif %}
 		</tr>
@@ -54,9 +54,9 @@
 					<td> Undefined </td>
 				{% endif %}
 				<td> {{ scan.validity }} </td>
-				<td align="center"><a href="{% url 'badges:update_studentbadge' scan.pk %}"
+				<td align="center"><a href="{% url 'pages:update_studentbadge' scan.pk %}"
 					class="btn btn-outline-secondary btn-sm">Update</a></td>
-				<td align="center"><a href="{% url 'api:delete_scan' scan.id %}"
+				<td align="center"><a href="{% url 'pages:delete_scan' scan.id %}"
 					class="btn btn-outline-danger btn-sm">Delete</a></td>
 		</tr>
 		{% endfor %}

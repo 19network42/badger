@@ -2,13 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib import auth
-
 from django.conf import settings
-from .backends import oauth
+from accounts.backends import oauth
+from accounts.models import User
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 def login(request):
-	return render(request, "accounts/login.html")
+	return render(request, "login.html")
 
 
 def authenticate(request):
@@ -32,3 +34,12 @@ def logout(request):
 	auth.logout(request)
 	messages.success(request, ("You were logged out!"))
 	return redirect('/')
+
+
+@login_required(login_url='accounts:login')
+@csrf_exempt
+def user_page(request):
+	context = {
+		'users': User.objects.all(),
+	}
+	return render(request, "user.html", context)
