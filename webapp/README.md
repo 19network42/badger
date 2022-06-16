@@ -22,9 +22,46 @@ $ cp template.env .env
 
 ## Manual
 
-- base.html: Render the menubar to redirect to the differents locations
+This project is a web application designed to keep track of scan requests from badges linked to students during an event.
+The scans can have different values depending on the event to keep track of drinks, presences or else.
 
-### pages
+The project is divided into 6 applications :
+
+- The account application:
+Handle the website Users data
+
+- The api application:
+Handle the scan database and the scanning requests by sending specific responses depending on the validity of the scan.
+
+- The badges application:
+Handle the database related to badges and students.
+
+- The core application.
+
+- The events application:
+Hanle the database related to the events and his scanning types.
+
+- The pages application:
+Render the different html pages and handle the website requests.
+The html files can be found in the template folder.
+
+### launch and run
+
+When launched, the embedded program will send a post request to the website to receive the different scanning type of the current event. Then, the embedded program will wait for scans and send an other post request with the current scanning type (or mode) and the badge uid. The webapp will send a response depending on the scan validity and store the scan into the database.
+
+### account app
+
+### api app
+
+### badges app
+
+### core app
+
+### events app
+
+### pages app
+
+- base.html: Render the menubar to redirect to the differents locations
 
 - home_page: render home.html
 
@@ -98,3 +135,6 @@ POST:
 Delete the chosen event and redirect to event_pages.
 
 🔴 Scan pages to add to pages part !!
+
+## templates (html files)
+

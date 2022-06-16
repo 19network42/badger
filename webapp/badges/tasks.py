@@ -1,10 +1,10 @@
-from email.mime import image
 import logging
 from time import sleep
 from authlib.integrations.requests_client import OAuth2Session
 from django.conf import settings
 
 from core.celery import app
+from accounts.models import User
 from .models import Student
 
 
