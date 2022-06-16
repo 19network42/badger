@@ -27,7 +27,7 @@ ToDo
 -   WiFiNINA
 -   Adafruit_PN532
 -   LiquidCrystal
--   ArduinoJSON
+-   ArduinoJson
 
 ### Setup
 
