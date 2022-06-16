@@ -21,6 +21,8 @@ INSTALLED_APPS = [
     'badges',
     'pages',
     'api',
+	'channels',
+	'log',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
+
 
 
 # Password validation
