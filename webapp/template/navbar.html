@@ -25,8 +25,6 @@
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="{% url 'badges:students' %}">All users</a></li>
 					<li><a class="dropdown-item" href="{% url 'badges:add_student' %}">Add user</a></li>
-					<!-- <li><hr class="dropdown-divider"></li>
-						<li><a class="dropdown-item" href="#">Something else here</a></li> -->
 				</ul>
 			</li>
 			<li class="nav-item dropdown">
@@ -40,6 +38,9 @@
 			</li>
 				<li class="nav-item">
 				  <a class="nav-link" href="{% url 'pages:calendar' %}">Calendar</a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="{% url 'api:scan' %}">Scans</a>
 				</li>
 			</ul>
 			<form class="d-flex" role="search" method="POST" action="{% url 'pages:search_general' %}">
