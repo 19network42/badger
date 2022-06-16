@@ -46,13 +46,13 @@
 			<tr>
 				<td><a class="link_event" href="{% url 'pages:one_event' event.pk %}">
 					{{ event.name }}</a></td>
-					<td>{{ event.date }}</td>
-					<td>{{ event.end }}</td>
-					<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
-						class="btn btn-outline-secondary btn-sm">Update</a></td>
-					<td align="center"><a href="{% url 'pages:delete_event' event.pk %}"
-						class="btn btn-outline-danger btn-sm">Delete</a></td>
-					</tr>
+				<td>{{ event.date }}</td>
+				<td>{{ event.end }}</td>
+				<td align="center"><a href="{% url 'pages:update_event' event.pk %}"
+					class="btn btn-outline-secondary btn-sm">Update</a></td>
+				<td align="center"><a href="{% url 'pages:delete_event' event.pk %}"
+					class="btn btn-outline-danger btn-sm">Delete</a></td>
+			</tr>
 			{% endfor %}
 		</table>
 		<div class="white_cube"> .</div>

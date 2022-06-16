@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'api',
 	'channels',
 	'log',
+    'events',
 ]
 
 MIDDLEWARE = [

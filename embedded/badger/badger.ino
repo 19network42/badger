@@ -13,9 +13,7 @@
 
 WiFiClient client;
 int status = WL_IDLE_STATUS;
-const int maxMode = 3;
-String modes[maxMode] = {"default", "alcohol", "soft"};
-volatile int currentMode = 0;
+
 #define PN532_SCK  2
 #define PN532_MOSI 3
 #define PN532_SS   4
@@ -31,6 +29,10 @@ volatile int currentMode = 0;
 #define LCD_D6 11
 #define LCD_D7 12
 #define BUTTON 0
+#define NBR_MODE 10
+int maxMode = 3;
+String modes[NBR_MODE] = {"default", "alcohol", "soft"};
+volatile int currentMode = 0;
 
 LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
@@ -46,7 +48,6 @@ void setup() {
   //  Setup pin for hardware use.
   setupPin();
   
-  
   //  Identifying nfc reader
   setupNfcReader();
   
@@ -55,7 +56,7 @@ void setup() {
 
 	//	Connecting to webapp
 	connectToWebApp();
-  pinMode(BUTTON, INPUT_PULLUP);
+  
   attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
 }
 
@@ -64,53 +65,105 @@ void loop() {
 	char id[20];
   String uid;
  
-  
-  String modeDisplay = "default";
   clientIsConnected(false);
-
-    uid = readCardUID(modes, currentMode);
-    if (strcmp("ERROR", uid.c_str()) == 0)
+  
+  uid = readCardUID(modes, currentMode);
+  //If error reading card or timeout do nothing.
+  if (strcmp("ERROR", uid.c_str()) == 0)  {}
+  else
+  {
+    createAndSendHttpRequestUser(uid, modes[currentMode]);
+    if (isResponseFromWebAppOK())
     {
-//      lcd.clear();
-//      Serial.println("ERROR reading card");
-//      lcd.print("Error card");
+        getDataFromWebAppUser();
     }
-    else
-    {
-      createAndSendHTTPRequestUser(uid, modeDisplay);
-      if (isResponseFromWebAppOK())
-      {
-          getDataFromWebAppUser();
-      }
-    }
-   //If there isn't wifi connection try to reconnect.
-   isConnectedToWifi();
+  }
+  //If there isn't wifi connection try to reconnect.
+  isConnectedToWifi();
    
-	  // if the server's disconnected, try to reconnect
+   // if the server's disconnected, try to reconnect
 	 clientIsConnected(true);
-   interrupts();
-//   delay(2000);
  }
 
 /*
- * Change the current mode.
- * @param : int, int : cuurentMode the current mode, nbrMode the nbr max of mode
- * @return int : the current mode changed.
+ * Send a basic HTTP request with no body to get the initial modes.
+ */
+void  createAndSendHttpRequestInit(void)
+{
+  client.print(
+    String("POST ") + INIT_URL + " HTTP/1.1\r\n" +
+    "Content-Type: application/json\r\n" +
+    "X-Secret: " + TOKEN_POST + "\r\n" +
+    "\r\n"
+   );
+}
+
+/*
+ * Initialise the global modes and the number of mode
+ *  with the response got by server.
+ */
+void  initModes(void)
+{
+   createAndSendHttpRequestInit();
+   if (isResponseFromWebAppOK())
+   {
+      getInitDataFromWebApp();
+   }
+   lcd.clear();
+   lcd.print("No Event...");
+   while (1){}
+}
+
+/*
+ * Get the reponse from the server to initialise mode.
+ * The response is deserialize from JSON and put in global variables.
+ */
+void  getInitDataFromWebApp(void)
+{
+  int capacity = 256;
+  JsonArray modesFromApp;
+  const char * tmp;
+  DynamicJsonDocument doc(capacity);
+  
+  DeserializationError error = deserializeJson(doc, client);
+  
+  if (error)
+  {
+    Serial.print("deserializeJson() failed: ");
+    Serial.println(error.c_str());
+  }
+  modesFromApp = doc["mode"];
+  maxMode = doc["mode_amount"]; //change to exact name
+  for (int i = 0; i < maxMode; i++)
+  {
+    tmp = modesFromApp[i];
+    modes[i] = tmp;
+  }
+}
+
+/*
+ * Change the current mode by launching interrupt.
  */
  void changeMode()
  {
-   
-    if (currentMode == maxMode - 1)
+    static unsigned long last_interrupt_time = 0;
+    unsigned long interrupt_time = millis();
+    
+    // If interrupts come faster than 310ms, assume it's a bounce and ignore
+    if (interrupt_time - last_interrupt_time > 310)
+    {
+      if (currentMode == maxMode - 1)
       currentMode = 0;
-    else
-      currentMode++;
+      else
+        currentMode++;
      lcd.clear();
-     lcd.print("mode :");
+     lcd.print("Scan a badge...");
      lcd.setCursor(0,1);
-     lcd.print(modes[currentMode]);
-     for (int i = 0; i < 10000000; i++)
-     {}
+     lcd.print("mode = " + modes[currentMode]);
+    }
+    last_interrupt_time = interrupt_time;
  }
+ 
 /*
  * Check if there is a wifi connection anymore.
  * If it's not the case try to reconnect to the wifi every 5 seconds.
@@ -120,16 +173,14 @@ void loop() {
   char ssid[] = SECRET_SSID;
   char pass[] = SECRET_PASS;
 
-  //If everything good do nothing.
+  //If everything's good do nothing.
   if (WiFi.status() == WL_CONNECTED) return;
-
+  detachInterrupt(BUTTON);
   lcd.clear();
   lcd.print("Wifi connect.");
   lcd.setCursor(0,1);
   lcd.print("lost...");
-  delay(2000);
-  Serial.print("Attempting to connect to SSID: ");
-  Serial.println(ssid);
+  delay(1000);
   lcd.clear();
   lcd.print("Reconnect. to");
   lcd.setCursor(0,1);
@@ -138,24 +189,28 @@ void loop() {
     status = WiFi.begin(ssid, pass);
     delay(5000);
   }
-  Serial.println("Connected to WiFi");
   lcd.clear();
   lcd.print("Wifi connect.");
   lcd.setCursor(0,1);
+  Serial.println("Wifi connected");
   lcd.print("OK!");
   delay(1500);
   lcd.clear();
   printWiFiStatus();
+  attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
  }
  
 /*
- * Check if the client is connected.
- * @error : If the client isn't connected anymore : Try to
- * reconnect every 5 seconds.
+ * Check if the client is connected and try to reconnect every 5 seconds 
+ *  if it's not the case. Interruptions are disabled at the beginning and 
+ *  enabled at the end of the function (Button does nothing).
+ *  
+ * @param bool reconnection : true if it's a reconnection, false otherwise.
  * 
  */
 void  clientIsConnected(bool reconnection)
 {
+  detachInterrupt(BUTTON);
   if (reconnection && !client.connected()) {
 		  Serial.println();
 		  Serial.println("Disconnected from server.");
@@ -181,7 +236,7 @@ void  clientIsConnected(bool reconnection)
         delay(5000);
       }
    }
-   delay(1000);
+   attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
 }
 
 
@@ -194,7 +249,9 @@ void  setupPin(void)
   lcd.begin(16, 2); 
   //Initialize pins
   pinMode(BUZZER, OUTPUT);
-//  pinMode(BUTTON, INPUT);
+  pinMode(BUTTON, INPUT_PULLUP);
+
+  //Builtin led pin
 	WiFiDrv::pinMode(GREEN, OUTPUT);
   WiFiDrv::pinMode(RED, OUTPUT);
   WiFiDrv::pinMode(BLUE, OUTPUT);
@@ -236,10 +293,36 @@ void getDataFromWebAppUser(void)
   turnOnLed(0,0,255);
   msg = doc["msg"];
   Serial.println(msg);
-  lcd.print(msg);
-  delay(1000);
+  lcd.clear();
+//  lcd.print(msg);
+  scrollingMessage(msg);
+  delay(500);
 }
 
+
+/*
+ * Utils method to display a message with scrolling view.
+ */
+void  scrollingMessage(const char * msg)
+{
+  uint8_t messageLength;
+  uint8_t lcdLength = 15;
+  uint8_t totalScroll;
+
+  lcd.print(msg);
+  delay(300);
+  messageLength = strlen(msg);
+  totalScroll = messageLength - lcdLength;
+  Serial.println(totalScroll);
+  detachInterrupt(BUTTON);
+  for (int i = totalScroll; i >= 0; i--)
+  {
+    lcd.scrollDisplayLeft();
+    delay(250);
+  }
+  attachInterrupt(digitalPinToInterrupt(BUTTON), changeMode, FALLING);
+}
+ 
 /*
  * Check if the response from the webApp is good to continue
  * process of the program.
@@ -254,13 +337,11 @@ bool  isResponseFromWebAppOK()
     if (strcmp(status + 9, "201 Created") != 0) {
       Serial.print(F("Unexpected response: "));
       Serial.println(status);
-//      client.stop();
       return (false);
     }
     char endOfHeaders[] = "\r\n\r\n";
     if (!client.find(endOfHeaders)) {
       Serial.println(F("Invalid response"));
-//      client.stop();
       return (false);
     }
     return (true);
@@ -268,9 +349,10 @@ bool  isResponseFromWebAppOK()
 
 /*
  * Send HTTP POST request to the webApp using a JSON object to send data.
- * @param String uid, String mode ; the uid of the card scanned, the actual mode for drinks
+ * @param String uid : the uid of the card scanned.
+ * @param String mode : the actual mode for drinks.
  */
-void  createAndSendHTTPRequestUser(String uid, String mode)
+void  createAndSendHttpRequestUser(String uid, String mode)
 {
   String postData = "{\"id\":\"" + uid + "\",\"mode\":\"" + mode + "\"}";
   client.print(
@@ -285,7 +367,6 @@ void  createAndSendHTTPRequestUser(String uid, String mode)
 
 /*
  * Try to connect to the server.
- * @Error : infinite loop to force turn off the arduino.
  */
 void  connectToWebApp()
 {
@@ -306,7 +387,6 @@ void  connectToWebApp()
     lcd.print("Connect. server");
     lcd.setCursor(0,1);
     lcd.print("KO!");
-//    while(1);
   }
   delay(1500);
   lcd.clear();
@@ -337,13 +417,12 @@ void  setupAndConnectWifi(void)
   lcd.print("OK!");
   delay(1500);
   lcd.clear();
-//  playSuccessBuzzer();
   printWiFiStatus();
 }
 
 /*
- * Setup the NFC Reader for the setup() function.
- * @error : infinite loop to force unplugged the arduino.
+ * Setup the NFC Reader. If it's not connected after 10 tries.
+ *  throw an infinite loop to force to restart the arduino.
  */
 void setupNfcReader(void)
 {
@@ -352,7 +431,7 @@ void setupNfcReader(void)
   int tries = 0;
 
   Serial.println("Looking for PN53x board ...");
-  while (!versiondata && tries++ < 5) {
+  while (!versiondata && tries++ < 10) {
     versiondata = nfc.getFirmwareVersion();
   }
 
@@ -361,18 +440,8 @@ void setupNfcReader(void)
     lcd.print("NFC Reader");
     lcd.setCursor(0,1);
     lcd.print("KO!");
-//    delay(1000);
     while(1);
-//    lcd.clear();
   }
-
-  //Print data of chip PN5
-  Serial.print("Found chip PN5");
-  Serial.println((versiondata>>24) & 0xFF, HEX); 
-  Serial.print("Firmware ver. ");
-  Serial.print((versiondata>>16) & 0xFF, DEC); 
-  Serial.print('.');
-  Serial.println((versiondata>>8) & 0xFF, DEC);
 
   // Set the max number of retry attempts to read from a card
   // This prevents us from waiting forever for a card, which is
@@ -390,7 +459,7 @@ void setupNfcReader(void)
 
 
 /*
- * Print the informations of the current wifi connection ofthe Arduino.
+ * Print the informations of the current wifi connection of the Arduino.
  */
 void printWiFiStatus() {
 	// print the SSID of the network you're attached to:
@@ -410,8 +479,10 @@ void printWiFiStatus() {
 }
 
 /*
- * Turn on the builtin led.
- * @param uint8_t, uint8_t, uint8_t : red color, green color, blue color
+ * Turn on the builtin led with RGB code.
+ * @param uint8_t red : red color.
+ * @param uint8_t green : green color.
+ * @param uint8_t blue : blue color.
  */
 void  turnOnLed(uint8_t red, uint8_t green, uint8_t blue)
 {
@@ -439,8 +510,6 @@ void  playFailureBuzzer(void)
 {
   tone(BUZZER, 100);
   delay(200);
-  noTone(BUZZER);
-  delay(100);
   tone(BUZZER, 100);
   delay(200);
   noTone(BUZZER);
@@ -449,8 +518,10 @@ void  playFailureBuzzer(void)
 
 /*
  * Read card and return into a String the UID of it.
- * @return : String corresponding to the UID of the card
- * @error : Return "ERROR" if something went wrong with the NFC Reader (PN532)
+ * @param : String [] : All the mode available for the event.
+ * @param : int : The current mode.
+ * @return : String : the UID of the card or ERROR if something 
+ *  went wrong (error reading card or timeout).
  */
 String  readCardUID(String modes[], int currentMode)
 {
@@ -461,18 +532,12 @@ String  readCardUID(String modes[], int currentMode)
   char id[20];
   
   //  Waiting for a card to be scanned
-//  noInterrupts();
-  Serial.println("Waiting for an ISO14443A card");
   lcd.clear();
   lcd.print("Scan a badge...");
   lcd.setCursor(0,1);
   lcd.print("mode = " + modes[currentMode]);
   delay(1000);
-  nfc.AsTarget();
-//  nfc.startPassiveTargetIDDetection(PN532_MIFARE_ISO14443A);
-//  success = nfc.readDetectedPassiveTargetID(&uid[0], &uidLength);
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, 1000);
-
+  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
   if (success) {
     Serial.println("Found a card!");
     for (uint8_t i=0; i < uidLength - 1; i++) 
@@ -482,7 +547,6 @@ String  readCardUID(String modes[], int currentMode)
     sprintf(id + len, "%X", uid[uidLength - 1]);
     Serial.print("UID Value: ");
     Serial.println(id);
-    lcd.clear();
     return (String(id));
   }
   turnOnLed(0,0,0);

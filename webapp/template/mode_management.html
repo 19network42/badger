@@ -1,18 +1,20 @@
 {{ mode_form.as_p}}
 
-<button name="action" value="add">Add</button>
 
-{% if mode_error %}
-    Error : {{ mode_error }}
-    <br/>
-{% endif %}
-
-<br/><br/>Modes: <br/>
-
-{% for mode in modes %}
-    {% csrf_token %}
-    Type : {{ mode.type }},
-    Amount : {{ mode.amount }} 
-    <button name="delete" value={{mode.pk}}>delete</button>
-<br/>
-{% endfor %}
+	<button name="action" value="add" class="btn btn-success">Add</button>
+	{% if mode_error %}
+		Error : {{ mode_error }}
+		<br/>
+	{% endif %}
+	
+	<br/><br/>
+		Modes: 
+	<br/><br/>
+	
+	{% for mode in modes %}
+	{% csrf_token %}
+		Type : {{ mode.type }},
+		Amount : {{ mode.amount }} 
+		<button name="delete" value={{mode.pk}} class="btn btn-danger">delete</button>
+		<br/>
+	{% endfor %}
