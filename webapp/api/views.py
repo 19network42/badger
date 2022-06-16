@@ -30,8 +30,8 @@ def response(msg, led, buzzer, mode):
 def specific_response(data_response, login):
 	if login == "tamighi":
 		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, "Default")
-	elif login == "zeno":
-		data_response = response("* insert funny joke here *", [153, 0, 153], True, "Default")
+	elif login == "Zeno":
+		data_response = response("What is yellow and is waiting?", [153, 0, 153], True, "Default")
 	elif login == "skip":
 		data_response = response("-> Next", [204, 255, 204], True, "Default")
 	elif login == "archimède":
