@@ -13,8 +13,8 @@ class ModeForm(ModelForm):
 			'amount': 'Enter its amount',
 		}
 		widgets = {
-			'type': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Drink/snack type', 'required': False}),
-			'amount': forms.NumberInput(attrs={'class':'form-control', 'placeholder': 'Amount', 'required': False}),
+			'type': forms.TextInput(attrs={'class':'form-control update_table', 'placeholder': 'Drink/snack type', 'required': False}),
+			'amount': forms.NumberInput(attrs={'class':'form-control update_table', 'placeholder': 'Amount', 'required': False}),
 		}
 
 class EventForm(ModelForm):
@@ -27,7 +27,7 @@ class EventForm(ModelForm):
 			'end': 'End date',
 		}
 		widgets = {
-			'name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Event name'}),
-			'date': forms.DateTimeInput(attrs={'class':'form-control', 'placeholder': 'Date'}),
-			'end': forms.DateTimeInput(attrs={'class':'form-control', 'placeholder': 'End date'}),
+			'name': forms.TextInput(attrs={'class':'form-control update_table', 'placeholder': 'Event name'}),
+			'date': forms.DateTimeInput(attrs={'class':'form-control update_table', 'placeholder': 'Date'}),
+			'end': forms.DateTimeInput(attrs={'class':'form-control update_table', 'placeholder': 'End date'}),
 		}
