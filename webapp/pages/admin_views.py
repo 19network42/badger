@@ -36,7 +36,7 @@ def logout(request):
 	return redirect('/')
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 @csrf_exempt
 def user_page(request):
 	context = {

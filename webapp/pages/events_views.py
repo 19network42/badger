@@ -13,7 +13,7 @@ from events.forms import EventForm, ModeForm
 #---------------------------------------#
 
 @csrf_exempt
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def events_page(request, *args, **kwargs):
 	context = {
 		'events': Event.objects.all(),
@@ -22,7 +22,7 @@ def events_page(request, *args, **kwargs):
 
 
 @csrf_exempt
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(pk=event_id)
 	context = {
@@ -33,7 +33,7 @@ def	one_event(request, event_id, *args, **kwargs):
 	return render(request, "one_event.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	event_form = EventForm(request.POST or None, instance=event)
@@ -53,7 +53,7 @@ def	update_event(request, event_id):
 	return render(request, "update_event.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	add_event(request):
 	form = EventForm(request.POST or None)
 
@@ -69,7 +69,7 @@ def	add_event(request):
 	return render(request, "add_event.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	delete_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	if request.method == "POST":
