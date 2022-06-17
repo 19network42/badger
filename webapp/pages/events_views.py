@@ -13,17 +13,17 @@ from events.forms import EventForm, ModeForm
 #---------------------------------------#
 
 @csrf_exempt
-@login_required(login_url='accounts:login')
-def events_page(request, *args, **kwargs):
+@login_required(login_url='pages:login')
+def events_page(request):
 	context = {
 		'events': Event.objects.all(),
 	}
 	return render(request, "events.html", context)
 
 
-@login_required(login_url='accounts:login')
 @csrf_exempt
-def	one_event(request, event_id, *args, **kwargs):
+@login_required(login_url='pages:login')
+def	one_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	context = {
 		'scans' : [sca for sca in Scan.objects.all() if event.date < sca.date < event.end ],
@@ -33,7 +33,7 @@ def	one_event(request, event_id, *args, **kwargs):
 	return render(request, "one_event.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	update_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	event_form = EventForm(request.POST or None, instance=event)
@@ -53,15 +53,13 @@ def	update_event(request, event_id):
 	return render(request, "update_event.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	add_event(request):
 	form = EventForm(request.POST or None)
 
 	if request.method == "POST":
-		submit = request.POST.get("submit")
 		form.save()
-		if submit == "first":
-			return HttpResponseRedirect('/update_event/' + str(form.instance.id))
+		return HttpResponseRedirect('/update_event/' + str(form.instance.id))
 
 	context = {
 		'form': form,
@@ -69,7 +67,7 @@ def	add_event(request):
 	return render(request, "add_event.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	delete_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	if request.method == "POST":
@@ -88,17 +86,22 @@ def mode_page(request, event, context):
 		action = request.POST.get("action")
 		delete = request.POST.get("delete")
 
+		#	Add mode
 		if action == "add":
 			mode_form.save()
+
+			#	Error management
 			if mode_form.instance.type in [mo.type for mo in Mode.objects.filter(event=event) if mo != mode_form.instance]:
 				error = "Already exist"
 				mode_form.instance.delete()
-			elif mode_form.instance.type == "" or mode_form.instance.amount == None:
+			elif mode_form.instance.type == None or mode_form.instance.amount == None:
 				error = "Fill out mode field"
 				mode_form.instance.delete()
 			elif mode_form.instance.amount <= 0:
 				error = "Incorrect amount"
 				mode_form.instance.delete()
+		
+		#	Delete mode
 		if delete:
 			Mode.objects.filter(id=delete).delete()
 

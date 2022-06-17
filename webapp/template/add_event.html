@@ -2,17 +2,16 @@
 
 {% block content %}
 	<center>
-	<br/><br/><br/>
-	<h1>Add an event to database...</h1>
-	<br/><br/><br/>
-
-		<form action="" method=POST>
-			{% csrf_token %}
-			
-			{{ form.as_p}}
-			
-			<button name="submit" value="first" class="btn btn-success">Add modes</button>
-		</form>
-
+	<div class="update_event">
+		<h1>Add a new event</h1>
+			<form action="" method=POST>
+				{% csrf_token %}
+				
+				{{ form.as_p}}
+				
+				<button name="submit" value="first" class="btn add_mode_btn">Add modes</button>
+			</form>
+			<p id="add_blue_bloc">.</p>
+	</div>
 	</center>
 {% endblock %}

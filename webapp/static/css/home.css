@@ -1,0 +1,29 @@
+/* ----------------------------------------------------------- */
+
+		/*					HOME PAGE					 */
+
+/* ----------------------------------------------------------- */
+
+#home_event {
+	background-color: lightcoral;
+	color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 48vh;
+	font-family: "SoMeFlOwErS", sans-serif;
+	font-size: 175px;
+}
+
+#home_user {
+	background-color: rgb(168, 167, 243);
+	color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 48vh;
+	font-family: "SoMeFlOwErS", sans-serif;
+	font-size: 175px;
+}
