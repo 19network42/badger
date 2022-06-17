@@ -3,18 +3,16 @@
 
 {% block content %}
 	<center>
-	<br/><br/><br/>
-	<h1>Update {{ event.name }}</h1>
-	<br/>
-	<form action=" " method=POST>
-		<br/>
-		{% csrf_token %}
+	<div class="update_event">
+		<h1>Update {{ event.name }}</h1>
+		<form action=" " method=POST>
+			{% csrf_token %}
 
-		{{ event_form.as_p}}
-				{% include 'mode_management.html' %}
-			<br/>
+			{{ event_form.as_p }}
 
-		<button name="submit" value="submitted" class="btn btn-success">Submit</button>
-	</form>
+			{% include 'mode_management.html' %}
+			<button name="submit" value="submitted" class="btn submit_btn">Submit</button>
+		</form>
+	</div>
 	</center>
 {% endblock %}

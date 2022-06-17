@@ -1,0 +1,72 @@
+
+/* ----------------------------------------------------- */
+
+		/*				EVENT PAGE				 */
+
+/* ----------------------------------------------------- */
+
+
+#event_page {
+	color: rgb(202, 31, 31);
+	height: 100vh;
+	font-family: 'Raleway-Regular', serif;
+}
+
+#event_page #title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 5vh;
+	padding-bottom: 2vh;
+	font-family: 'Blazed', serif;
+	font-size: 100px;
+}
+
+#event_page #table {
+	border-collapse: collapse;
+	width: 75vw;
+}
+
+#table td, #table th {
+	padding: 8px;
+	border: 1px solid rgb(184, 28, 28);
+}
+
+#table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+#table tr:hover {
+	background-color: #ddd;
+}
+
+#table th {
+	background-color: white;
+	color: rgb(202, 31, 31);
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+#mode_error {
+	color: rgb(238, 11, 11);
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.white_cube {
+	margin: 350px;
+}
+
+.link_event {
+	color:  rgb(202, 31, 31)!important;
+	font-style: italic;
+}
+
+#event_page p {
+	position: sticky;
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	font-size: larger;
+}
