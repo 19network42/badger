@@ -9,6 +9,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import json
 from pages.scans_views import scan_page
+from django.contrib.auth.decorators import login_required
 
 """
 Upon request from the arduino : 
@@ -161,7 +162,7 @@ def scan_history(request, *args, **kwargs):
 	}
 	return render(request, "scan.html", context)
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	delete_scan(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
 	if request.method == "POST":
