@@ -28,11 +28,7 @@ def	get_current_event():
 	for ev in Event.objects.all():
 		if ev.is_current():
 			events.append(ev)
-	# Should we prioritize one event over another if two events overlap?
-	# How do we handle this ?
-	if len(events) > 1:
-		print("Error, multiple events found")
-	if len(events) == 1:
+	if len(events) > 0:
 		return events[0]
 
 class Mode(models.Model):
@@ -42,11 +38,3 @@ class Mode(models.Model):
 
 	def __str__(self):
 		return "[" + str(self.event) + "] " +   str(self.amount)  + " " + self.type 
-
-class Scan(models.Model):
-	uid = models.CharField(max_length=15)
-	date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
-

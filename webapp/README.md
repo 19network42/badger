@@ -51,13 +51,95 @@ When launched, the embedded program will send a post request to the website to r
 
 ### account app
 
+🔴
+
 ### api app
+
+The api application handle the connection with the embedded program and handle the Scan model.
+
+#### views
+
+- init_page:
+
+POST:
+Send the modes of the current event to the embedded program in a json format.
+
+- scan_post_management:
+
+POST:
+Receive an UID and a mode from the embedded program in a json format. The function checks for a StudentBadge with this UID and assign his login to a new Scan object along with his other relative informations.
+If the uid sent by the scan has not StudentBadge assigned yet, the scan login is set as UNDEFINED.
+
+It also checks for the validity of the scan depending the mode amount and the number of time an UID has been scanned for the mode in the current event.
+
+#### models
+
+- Scan:
+
+uid: uid of the badge sent by the embedded program.
+date: date of the scan.
+mode: mode sent by the embedded program.
+login: login based on the StudentBadge that is assigned the given uid.
+validity: if the scan is valid based on the amount of the given mode.
+event: event to which the badge has been scanned.
 
 ### badges app
 
+Handle the Badge, Student and StudentBadge models.
+
+#### models
+
+- Student:
+
+intra_id: id of the student.
+login: login of the student.
+email: email of the student.
+displayname: 🔴 idk
+image_url: image of the student on the intranet.
+is_staff: boolean, if the student is a staff member or not.
+
+- Badge:
+
+serial: Badge serial.
+uid: badge uid.
+reference: Badge reference.
+badge_type: Depends on the student status (Piscineux or Student).
+
+- StudentBadge:
+
+student: Student model.
+badge: Badge model.
+start_at: The date of the acquisition of the badge by the student.
+end_at: The date of the requisition of the badge.
+caution_paid: The caution paid by the student for the badge.
+caution_returned: Boolean, caution returned or not.
+lost: Boolean, badge lost or not.
+
 ### core app
 
+🔴
+
 ### events app
+
+Handle the Event and Mode models.
+
+#### models
+
+🔴 Quick fix still in file. (two_hours_hence function)
+
+- Event:
+
+date: Event starting date.
+name: Event name.
+end: Event end date.
+
+🔴 get_current_event return nothing if not events, and undefined behavior if multiple.
+
+- Mode:
+
+amount: Max valid scans possibles for the mode.
+type: Name / type of the mode.
+event: Related event for this mode.
 
 ### pages app
 
@@ -218,7 +300,7 @@ Render delete_event.html.
 🔴 Pourquoi render delete_event ??
 
 
-## templates (html files) NOT DONE YET!!
+### templates (html files) NOT DONE YET!!
 
 
 POST:

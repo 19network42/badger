@@ -1,14 +1,10 @@
-from asyncio import events
-import re
-from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from badges.models import Badge, Student, StudentBadge
-from events.models import Event, get_current_event, Mode
-from django.contrib.auth.decorators import login_required
+from badges.models import StudentBadge
+from events.models import get_current_event, Mode
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan
 from badges.models import StudentBadge
-import json, sys
+import json
 from pages.scans_views import scan_page
 
 """
