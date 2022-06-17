@@ -1,0 +1,46 @@
+/* ----------------------------------------------------------- */
+
+		/*				UPDATE STUDENT				 */
+
+/* ----------------------------------------------------------- */
+
+.update_student {
+	background-color: rgb(255, 240, 212);
+	font-family: 'Raleway-Regular', serif;
+}
+
+.update_student h1 {
+	padding-top: 6vh;
+	padding-bottom: 3vh;
+	font-family: 'Retrolight';
+	font-size: 125px;
+	font-weight: 100;
+	width: 75vw;
+}
+
+.update_student h2 {
+	padding-top: 3vh;
+	font-family: 'Retrolight';
+	font-size: 100px;
+	font-weight: 100;
+	width: 75vw;
+	text-align: justify;
+}
+
+.update_stud_table {
+	background-color: rgb(255, 230, 185);
+	width: 75vw;
+	border: 1px solid black;
+	margin-top: 7px;
+	padding: 8px;
+	border-radius: 0;
+}
+
+.add_stud_btn {
+	margin-bottom: 25%;
+	width: 125px;
+	border-color: black;
+}
+.add_mode_btn:hover {
+	background-color: rgb(255, 230, 185);
+}

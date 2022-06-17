@@ -9,7 +9,7 @@
 			<th>Student name</th>
 			<th>Time of scan</th>
 		</tr>
-		{% for scan in scans %}
+		{% for scan in scans reversed %}
 		<tr>
 			<td>{{ scan.uid }}</td>
 			<td>{{ scan.login }}</td>
@@ -32,7 +32,6 @@
 	</table>
 	<td><button class="btn eventbtn"><a id="update_one_event" href="{% url 'pages:update_event' event.pk %}"
 		>Update event</a></button></td>
-	<div class="blue_cube"> .</div>
 </div>
 {% endblock %}
 

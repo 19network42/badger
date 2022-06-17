@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from badges.models import StudentBadge
 from events.models import get_current_event, Mode
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Log
 from badges.models import StudentBadge
@@ -8,7 +9,7 @@ import json, sys
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import json
-from pages.scans_views import scan_page
+from django.shortcuts import render
 
 """
 Upon request from the arduino : 
@@ -30,7 +31,7 @@ def response(msg, led, buzzer, mode, mode_amount):
 def specific_response(data_response, login):
 	mode = ['default']
 	if login == "tamighi":
-		data_response = response("Lord Tamighi has been scanned... * blushes *", [223, 24, 245], True, mode, len(mode))
+		data_response = response("Tamighi has been scanned... * blushes *", [223, 24, 245], True, mode, len(mode))
 	elif login == "Suske":
 		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, mode, len(mode))
 	elif login == "Zeno":
@@ -38,23 +39,11 @@ def specific_response(data_response, login):
 	elif login == "skip":
 		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
 	elif login == "ncolin":
-		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
+		data_response = response("prout", [204, 255, 204], True, mode, len(mode))
 	return data_response
 
 @csrf_exempt
 def init_page(request):
-	if request.method == 'POST':
-		event = get_current_event()
-		if not (event):
-			return HttpResponse("", content_type="application/json", status=404)
-		else:
-			modes = [mo.type for mo in Mode.objects.all() if mo.event.id == event.id]
-			response_data = response("Event init", [0, 0, 255], True, modes)
-		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
-	return HttpResponse("", content_type="application/json", status=404)
-
-@csrf_exempt
-def init_page(request, *args, **kwargs):
 	if request.method == 'POST':
 		event = get_current_event()
 		if not (event):
@@ -113,7 +102,7 @@ def scan_page(request, *args, **kwargs):
 		if scan_limit_reached(scan):
 			response_data = response("Scan capacity reached.", [255, 0, 0], True, scan.mode, 1)
 			scan.save()
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=205)
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 		#	Else check if uid assigned to StudentBadge
 		else :
 			scan.validity = True
@@ -161,7 +150,7 @@ def scan_history(request, *args, **kwargs):
 	}
 	return render(request, "scan.html", context)
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	delete_scan(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
 	if request.method == "POST":

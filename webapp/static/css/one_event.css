@@ -7,7 +7,7 @@
 #one_event_page {
 	background-color: rgb(226, 195, 244);
 	color: black;
-	height: 100vh;
+	height: 150vh;
 	font-family: 'Raleway-Regular', serif;
 }
 
@@ -80,13 +80,8 @@
 }
 
 #update_one_event {
+	margin-bottom: 50px;
 	padding: 10px;
 	color: black;
 	font-size: larger;
-}
-
-.blue_cube {
-	background-color: rgb(226, 195, 244);
-	color: rgb(226, 195, 244);
-	margin: 400px;
 }

@@ -2,22 +2,21 @@
 
 {% block content %}
 	<center>
-	<br/><br/><br/>
-	<h1>Add a student to database...</h1>
-	<br/><br/><br/>
-	{% if submitted %}
-		The student was added!
+	<div class="update_student">
+		<h1>Add a new student</h1>
+		{% if submitted %}
+			The student was added!
 
-	{% else %}
+		{% else %}
 
-		<form action="" method=POST>
-			{% csrf_token %}
-			
-			{{ form.as_p}}
-			
-			<input type="submit" value="Add" class="btn btn-success">
-		</form>
-
-	{% endif %}
+			<form action="" method=POST>
+				{% csrf_token %}
+				
+				{{ form.as_p}}
+				
+				<input type="submit" value="Add" class="btn add_stud_btn">
+			</form>
+		{% endif %}
+	</div>
 	</center>
 {% endblock %}
