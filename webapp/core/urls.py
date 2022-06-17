@@ -23,7 +23,7 @@ urlpatterns = [
 	#path('', include('accounts.urls', namespace='accounts')),
 	#path('', include('api.urls', namespace='api')),
     #path('', include('badges.urls', namespace='badges')),
-	path('log/', include('log.urls', namespace='log')),
+	#path('log/', include('log.urls', namespace='log')),
 
 ]
 
