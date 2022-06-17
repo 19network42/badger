@@ -39,6 +39,17 @@ def specific_response(data_response, login):
 		data_response = response("scan .. for ..* PANIC *", [255, 128, 0], True, "Default")
 	return data_response
 
+@csrf_exempt
+def init_page(request):
+	if request.method == 'POST':
+		event = get_current_event()
+		if not (event):
+			return HttpResponse("", content_type="application/json", status=404)
+		else:
+			modes = [mo.type for mo in Mode.objects.all() if mo.event.id == event.id]
+			response_data = response("Event init", [0, 0, 255], True, modes)
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
+	return HttpResponse("", content_type="application/json", status=404)
 
 @csrf_exempt
 def scan_post_management(request):
