@@ -46,7 +46,7 @@ def scan_history(request, *args, **kwargs):
 	return render(request, "scan.html", context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 def	delete_scan(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
 	if request.method == "POST":
