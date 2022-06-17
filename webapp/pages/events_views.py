@@ -90,10 +90,11 @@ def mode_page(request, event, context):
 
 		if action == "add":
 			mode_form.save()
+			print (mode_form.instance.type)
 			if mode_form.instance.type in [mo.type for mo in Mode.objects.filter(event=event) if mo != mode_form.instance]:
 				error = "Already exist"
 				mode_form.instance.delete()
-			elif mode_form.instance.type == "" or mode_form.instance.amount == None:
+			elif mode_form.instance.type == None or mode_form.instance.amount == None:
 				error = "Fill out mode field"
 				mode_form.instance.delete()
 			elif mode_form.instance.amount <= 0:
