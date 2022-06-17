@@ -119,6 +119,12 @@ a:active { text-decoration: none; color: black; }
 	text-align: left;
 }
 
+#mode_error {
+	color: rgb(238, 11, 11);
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
 .white_cube {
 	margin: 350px;
 }
