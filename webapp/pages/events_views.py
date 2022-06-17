@@ -14,7 +14,7 @@ from events.forms import EventForm, ModeForm
 
 @csrf_exempt
 @login_required(login_url='accounts:login')
-def events_page(request, *args, **kwargs):
+def events_page(request):
 	context = {
 		'events': Event.objects.all(),
 	}
@@ -23,7 +23,7 @@ def events_page(request, *args, **kwargs):
 
 @login_required(login_url='accounts:login')
 @csrf_exempt
-def	one_event(request, event_id, *args, **kwargs):
+def	one_event(request, event_id):
 	event = Event.objects.get(pk=event_id)
 	context = {
 		'scans' : [sca for sca in Scan.objects.all() if event.date < sca.date < event.end ],
@@ -88,9 +88,11 @@ def mode_page(request, event, context):
 		action = request.POST.get("action")
 		delete = request.POST.get("delete")
 
+		#	Add mode
 		if action == "add":
 			mode_form.save()
-			print (mode_form.instance.type)
+
+			#	Error management
 			if mode_form.instance.type in [mo.type for mo in Mode.objects.filter(event=event) if mo != mode_form.instance]:
 				error = "Already exist"
 				mode_form.instance.delete()
@@ -100,6 +102,8 @@ def mode_page(request, event, context):
 			elif mode_form.instance.amount <= 0:
 				error = "Incorrect amount"
 				mode_form.instance.delete()
+		
+		#	Delete mode
 		if delete:
 			Mode.objects.filter(id=delete).delete()
 
