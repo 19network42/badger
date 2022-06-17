@@ -16,7 +16,7 @@ def	home_page(request, *args, **kwargs):
 	return render(request, "home.html")
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='pages:login')
 @csrf_exempt
 def	search_general(request):
 	if request.method == "POST":
