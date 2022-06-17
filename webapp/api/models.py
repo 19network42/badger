@@ -3,6 +3,10 @@ from django.utils import timezone
 from badges.models import Badge, StudentBadge
 from events.models import Event
 
+class Log(models.Model):
+	name = models.CharField(max_length=255)
+	slug = models.SlugField(unique=True)
+
 class Scan(models.Model):
 
 	uid = models.CharField(max_length=15)
