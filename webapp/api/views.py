@@ -91,4 +91,5 @@ def scan_post_management(request):
 
 		scan.save()
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
-	return scan_page(request)
+	else:
+		return scan_page(request)

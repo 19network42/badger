@@ -1,12 +1,9 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from badges.models import Student, Badge, StudentBadge
-from badges.forms import StudentForm, StudentBadgeForm
+from badges.models import StudentBadge
+from badges.forms import StudentBadgeForm
 from api.forms import ScanForm
-from accounts.models import User
-import json
 from badges.tasks import update_students
 from api.models import Scan
 

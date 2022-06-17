@@ -3,12 +3,9 @@
 
 	<button name="action" value="add" class="btn btn-success">Add</button>
 	{% if mode_error %}
-		Error : {{ mode_error }}
-		<br/>
+		<p id="mode_error">Error : {{ mode_error }}</p>
 	{% endif %}
-	
-	<br/><br/>
-		Modes: 
+		Modes:
 	<br/><br/>
 	
 	{% for mode in modes %}
