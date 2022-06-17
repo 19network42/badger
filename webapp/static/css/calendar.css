@@ -27,6 +27,11 @@
   .date {
 	font-size: 16px;
   }
+
+  .today {
+	  font-size: 16px;
+	  color: #f74d2f;
+  }
   
   ul {
 	height: 100%;
@@ -35,4 +40,29 @@
   
   a {
 	color: #17a2b8;
+  }
+  .left {
+	float: left;
+  }
+
+  .right {
+	float: right;
+  }
+
+  .center {
+	position: relative;
+	top: 0%;
+	left: 35%;
+	translate: middle;
+  }
+
+  .btn {
+	outline: none;
+	color: black;
+	background-color: transparent;
+	box-shadow: 0 0 0 0;
+  }
+
+  .clearfix {
+	margin: 15px;
   }
