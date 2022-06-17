@@ -45,19 +45,19 @@ Hanle the database related to the events and his scanning types.
 Render the different html pages and handle the website requests.
 The html files can be found in the template folder.
 
-### launch and run
+## launch and run
 
 When launched, the embedded program will send a post request to the website to receive the different scanning type of the current event. Then, the embedded program will wait for scans and send an other post request with the current scanning type (or mode) and the badge uid. The webapp will send a response depending on the scan validity and store the scan into the database.
 
-### account app
+## account app
 
 🔴
 
-### api app
+## api app
 
 The api application handle the connection with the embedded program and handle the Scan model.
 
-#### views
+### views
 
 - init_page:
 
@@ -72,7 +72,7 @@ If the uid sent by the scan has not StudentBadge assigned yet, the scan login is
   
 It also checks for the validity of the scan depending the mode amount and the number of time an UID has been scanned for the mode in the current event.
 
-#### models
+### models
 
 - Scan:
 
@@ -83,11 +83,11 @@ login: login based on the StudentBadge that is assigned the given uid.
 validity: if the scan is valid based on the amount of the given mode.  
 event: event to which the badge has been scanned.
 
-### badges app
+## badges app
 
 Handle the Badge, Student and StudentBadge models.
 
-#### models
+### models
 
 - Student:
 
@@ -115,15 +115,15 @@ caution_paid: The caution paid by the student for the badge.
 caution_returned: Boolean, caution returned or not.  
 lost: Boolean, badge lost or not.
 
-### core app
+## core app
 
 🔴
 
-### events app
+## events app
 
 Handle the Event and Mode models.
 
-#### models
+### models
 
 🔴 Quick fix still in file. (two_hours_hence function)
 
@@ -141,12 +141,12 @@ amount: Max valid scans possibles for the mode.
 type: Name / type of the mode.  
 event: Related event for this mode.
 
-### pages app
+## pages app
 
 The pages application is divided based on the different databases. Each databases type has a view file that handle the requests from their respective pages.  
 The urls.py file shows which url is linked to which function in the views.
 
-#### admin_views
+### admin_views
 
 - login:
 
@@ -158,7 +158,7 @@ The urls.py file shows which url is linked to which function in the views.
 
 - user_page:
 
-#### badges_views
+### badges_views
 
 - add_student:
 
@@ -206,11 +206,11 @@ Render update_studentbadge.html
 🔴 Update student vs update studentbadge ?? + too much error management ?
 (If login is already assigned uid, can't assign an other one)
 
-#### calendar_views
+### calendar_views
 
 Infos can be found at https://github.com/huiwenhw
 
-#### event_views
+### event_views
 
 - events_page:
 
@@ -259,7 +259,7 @@ to the context given in parameter.
 
 🔴 Can be put directly in update event since its the only function that calls it
 
-#### general_views
+### general_views
 
 - home_page: 
 
@@ -273,7 +273,7 @@ Redirect to search_general.html and list all Event and StudentBadge objects matc
 
 🔴 Users should be modified to students
 
-#### scan views
+### scan views
 
 - scan_page:
 
@@ -301,75 +301,4 @@ Render delete_event.html.
 🔴 Pourquoi render delete_event ??
 
 
-### templates (html files) NOT DONE YET!!
-
-
-POST:
-Can redirect to : events_page, students_page
-
-- events_page : render events_page.html
-
-GET:
-List all Event objects with their name and dates.
-
-POST:
-The update button redirect to the update_event page and the delete button delete the chosen Event object.
-
-The one_event page is rendered if clicking on the event name.
-
-- one_event : render one_event.html
-
-GET:
-List the scans of the event and his different modes.
-
-POST:
-The update button redirect to the update_event page.
-
-- user_page : render user.html
-
-GET:
-List all User objects with their information.
-
-- calendar_page : render calendar.html
-
-🔴 Infos missing
-
-
-
-- mode_page : called by update_event
-
-GET:
-List every mode of the Event object with the id parameter.
-
-POST:
-Possibility to add and delete a mode for an Event object.
-
-- update_event : render update_event.html
-
-GET:
-Render the Event form for the specified Event object and his list of modes (see mode_page).
-
-POST:
-Update the Event object and redirect to the events_page (events.html).
-
-- add_event : render add_event.html
-
-GET:
-Render an Event form to submit.
-
-POST:
-The add modes button redirect to the update_event page to add the different modes and save the new submitted Event object.
-
-- delete_event : render delete_event.html
-
-GET:
-Confirmation page to delete the chosen event.
-
-POST:
-Delete the chosen event and redirect to event_pages.
-
-🔴 Scan pages to add to pages part !!
-
-
-- base.html: Render the menubar to redirect to the differents locations
-
+## templates (html files) To do ?
