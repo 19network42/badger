@@ -1,16 +1,13 @@
-from asyncio import events
-import re
-from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from badges.models import Badge, Student, StudentBadge
-from events.models import Event, get_current_event, Mode
-from django.contrib.auth.decorators import login_required
+from badges.models import StudentBadge
+from events.models import get_current_event, Mode
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Log
 from badges.models import StudentBadge
 import json, sys
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+import json
 from pages.scans_views import scan_page
 
 """
@@ -44,6 +41,17 @@ def specific_response(data_response, login):
 		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
 	return data_response
 
+@csrf_exempt
+def init_page(request):
+	if request.method == 'POST':
+		event = get_current_event()
+		if not (event):
+			return HttpResponse("", content_type="application/json", status=404)
+		else:
+			modes = [mo.type for mo in Mode.objects.all() if mo.event.id == event.id]
+			response_data = response("Event init", [0, 0, 255], True, modes)
+		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
+	return HttpResponse("", content_type="application/json", status=404)
 
 @csrf_exempt
 def init_page(request, *args, **kwargs):

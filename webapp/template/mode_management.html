@@ -1,20 +1,25 @@
-{{ mode_form.as_p}}
 
-
-	<button name="action" value="add" class="btn btn-success">Add</button>
+<center>
+	<h2 id="">Modes</h2>
+	{{ mode_form.as_p}}
+	<button name="action" value="add" class="btn add_mode_btn">Add</button>
 	{% if mode_error %}
-		Error : {{ mode_error }}
-		<br/>
+		<p id="mode_error">Error : {{ mode_error }}</p>
 	{% endif %}
-	
-	<br/><br/>
-		Modes: 
-	<br/><br/>
-	
-	{% for mode in modes %}
-	{% csrf_token %}
-		Type : {{ mode.type }},
-		Amount : {{ mode.amount }} 
-		<button name="delete" value={{mode.pk}} class="btn btn-danger">delete</button>
-		<br/>
-	{% endfor %}
+	<table id="mode_table">
+		<tr>
+			<th>Type</th>
+			<th>Amount</th>
+			<th></th>
+		</tr>
+		{% for mode in modes %}
+		<tr>
+				{% csrf_token %}
+			
+				<td>{{ mode.type }}</td>
+				<td>{{ mode.amount }}</td>
+				<td><button name="delete" value={{mode.pk}} class="btn del_mode_btn">delete</button></td>
+			</tr>
+		{% endfor %}
+	</table>
+</center>
