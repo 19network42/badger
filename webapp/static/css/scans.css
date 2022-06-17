@@ -6,10 +6,11 @@
 
 #scan_page {
 	background-color: rgb(187, 246, 246);
-	height: 100vh;
+	height: 250vh;
 }
 
 #scan_page h1 {
+	font-family: 'Retrolight' !important;
 	font-size: 70pt;
 	padding-top: 5vh;
 	padding-bottom: 2vh;

@@ -41,11 +41,11 @@ class StudentBadgeForm(ModelForm):
 			'lost': 'Card lost',
 		}
 		widgets = {
-			'student': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'student'}),
-			'badge': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'badge'}),
-			'start_at': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'start at'}),
-			'end_at': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'end at'}),
-			'caution_paid': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'caution paid'}),
-			'caution_returned': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'caution returned'}),
-			'lost': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'card lost'}),
+			'student': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'Student'}),
+			'badge': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'Badge'}),
+			'start_at': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'Start at'}),
+			'end_at': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'End at'}),
+			'caution_paid': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'Caution paid'}),
+			'caution_returned': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'Caution returned'}),
+			'lost': forms.TextInput(attrs={'class':'form-control update_stud_table', 'placeholder': 'Card lost'}),
 		}

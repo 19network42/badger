@@ -10,14 +10,7 @@ DEBUG = True
 USE_TZ = False
 TIME_ZONE = 'Europe/Brussels'
 
-ALLOWED_HOSTS = ['127.0.0.1',
-                'localhost',
-                '10.1.12.2',
-                '10.40.6.198',
-                '10.40.6.188',
-                'shi-r12-p2.s19.be',
-                '0.0.0.0',
-                ]
+ALLOWED_HOSTS = ['*']
 
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
