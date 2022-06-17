@@ -87,7 +87,6 @@ def scan_limit_reached(scan):
 
 @csrf_exempt
 def scan_page(request, *args, **kwargs):
-
 	# POST
 	if request.method == 'POST':
 		#	Check if there is a current event. Undefined behavior if there is more than one.
@@ -122,6 +121,7 @@ def scan_page(request, *args, **kwargs):
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	# GET
 	else:
+		print("\n\n\n\n\n\n----------", Scan.objects.last())
 		context = {
 			'scans': Scan.objects.all(),
 			'current_scan': Scan.objects.last()
@@ -143,7 +143,7 @@ def real_time_scan(request, scan):
 		}
 		)
 	print('test', dir(async_convert))
-	return render(request, "add_event.html") #Pas besoin de ca i guess
+	#return render(request, "add_event.html") #Pas besoin de ca i guess
 	
 
 
