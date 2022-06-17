@@ -238,8 +238,6 @@ Add an event and redirect to update_event.
 ALL:  
 Render add_event.html.  
 
-🔴 Submit variable useless
-
 - delete_event:
 
 POST:  
@@ -270,8 +268,6 @@ render home.html
 POST:  
 From the menubar : possibility to search for a specific Event object and / or StudentBadge object.  
 Redirect to search_general.html and list all Event and StudentBadge objects matching the parameter given in the search bar.  
-
-🔴 Users should be modified to students
 
 ### scan views
 
