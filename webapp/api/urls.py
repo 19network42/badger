@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import (scan_post_management, init_page)
+from .views import scan_page, log
+
 
 urlpatterns = [
-	path('scan/', scan_post_management),
-	path('init/', init_page),
+	path('scan/', scan_page),
 ]
