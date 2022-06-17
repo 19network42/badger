@@ -6,7 +6,7 @@ from badges.models import Badge, Student, StudentBadge
 from events.models import Event, get_current_event, Mode
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from .models import Scan
+from .models import Scan, Log
 from badges.models import StudentBadge
 import json, sys
 from asgiref.sync import async_to_sync
@@ -64,7 +64,7 @@ def scan_page(request, *args, **kwargs):
 		print(res)
 		d = json.loads(res)
 		scan = Scan(uid = d['id'], mode = d['mode'])
-		test_scan(request, scan)
+		real_time_scan(request, scan) # Pourquoi tu l'appelles ici Nathan
 		#	Assign a login to the scan if the uid is already assigned. Login is set as "UNDEFINED" if not.
 		student_badge = StudentBadge.objects.filter(badge__uid = scan.uid)
 		if len(student_badge) == 0:
@@ -83,7 +83,8 @@ def scan_page(request, *args, **kwargs):
 		scan.event = event
 
 		#	Undefined behavior if the mode is invalid.
-	
+
+
 		#	Check if scan amount is reached for current mode and uid.
 		all_scans = Scan.objects.filter(mode = scan.mode, uid = scan.uid, event = scan.event)
 		current_mode = Mode.objects.filter(event=event, type=scan.mode)	
@@ -106,6 +107,9 @@ def scan_page(request, *args, **kwargs):
 				response_data = specific_response(response_data, login)
 		
 		scan.save()
+		# Real-time
+		log = Log.objects.all()
+		real_time_scan(request, scan)
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	#	GET management
 	context = {
@@ -114,18 +118,23 @@ def scan_page(request, *args, **kwargs):
 	}
 	return render(request, "scans.html", context)
 
-def test_scan(request, scan):
+
+def real_time_scan(request, scan):
 	channel_layer = get_channel_layer()
-	blabla = async_to_sync(channel_layer.group_send)(
+	async_convert = async_to_sync(channel_layer.group_send)(
 		"log",
 		{
 			'type' : "send.scan",
 			'id' : scan.uid,
 			'mode' : scan.mode,
+			'login' : scan.login,
+			'validity' : scan.validity,
+			'event' : scan.event,
 		}
 		)
-	print('test', dir(blabla))
-	return render(request, "add_event.html")
+	print('test', dir(async_convert))
+	return render(request, "add_event.html") #Pas besoin de ca i guess
+	
 
 
 def scan_history(request, *args, **kwargs):
