@@ -64,21 +64,21 @@ When launched, the embedded program will send a post request to the website to r
 The pages application is divided based on the different databases. Each databases type has a view file that handle the requests from their respective pages.
 The urls.py file shows which url is linked to which function in the views.
 
-- admin_views
+#### admin_views
 
-#### login:
+- login:
 
-#### authenticate:
+- authenticate:
 
-#### authorize:
+- authorize:
 
-#### logout:
+- logout:
 
-#### user_page:
+- user_page:
 
-- badges_views
+#### badges_views
 
-#### add_student:
+- add_student:
 
 POST:
 Add a StudentBadge to the database and redirect to list_student
@@ -88,7 +88,7 @@ Render add_student.html
 🔴 add_student (in add user) add a student_badge with a complicated form. Submitted variable should also be deleted (useless in html and function)
 Context should be in a variable outside the return line (uniformity of functions)
 
-#### update_student:
+- update_student:
 
 ALL:
 Render update_student.html
@@ -97,21 +97,21 @@ Update the StudentBadge
 🔴 different than add_student, might need update to look/work like add_student (divide in post and get)
 Context should be in a variable outside the return line (uniformity of functions)
 
-#### one_student:
+- one_student:
 
 ALL:
 Render one_student.html with a specific StudentBadge
 
-#### testing_student:
+- testing_student:
 
 🔴 idk what that is
 
-#### list_student:
+- list_student:
 
 ALL:
 Render students.html with all StudentBadge objects
 
-#### udate_studentbadge:
+- udate_studentbadge:
 
 POST:
 Can be called on the scan page by clicking on a specific scan.
@@ -123,24 +123,24 @@ Render update_studentbadge.html
 🔴 Update student vs update studentbadge ?? + too much error management ?
 (If login is already assigned uid, can't assign an other one)
 
-- calendar_views
+#### calendar_views
 
 Infos can be found at https://github.com/huiwenhw
 
-- event_views
+#### event_views
 
-#### events_page:
+- events_page:
 
 ALL:
 Render events.html with all Events objects
 
-#### one_event:
+- one_event:
 
 ALL:
 Render one_event.html with a specific event, the scans related to the event
 and his modes (or scanning type)
 
-#### update_event:
+- update_event:
 
 POST:
 Update an Event object.
@@ -148,7 +148,7 @@ Update an Event object.
 ALL:
 Render update_event.html and call mode_page.
 
-#### add_event:
+- add_event:
 
 POST:
 Add an event and redirect to update_event.
@@ -157,14 +157,14 @@ Render add_event.html.
 
 🔴 Submit variable useless
 
-#### delete_event:
+- delete_event:
 
 POST:
 Delete an event and redirect to events_page.
 ALL:
 Render delete_event.html.
 
-#### mode_page:
+- mode_page:
 
 This function is called by other page functions.
 
@@ -176,13 +176,13 @@ to the context given in parameter.
 
 🔴 Can be put directly in update event since its the only function that calls it
 
-- general_views
+#### general_views
 
-#### home_page: 
+- home_page: 
 
 render home.html
 
-#### search_general: 
+- search_general: 
 
 POST:
 From the menubar : possibility to search for a specific Event object and / or StudentBadge object.
@@ -190,24 +190,35 @@ Redirect to search_general.html and list all Event and StudentBadge objects matc
 
 🔴 Users should be modified to students
 
-- scan views
+#### scan views
 
-#### scan_page:
+- scan_page:
 
 ALL:
 Render scans.html with all the Scan objects and the last scan.
 
 🔴 Do we need the last scan since it is on top of the list ?
 
-#### scan_page:
+- search_scan_page:
 
-#### scan_page:
+GET:
+Render search_scan.html.
+ALL:
+Render scans.html with all the scans matching the event_name and login given.
 
-#### scan_page:
+🔴 Not used yet
 
-#### scan_page:
+- delete_scan:
 
-## templates (html files)
+POST:
+Delete scan and redirect to scan_page .
+🔴 redirect a verifier
+ALL:
+Render delete_event.html.
+🔴 Pourquoi render delete_event ??
+
+
+## templates (html files) NOT DONE YET!!
 
 
 POST:

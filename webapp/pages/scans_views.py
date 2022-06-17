@@ -38,18 +38,10 @@ def search_scan_page(request):
 	}
 	return render(request, "scans.html", context)
 
-
-def scan_history(request, *args, **kwargs):
-	context = {
-		'scans': Scan.objects.all()
-	}
-	return render(request, "scan.html", context)
-
-
 @login_required(login_url='pages:login')
 def	delete_scan(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
 	if request.method == "POST":
 		scan.delete()
-		return redirect('api:scan')
+		return redirect('scan_page')
 	return render(request, 'delete_event.html', {'scan': scan})
