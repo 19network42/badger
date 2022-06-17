@@ -146,7 +146,7 @@ event: Related event for this mode.
 The pages application is divided based on the different databases. Each databases type has a view file that handle the requests from their respective pages.  
 The urls.py file shows which url is linked to which function in the views.
 
-### admin_views
+### admin_views 🔴
 
 - login:
 
