@@ -58,10 +58,8 @@ def	add_event(request):
 	form = EventForm(request.POST or None)
 
 	if request.method == "POST":
-		submit = request.POST.get("submit")
 		form.save()
-		if submit == "first":
-			return HttpResponseRedirect('/update_event/' + str(form.instance.id))
+		return HttpResponseRedirect('/update_event/' + str(form.instance.id))
 
 	context = {
 		'form': form,
