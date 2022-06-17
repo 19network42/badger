@@ -21,8 +21,8 @@ def events_page(request, *args, **kwargs):
 	return render(request, "events.html", context)
 
 
-@login_required(login_url='accounts:login')
 @csrf_exempt
+@login_required(login_url='accounts:login')
 def	one_event(request, event_id, *args, **kwargs):
 	event = Event.objects.get(pk=event_id)
 	context = {
