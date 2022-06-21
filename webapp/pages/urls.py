@@ -12,8 +12,6 @@ from pages.general_views import (
 							search_general,
 						)
 
-from api.views import scan_page
-
 from pages.scans_views import (
 							delete_scan,
 							search_scan_page
@@ -63,9 +61,6 @@ urlpatterns = [
 	path('user/', user_page, name = 'user'),
 
 	#	API
-	path('scan/', scan_page, name = 'scan'),
-	# path('scan_display/', scan_page, name = 'scan_display'),
-
 	path('search_scan/', search_scan_page, name='search_scan'),
 	path('delete_scan/<int:scan_id>/', delete_scan, name = 'delete_scan'),
 

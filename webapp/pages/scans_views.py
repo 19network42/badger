@@ -2,7 +2,6 @@ from events.models import Event, get_current_event, Mode
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from api.models import Scan
 
 @csrf_exempt
