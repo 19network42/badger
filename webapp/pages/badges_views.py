@@ -73,7 +73,7 @@ def update_studentbadge(request, scan_id):
 		#	Error management
 		if len(student_badge) == 0:
 			error = "Login not found"
-		elif student_badge[0].badge.uid != None:
+		elif student_badge[0].badge.uid != None and student_badge[0].badge.uid != form.instance.uid:
 			error = "Login is already assigned uid"
 	
 		#	The student badge is correct and the uid is assigned to it.

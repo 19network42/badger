@@ -9,8 +9,8 @@ import json, sys
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import json
-from django.shortcuts import render
 from pages.scans_views import scan_page
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
 """
@@ -85,7 +85,7 @@ def scan_limit_reached(scan):
 		return False
 
 @csrf_exempt
-def scan_page(request, *args, **kwargs):
+def scan(request):
 	# POST
 	if request.method == 'POST':
 		#	Check if there is a current event. Undefined behavior if there is more than one.
@@ -120,12 +120,7 @@ def scan_page(request, *args, **kwargs):
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 	# GET
 	else:
-		print("\n\n\n\n\n\n----------", Scan.objects.last())
-		context = {
-			'scans': Scan.objects.all(),
-			'current_scan': Scan.objects.last()
-		}
-	return render(request, "scans.html", context)
+		return scan_page(request)
 
 
 def real_time_scan(request, scan):
@@ -143,19 +138,3 @@ def real_time_scan(request, scan):
 		)
 	print('test', dir(async_convert))
 	#return render(request, "add_event.html") #Pas besoin de ca i guess
-	
-
-
-def scan_history(request, *args, **kwargs):
-	context = {
-		'scans': Scan.objects.all()
-	}
-	return render(request, "scan.html", context)
-
-@login_required(login_url='pages:login')
-def	delete_scan(request, scan_id):
-	scan = Scan.objects.get(pk=scan_id)
-	if request.method == "POST":
-		scan.delete()
-		return redirect('api:scan')
-	return render(request, 'delete_event.html', {'scan': scan})
