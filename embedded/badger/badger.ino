@@ -85,6 +85,11 @@ void	loop() {
 	{
 		//Need to stop the client to retrieve a good request and response.
 		//If not ; we'll get informations we don't want.
+    lcd.clear();
+    lcd.print("Bad response");
+    lcd.setCursor(0,1);
+    lcd.print("from server...");
+    delay(300);
 		client.stop();
 	}
 }
@@ -257,10 +262,6 @@ void	clientIsConnected(bool reconnection)
 	}
 	while (!client.connected())
 	{
-		lcd.clear();
-		lcd.print("Retry connect.");
-		lcd.setCursor(0,1);
-		lcd.print("to server...");
 		connectToWebApp();
 		if (!client.connected())
 		{
@@ -348,6 +349,8 @@ void	scrollingMessage(const char * msg)
 	delay(300);
 	messageLength = strlen(msg);
 	totalScroll = messageLength - lcdLength;
+  if (totalScroll <= 0)
+    totalScroll = 0;
 	detachInterrupt(BUTTON);
 	for (int i = totalScroll; i >= 0; i--)
 	{
@@ -402,6 +405,10 @@ void	createAndSendHttpRequestUser(String uid, String mode)
  */
 void	connectToWebApp()
 {
+	lcd.clear();
+	lcd.print("Try connect.");
+	lcd.setCursor(0,1);
+	lcd.print("to server...");
 	if (client.connect(IPADDRESS_SERVER, PORT))
 	{
 		lcd.clear();
@@ -438,6 +445,10 @@ void	setupAndConnectWifi(void)
 		lcd.setCursor(0,1);
 		lcd.print("the firmware");
 	}
+	lcd.clear();
+	lcd.print("Try connect.");
+	lcd.setCursor(0,1);
+	lcd.print("to wifi...");
 	while (status != WL_CONNECTED)
 	{
 		status = WiFi.begin(ssid, pass);
