@@ -97,13 +97,15 @@ def scan(request):
 		if not (event):
 			response_data = response("No current event.", [255, 0, 0], True, "", 0)
 			scan.save()
-			return HttpResponse(json.dumps(response_data), content_type="application/json", status=204)
+			real_time_scan(request, scan)
+			return HttpResponse(json.dumps(response_data), content_type="application/json", status=201) # you cannot return a 204 with a body!
 		scan.event = event
 
 		# Check if scan amount is reached for current mode and uid.
 		if scan_limit_reached(scan):
 			response_data = response("Scan capacity reached.", [255, 0, 0], True, scan.mode, 1)
 			scan.save()
+			real_time_scan(request, scan)
 			return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
 		#	Else check if uid assigned to StudentBadge
 		else :
@@ -114,7 +116,7 @@ def scan(request):
 				response_data = response("Scan ok", [0, 255, 0], True, "Default", 1)
 				response_data = specific_response(response_data, scan.login)
 		scan.save()
-		# Real-time
+		# Real-time		
 		log = Log.objects.all()
 		real_time_scan(request, scan)
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
@@ -126,14 +128,16 @@ def scan(request):
 def real_time_scan(request, scan):
 	channel_layer = get_channel_layer()
 	async_convert = async_to_sync(channel_layer.group_send)(
-		"log",
+		"api",
 		{
 			'type' : "send.scan",
+			'pk': scan.pk,
 			'id' : scan.uid,
 			'mode' : scan.mode,
 			'login' : scan.login,
 			'validity' : scan.validity,
 			'event' : scan.event,
+			'date': scan.date
 		}
 		)
 	print('test', dir(async_convert))

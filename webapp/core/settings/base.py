@@ -22,7 +22,6 @@ INSTALLED_APPS = [
     'pages',
     'api',
 	'channels',
-	'log',
     'events',
 ]
 

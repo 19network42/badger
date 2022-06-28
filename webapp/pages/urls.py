@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path
-import log
 # from badger.webapp.pages.views import CalendarView
 
 from pages.admin_views import (
