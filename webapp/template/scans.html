@@ -3,37 +3,8 @@
 
 {% block content %}
 <div id="scan_page">
-	<h1>LAST SCAN</h1>
-	<table class="last_scan">
-		<tr>
-			<th>Badge UID</th>
-			<th>Login</th>
-			<th>Date</th>
-			<th>Event</th>
-			<th>Validity</th>
-			<th></th>
-			<th></th>
-		</tr>
-		<tr>
-			{% if current_scan %}
-			<td>{{ current_scan.uid }}</td>
-			<td>{{ current_scan.login }}</td>
-			<td>{{ current_scan.date }}</td>
-			{% if current_scan.event %}
-				<td>{{ current_scan.event.name }}</td>
-			{% else %}
-				<td> Undefined </td>
-			{% endif %}
-			<td> {{ current_scan.validity }} </td>
-			<td align="center"><a href="{% url 'pages:update_studentbadge' current_scan.pk %}"
-				class="btn btn-outline-secondary btn-sm">Update</a></td>
-			<td align="center"><a href="{% url 'pages:delete_scan' current_scan.id %}"
-				class="btn btn-outline-danger btn-sm">Delete</a></td>
-			{% endif %}
-		</tr>
-		</table>
 		<h1>ALL SCANS</h1>
-		<table class="scan_page_table">
+		<table class="scan_page_table" id="scan_table">
 			<tr>
 				<th>Badge UID</th>
 				<th>Login</th>
@@ -63,4 +34,39 @@
 	</table>
 	
 </div>
+
+<script>
+
+	const chatSocket = new WebSocket(
+		'ws://'
+		+ window.location.host
+		+ '/ws/log/'
+	);
+
+	chatSocket.onmessage = function(e) {
+		const data = JSON.parse(e.data);
+		console.log(data);
+		var table = document.getElementById("scan_table");
+		var row = table.insertRow(1);
+		var cell = row.insertCell();
+		cell.innerHTML = data.id
+		var cell = row.insertCell();
+		cell.innerHTML = data.login
+		var cell = row.insertCell();
+		cell.innerHTML = new Date(data.date).toLocaleString('en-us', {month: 'short', day: 'numeric', year: 'numeric', hour12:true,hour: 'numeric', minute: 'numeric' })
+		var cell = row.insertCell();
+		cell.innerHTML = data.event ? data.event : 'Undefined'
+		var cell = row.insertCell();
+		cell.innerHTML = data.validity
+		var cell = row.insertCell();
+		cell.innerHTML = '<a href="/update_studentbadge/'+ data.pk +'/" class="btn btn-outline-secondary btn-sm">Update</a>'
+		var cell = row.insertCell();
+		cell.innerHTML = '<a href="/delete_studentbadge/'+ data.pk +'/" class="btn btn-outline-danger btn-sm">Delete</a>'
+	};
+
+	chatSocket.onclose = function(e) {
+		console.error('Chat socket closed unexpectedly');
+	};
+
+</script>
 {% endblock %}

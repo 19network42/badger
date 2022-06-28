@@ -21,8 +21,13 @@ class ScanConsumer(AsyncWebsocketConsumer):
 	async def send_scan(self, scan):
 		await self.send(text_data=json.dumps(
 			{
-				"UID" : scan["id"],
-				"mode" : scan["mode"],
-			})
+				'pk' : scan['pk'],
+				'id' : scan['id'],
+				'mode' : scan['mode'],
+				'login' : scan['login'],
+				'validity' : scan['validity'],
+				'event' : scan['event'],
+				'date' : scan['date'],
+			}, default=str)
 		)
 
