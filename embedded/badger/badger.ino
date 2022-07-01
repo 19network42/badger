@@ -40,11 +40,6 @@ Adafruit_PN532 nfc(PN532_SCK, PN532_MISO, PN532_MOSI, PN532_SS);
 
 void	setup() {
 
-	Serial.begin(9600);
-	while (!Serial) {
-		; // Wait for serial port to connect. Needed for native USB port only
-	}
-
 	//  Setup pin for hardware use.
 	setupPin();
 
@@ -85,11 +80,11 @@ void	loop() {
 	{
 		//Need to stop the client to retrieve a good request and response.
 		//If not ; we'll get informations we don't want.
-    lcd.clear();
-    lcd.print("Bad response");
-    lcd.setCursor(0,1);
-    lcd.print("from server...");
-    delay(300);
+		lcd.clear();
+		lcd.print("Bad response");
+		lcd.setCursor(0,1);
+		lcd.print("from server...");
+		delay(300);
 		client.stop();
 	}
 }
@@ -121,6 +116,7 @@ void	initModes(void)
 {
 	//Used for time after retrying init mode.
 	int i = 20;
+	if (!client.connected()) return ;
 	createAndSendHttpRequestInit();
 	if (isResponseFromWebAppOK())
 	{
@@ -454,6 +450,7 @@ void	setupAndConnectWifi(void)
 		status = WiFi.begin(ssid, pass);
 		delay(100);
 	}
+	lcd.clear();
 	lcd.print("Wifi connect.");
 	lcd.setCursor(0,1);
 	lcd.print("OK!");
