@@ -70,3 +70,24 @@
 	margin-top: 30px;
 	font-size: larger;
 }
+
+.add_eventbtn {
+	margin-top: 30px;
+	height: 50px;
+	padding : 0px;
+	border-color: black;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.add_eventbtn:hover {
+	background-color: rgb(202, 31, 31);
+	color: white;
+}
+
+#add_event :hover{
+	margin-top: 50px;
+	margin-bottom: 50px;
+	padding: 10px;
+	color: white;
+}
