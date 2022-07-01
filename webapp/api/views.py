@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from .models import Scan, Log
 from badges.models import StudentBadge
 from events.models import get_current_event, Mode
@@ -43,8 +44,16 @@ def specific_response(data_response, login):
 		data_response = response("prout", [204, 255, 204], True, mode, len(mode))
 	return data_response
 
+def check_secret(request):
+	print("    eqweqe ", settings.ARDUINO_SECRET_KEY)
+	if request.headers["X-Secret"] != settings.ARDUINO_SECRET_KEY:
+		return False
+	return True
+
 @csrf_exempt
 def init_page(request):
+	if not check_secret(request):
+		return HttpResponse(status=401)
 	if request.method == 'POST':
 		event = get_current_event()
 		if not (event):
@@ -83,12 +92,11 @@ def scan_limit_reached(scan):
 	else:
 		return False
 
-def check_secret(request):
-	pass
 
 @csrf_exempt
 def scan(request):
-    
+	if not check_secret(request):
+		return HttpResponse(status=401)
 	if request.method == 'POST':
 		#	Check if there is a current event. Undefined behavior if there is more than one.
 		scan = get_scan(request)
