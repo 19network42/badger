@@ -4,6 +4,7 @@ from django.urls import path
 						
 from general.views import (
 							home_page,
+    						scan_page,
 							search_general,
 							delete_scan,
 							search_scan_page,
@@ -22,6 +23,7 @@ urlpatterns = [
 
 	#	API
 	path('search_scan/', search_scan_page, name='search_scan'),
+	path('scans/', scan_page, name='scans'),
 	path('delete_scan/<int:scan_id>/', delete_scan, name = 'delete_scan'),
 	path('scan/', scan_page, name = 'scan'),
 

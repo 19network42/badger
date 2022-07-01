@@ -6,12 +6,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <title>Login</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}"/>
 </head>
 
+
 <body>
-    <a href="{% url 'accounts:authenticate' %}">login</a>
+	<div class="login-box">
+		<form>
+		  <a href="{% url 'accounts:authenticate' %}">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			Login
+		  </a>
+		</form>
+	  </div>
+		
+		
 </body>
 
 </html>

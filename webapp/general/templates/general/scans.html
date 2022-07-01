@@ -46,8 +46,19 @@
 	chatSocket.onmessage = function(e) {
 		const data = JSON.parse(e.data);
 		console.log(data);
+		var row_color;
+		if (data.validity.toString() == "true")
+		{
+			row_color = "lightgreen";
+		}
+		else
+		{
+			row_color = "Tomato";
+		}
+		console.log(row_color)
 		var table = document.getElementById("scan_table");
 		var row = table.insertRow(1);
+		row.style.backgroundColor = row_color;
 		var cell = row.insertCell();
 		cell.innerHTML = data.id
 		var cell = row.insertCell();
@@ -59,8 +70,10 @@
 		var cell = row.insertCell();
 		cell.innerHTML = data.validity
 		var cell = row.insertCell();
+		cell.style.textAlign = "center";		
 		cell.innerHTML = '<a href="/update_studentbadge/'+ data.pk +'/" class="btn btn-outline-secondary btn-sm">Update</a>'
 		var cell = row.insertCell();
+		cell.style.textAlign = "center";		
 		cell.innerHTML = '<a href="/delete_studentbadge/'+ data.pk +'/" class="btn btn-outline-danger btn-sm">Delete</a>'
 	};
 

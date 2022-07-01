@@ -1,17 +1,14 @@
-from django.http import HttpResponse
-from badges.models import StudentBadge
-from events.models import get_current_event, Mode
+import json
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Scan, Log
 from badges.models import StudentBadge
-import json, sys
+from events.models import get_current_event, Mode
+from general.views import scan_page
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-import json
-from general.views import scan_page
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
 
 """
 Upon request from the arduino : 
@@ -86,9 +83,12 @@ def scan_limit_reached(scan):
 	else:
 		return False
 
+def check_secret(request):
+	pass
+
 @csrf_exempt
 def scan(request):
-	# POST
+    
 	if request.method == 'POST':
 		#	Check if there is a current event. Undefined behavior if there is more than one.
 		scan = get_scan(request)
@@ -122,9 +122,9 @@ def scan(request):
 		log = Log.objects.all()
 		real_time_scan(request, scan)
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
-	# GET
 	else:
-		return scan_page(request)
+	# Not a post request
+		return HttpResponseBadRequest()
 
 
 def real_time_scan(request, scan):
