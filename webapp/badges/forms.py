@@ -32,8 +32,8 @@ class StudentBadgeForm(ModelForm):
 		fields = ('student', 'badge', 'start_at', 'end_at', 'caution_paid', 'caution_returned', 'lost')
 
 		labels = {
-			'student': 'Student',
-			'badge': 'Badge',
+			'student': 'Student id',
+			'badge': 'Badge serial',
 			'start_at': 'Start at',
 			'end_at': 'End at',
 			'caution_paid': 'Caution paid',

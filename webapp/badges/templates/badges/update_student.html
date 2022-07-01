@@ -3,7 +3,7 @@
 
 {% block content %}
 	<center>
-		<h1>Update {{ student.login }}</h1>
+		<h1>Update {{ student_bg.student.login }}</h1>
 		<form action="" method=POST>
 			{% csrf_token %}
 			{{ form.as_p}}

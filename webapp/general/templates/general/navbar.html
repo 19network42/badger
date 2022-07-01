@@ -18,13 +18,11 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
 		 	 </li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="{% url 'events:events' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				  Students
-				</a>
+			  <li class="nav-item">
+				<a class="nav-link" href="{% url 'badges:students' %}">Students</a>
+		 	 </li>
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="{% url 'badges:students' %}">All students</a></li>
-					<li><a class="dropdown-item" href="{% url 'badges:add_student' %}">Add student</a></li>
 				</ul>
 			</li>
 			<li class="nav-item dropdown">
