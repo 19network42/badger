@@ -17,9 +17,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # custom
+    'general',
     'accounts',
     'badges',
-    'pages',
     'api',
 	'channels',
     'events',

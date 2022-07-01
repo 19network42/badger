@@ -9,7 +9,7 @@ import json, sys
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import json
-from pages.scans_views import scan_page
+from general.views import scan_page
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 

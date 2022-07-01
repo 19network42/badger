@@ -1,0 +1,37 @@
+{% extends 'general/base.html' %}
+
+{% block content %}
+<div id="one_event_page">
+	<h1>{{event.name}}</h1>
+	<table class="scan_table">
+		<tr>
+			<th>Badge UID</th>
+			<th>Student name</th>
+			<th>Time of scan</th>
+		</tr>
+		{% for scan in scans reversed %}
+		<tr>
+			<td>{{ scan.uid }}</td>
+			<td>{{ scan.login }}</td>
+			<td>{{ scan.date }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<h2>MODES</h2>
+	<table class="scan_table">
+		<tr>
+			<th>Mode</th>
+			<th>Amount</th>
+		</tr>
+		{% for mode in modes %}
+		<tr>
+			<td>{{ mode.type }}</td>
+			<td>{{ mode.amount }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<td><button class="btn eventbtn"><a id="update_one_event" href="{% url 'events:update_event' event.pk %}"
+		>Update event</a></button></td>
+</div>
+{% endblock %}
+

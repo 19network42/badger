@@ -1,0 +1,27 @@
+{% extends 'general/base.html' %}
+{% load static %}
+
+{% block content %}
+	<center>
+	<br><br><br>
+		{% if searched %}
+		<h1>You searched for {{ searched }}</h1>
+		<br/>
+		<br/>
+		{% for event in events %}
+			<a href="{% url 'events:one_event' event.pk%}"><u>{{ event.name }}</u> - {{ event.date }} </a><br/>
+
+		{% endfor %}
+
+		{% for student_bg in student_bgs %}
+			<a href="{% url 'badges:one_student' student_bg.pk%}"><u>{{ student_bg.student.intra_id }}</u></a> - <a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student_bg.student.login }}</u></a> - {{ student_bg.student.displayname }}<br/>
+
+		{% endfor %}
+		
+		{% else %}
+		<h1>Nothing to search for!</h1>
+		{% endif %}
+	
+	</center>
+
+{% endblock %}
