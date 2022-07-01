@@ -107,7 +107,7 @@ def get_date(req_day):
 #										#
 #---------------------------------------#
 
-
+@login_required(login_url='accounts:login')
 @csrf_exempt
 def	home_page(request, *args, **kwargs):
 	return render(request, "general/home.html")
