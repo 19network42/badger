@@ -345,8 +345,10 @@ void	scrollingMessage(const char * msg)
 	delay(300);
 	messageLength = strlen(msg);
 	totalScroll = messageLength - lcdLength;
-  if (totalScroll <= 0)
-    totalScroll = 0;
+	if (totalScroll <= 0)
+	{
+		totalScroll = 0;
+	}
 	detachInterrupt(BUTTON);
 	for (int i = totalScroll; i >= 0; i--)
 	{
