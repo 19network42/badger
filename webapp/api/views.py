@@ -83,8 +83,12 @@ def scan_limit_reached(scan):
 	else:
 		return False
 
+def check_secret(request):
+	pass
+
 @csrf_exempt
 def scan(request):
+    
 	if request.method == 'POST':
 		#	Check if there is a current event. Undefined behavior if there is more than one.
 		scan = get_scan(request)
