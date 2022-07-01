@@ -52,9 +52,10 @@
 					class="btn btn-outline-secondary btn-sm">Update</a></td>
 				<td align="center"><a href="{% url 'events:delete_event' event.pk %}"
 					class="btn btn-outline-danger btn-sm">Delete</a></td>
-			</tr>
-			{% endfor %}
-		</table>
+				</tr>
+				{% endfor %}
+			</table>
+			<button href="{% url 'events:add_event' %}" class="btn add_eventbtn" id="add_event">Add event</button>
 		<div class="white_cube"> .</div>
 	</div>
 {% endif %}

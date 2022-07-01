@@ -84,7 +84,10 @@ def update_studentbadge(request, scan_id):
 		
 		#	If there is an error, login is undefined, error is set
 		#	and render studentbadge.html
-		form.instance.login = "UNDEFINED"
+		if len(student_badge) != 0:
+			form.instance.login = student_badge[0].student.login
+		else:
+			form.instance.login = "UNDEFINED"
 		form.save()
 		
 	context = {
