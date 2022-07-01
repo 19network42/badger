@@ -8,6 +8,7 @@ from general.views import (
 							search_general,
 							delete_scan,
 							search_scan_page,
+							scan_page,
 							CalendarView
 						)
 

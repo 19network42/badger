@@ -169,5 +169,5 @@ def	delete_scan(request, scan_id):
 	scan = Scan.objects.get(pk=scan_id)
 	if request.method == "POST":
 		scan.delete()
-		return redirect('scan_page')
+		return redirect('general:scans')
 	return render(request, 'events/delete_event.html', {'scan': scan})
