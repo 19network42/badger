@@ -80,12 +80,14 @@ def update_studentbadge(request, scan_id):
 		else:
 			student_badge[0].badge.uid = form.instance.uid
 			student_badge[0].badge.save()
-			return redirect('api:scan')
+			return redirect('general:scans')
 		
-		#	If there is an error, login is undefined, error is set
-		#	and render studentbadge.html
-		if len(student_badge) != 0:
-			form.instance.login = student_badge[0].student.login
+		#	If there is an error, login is undefined or set back to its original state,
+		#	error is set and render studentbadge.html
+
+		login = StudentBadge.objects.filter(badge__uid=form.instance.uid)
+		if len(login) != 0:
+			form.instance.login = login[0].student.login
 		else:
 			form.instance.login = "UNDEFINED"
 		form.save()
