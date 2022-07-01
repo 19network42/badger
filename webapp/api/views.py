@@ -34,10 +34,12 @@ def specific_response(data_response, login):
 	mode = ['default']
 	if login == "tamighi":
 		data_response = response("Tamighi has been scanned... * blushes *", [223, 24, 245], True, mode, len(mode))
-	elif login == "Suske":
-		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, mode, len(mode))
+	elif login == "lrondia":
+		data_response = response("(┛◉_◉)┛彡┻━┻", [223, 24, 245], True, mode, len(mode))
 	elif login == "Zeno":
 		data_response = response("What is yellow and is waiting?", [153, 0, 153], True, "Default")
+	elif login == "abuzdin":
+		data_response = response("Hello the creator!", [153, 0, 153], True, "Default")
 	elif login == "skip":
 		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
 	elif login == "ncolin":
