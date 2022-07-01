@@ -72,7 +72,7 @@
 }
 
 .add_eventbtn {
-	margin-top: 30px;
+	margin-bottom: 30px;
 	height: 50px;
 	padding : 0px;
 	border-color: black;
@@ -81,13 +81,11 @@
 }
 
 .add_eventbtn:hover {
+	color: white !important;
+	border-color: rgb(202, 31, 31);
 	background-color: rgb(202, 31, 31);
-	color: white;
 }
 
 #add_event :hover{
-	margin-top: 50px;
-	margin-bottom: 50px;
-	padding: 10px;
 	color: white;
 }

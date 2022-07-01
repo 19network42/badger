@@ -34,6 +34,7 @@
 {% else %}
 	<div id="event_page">
 		<h1 id="title">EVENTS</h1>
+		<button class="btn add_eventbtn" id="add_event"><a href="{% url 'events:add_event' %}">Add event</a></button>
 		<table id="table">
 			<tr class="first_part">
 				<th>Name</th>
@@ -55,7 +56,6 @@
 				</tr>
 				{% endfor %}
 			</table>
-			<button href="{% url 'events:add_event' %}" class="btn add_eventbtn" id="add_event">Add event</button>
 		<div class="white_cube"> .</div>
 	</div>
 {% endif %}
