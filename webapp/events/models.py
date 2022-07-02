@@ -37,4 +37,4 @@ class Mode(models.Model):
 	event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event', null=True)
 
 	def __str__(self):
-		return "[" + str(self.event) + "] " +   str(self.amount)  + " " + self.type 
+		return "[" + str(self.event) + "] " +   str(self.amount)  + " " + self.type
