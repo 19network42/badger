@@ -120,8 +120,14 @@ def	search_general(request):
 		searched = request.POST['searched']
 		events = Event.objects.filter(name__contains=searched)
 		student_bgs = StudentBadge.objects.filter(Q(student__login__contains=searched) | Q(student__displayname__contains=searched))
-		return render(request, 'general/search_general.html', 
-			{'searched': searched, 'events': events, 'student_bgs': student_bgs})
+		scans = Scan.objects.filter(Q(uid__contains=searched) | Q(login__contains=searched))
+		context = {
+			'searched': searched,
+			'events': events,
+			'student_bgs': student_bgs,
+			'scans': scans
+		}
+		return render(request, 'general/search_general.html', context)
 
 
 #---------------------------------------#
@@ -132,6 +138,7 @@ def	search_general(request):
 
 
 @csrf_exempt
+@login_required(login_url='accounts:login')
 def	scan_page(request):
 	#	GET management
 	context = {
@@ -139,6 +146,14 @@ def	scan_page(request):
 		'current_scan': Scan.objects.last()
 	}
 	return render(request, "general/scans.html", context)
+
+@login_required(login_url='accounts:login')
+def	one_scan_page(request, scan_id):
+	scan = Scan.objects.get(pk=scan_id)
+	context = {
+		'scan' : scan
+	}
+	return render(request, "general/one_scan.html", context)
 
 def search_scan_page(request):
 	if request.method == 'GET':

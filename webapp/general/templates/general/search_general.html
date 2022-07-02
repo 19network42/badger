@@ -10,12 +10,14 @@
 		<br/>
 		{% for event in events %}
 			<a href="{% url 'events:one_event' event.pk%}"><u>{{ event.name }}</u> - {{ event.date }} </a><br/>
-
 		{% endfor %}
-
+			
 		{% for student_bg in student_bgs %}
 			<a href="{% url 'badges:one_student' student_bg.pk%}"><u>{{ student_bg.student.intra_id }}</u></a> - <a href="https://profile.intra.42.fr/users/{{ student.login }}"><u>{{ student_bg.student.login }}</u></a> - {{ student_bg.student.displayname }}<br/>
-
+		{% endfor %}
+			
+		{% for scan in scans %}
+			<a href="{% url 'general:one_scan' scan.pk%}"><u>{{ scan.uid }}</u> - {{ scan.login }} </a><br/>
 		{% endfor %}
 		
 		{% else %}

@@ -8,7 +8,7 @@ from general.views import (
 							search_general,
 							delete_scan,
 							search_scan_page,
-							scan_page,
+							one_scan_page,
 							CalendarView
 						)
 
@@ -24,6 +24,7 @@ urlpatterns = [
 	#	API
 	path('search_scan/', search_scan_page, name='search_scan'),
 	path('scans/', scan_page, name='scans'),
+	path('scans/<int:scan_id>/', one_scan_page, name='one_scan'),
 	path('delete_scan/<int:scan_id>/', delete_scan, name = 'delete_scan'),
 
 	#	Calendar

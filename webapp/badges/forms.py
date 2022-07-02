@@ -23,10 +23,6 @@ class StudentForm(ModelForm):
 		}
 
 class StudentBadgeForm(ModelForm):
-	# student = forms.ModelChoiceField(queryset=Student.objects.filter(pk=student_id))
-	# badge = forms.ModelChoiceField(queryset=Badge.objects.filter(pk=badge_id))
-	# type = forms.ModelMultipleChoiceField(queryset=None)
-
 	class Meta:
 		model = StudentBadge
 		fields = ('student', 'badge', 'start_at', 'end_at', 'caution_paid', 'caution_returned', 'lost')
