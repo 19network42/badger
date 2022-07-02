@@ -11,8 +11,8 @@ from django.utils.safestring import mark_safe
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime, timedelta, date
-from django.core.paginator import Paginator
-from django.views.generic import ListView
+# from django.core.paginator import Paginator
+# from django.views.generic import ListView
 
 #---------------------------------------#
 #										#
@@ -137,12 +137,6 @@ def	search_general(request):
 #										#
 #---------------------------------------#
 
-# class	ScansListView(ListView):
-# 	paginate_by = 20
-# 	model = Scan
-
-@csrf_exempt
-@login_required(login_url='accounts:login')
 # def	scan_page(request):
 # 	#	GET management
 # 	scans = Scan.objects.all()
@@ -155,6 +149,8 @@ def	search_general(request):
 # 	}
 # 	return render(request, "general/scans.html", context)
 
+@csrf_exempt
+@login_required(login_url='accounts:login')
 def	scan_page(request):
 	#	GET management
 	context = {
