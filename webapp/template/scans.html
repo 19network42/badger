@@ -4,6 +4,7 @@
 {% block content %}
 <div id="scan_page">
 	<h1>LAST SCAN</h1>
+
 	<table class="last_scan">
 		<tr>
 			<th>Badge UID</th>
@@ -60,7 +61,30 @@
 					class="btn btn-outline-danger btn-sm">Delete</a></td>
 		</tr>
 		{% endfor %}
+		
 	</table>
 	
 </div>
+<script>
+	function myFunction(data) {
+		document.getElementById("demo").innerHTML = JSON.stringify(data);
+		} 
+
+	const chatSocket = new WebSocket(
+		'ws://'
+		+ window.location.host
+		+ '/ws/log/'
+	);
+
+	chatSocket.onmessage = function(e) {
+		const data = JSON.parse(e.data);
+		myFunction(data);
+		console.log(data);
+	};
+
+	chatSocket.onclose = function(e) {
+		console.error('Chat socket closed unexpectedly');
+	};
+
+</script>
 {% endblock %}

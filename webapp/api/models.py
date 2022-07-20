@@ -3,6 +3,10 @@ from django.utils import timezone
 from badges.models import Badge, StudentBadge
 from events.models import Event
 
+class Log(models.Model):
+	name = models.CharField(max_length=255)
+	slug = models.SlugField(unique=True)
+
 class Scan(models.Model):
 
 	uid = models.CharField(max_length=15)
@@ -12,12 +16,6 @@ class Scan(models.Model):
 	validity = models.BooleanField(default=False)
 	event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True)
 
-	# def find_badge(self):
-	# 	badges = StudentBadge.objects.all()
-	# 	for badge in badges:
-	# 		if badge.badge.uid == self.uid:
-	# 			return badge
-	# 	return None
 
 	def __str__(self):
 		return "Scan_" + self.uid + "_" + self.date.strftime('%m/%d/%y %H:%M')
