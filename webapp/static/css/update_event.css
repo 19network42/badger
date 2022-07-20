@@ -1,0 +1,96 @@
+/* ----------------------------------------------------------- */
+
+		/*				UPDATE EVENT PAGE				*/
+
+/* ----------------------------------------------------------- */
+
+.update_event {
+	background-color: rgb(199, 230, 255);
+	font-family: 'Raleway-Regular', serif;
+}
+
+.update_event h1 {
+	padding-top: 6vh;
+	padding-bottom: 3vh;
+	font-family: 'Retrolight';
+	font-size: 125px;
+	font-weight: 100;
+	width: 75vw;
+}
+
+.update_event h2 {
+	padding-top: 3vh;
+	font-family: 'Retrolight';
+	font-size: 100px;
+	font-weight: 100;
+	width: 75vw;
+	text-align: justify;
+}
+
+.update_table {
+	background-color: rgb(185, 222, 255);
+	width: 75vw;
+	border: 1px solid black;
+	margin-top: 7px;
+	padding: 8px;
+	border-radius: 0;
+}
+
+.add_mode_btn {
+	margin-bottom: 50px;
+	width: 125px;
+	border-color: black;
+}
+.add_mode_btn:hover {
+	background-color: rgb(165, 209, 243);
+}
+
+.del_mode_btn {
+	justify-content: center;
+	width: 125px;
+	border-color: black;
+}
+
+.submit_btn {
+	margin-top: 20px;
+	margin-bottom: 50px;
+	width: 125px;
+	border-color: black;
+}
+.submit_btn:hover {
+	background-color: rgb(165, 209, 243);
+}
+
+#mode_table {
+	border-collapse: collapse;
+	width: 75vw;
+}
+
+#mode_table tr:nth-child(even) {
+	background-color: rgb(199, 230, 255);
+}
+
+#mode_table td, #mode_table th {
+	padding: 4px;
+	border: 1px solid black;
+	background-color: rgb(185, 222, 255);
+}
+
+#mode_table th {
+	background-color: rgb(165, 209, 243);
+	padding-top: 12px;
+	padding-bottom: 12px;
+	width: 33%;
+	text-align: left;
+}
+
+#mode_table tr:hover {
+	background-color: rgb(165, 209, 243);
+	color: white;
+}
+
+#add_blue_bloc {
+	background-color: rgb(199, 230, 255);
+	color: rgb(199, 230, 255);
+	height: 40vh;
+}

@@ -1,0 +1,87 @@
+/* ----------------------------------------------------------- */
+
+		/*				ONE EVENT PAGE				 */
+
+/* ----------------------------------------------------------- */
+
+#one_event_page {
+	background-color: rgb(226, 195, 244);
+	color: black;
+	height: 150vh;
+	font-family: 'Raleway-Regular', serif;
+}
+
+#one_event_page h1 {
+	margin-left: 10vw;
+	padding-top: 6vh;
+	padding-bottom: 3vh;
+	font-family: 'Retrolight';
+	font-size: 150px;
+	font-weight: 100;
+}
+
+#one_event_page h2 {
+	margin-left: 10vw;
+	padding-top: 4vh;
+	padding-bottom: 2vh;
+	font-family: 'Retrolight';
+	font-size: 100px;
+	font-weight: 100;
+}
+
+.scan_table {
+	border-collapse: collapse;
+	margin-left: 10vw;
+	width: 75vw;
+}
+
+.scan_table td, .scan_table th {
+	width: 33%;
+	border: 1px solid black;
+	padding: 8px;
+}
+
+.scan_table tr:nth-child(even) {
+	background-color: rgb(204, 149, 236);
+}
+
+.scan_table tr:hover {
+	background-color: rgb(209, 167, 233);
+	color: white;
+}
+
+
+.scan_table th {
+	background-color : rgb(209, 167, 233);
+	color: black;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+#one_event_page p {
+	position: sticky;
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	font-size: larger;
+}
+
+.eventbtn {
+	margin-top: 30px;
+	margin-left: 45%;
+	height: 50px;
+	padding : 0px;
+	background-color: rgb(204, 149, 236);
+	border-color: black;
+}
+.eventbtn:hover {
+	background-color: rgb(209, 167, 233);
+}
+
+#update_one_event {
+	margin-bottom: 50px;
+	padding: 10px;
+	color: black;
+	font-size: larger;
+}

@@ -1,0 +1,81 @@
+/* --------------------------------------------------------- */
+
+		/*				SCAN PAGE					 */
+
+/* --------------------------------------------------------- */
+
+#scan_page {
+	background-color: rgb(187, 246, 246);
+	height: 250vh;
+}
+
+#scan_page h1 {
+	font-family: 'Retrolight' !important;
+	font-size: 70pt;
+	padding-top: 5vh;
+	padding-bottom: 2vh;
+	padding-left: 12vw;
+}
+
+.last_scan {
+	border-collapse: collapse;
+	margin-left: 12vw;
+	width: 75vw;
+	background-color: rgb(154, 228, 238);
+}
+
+#title_last_scan {
+	width: 100%;
+}
+
+.last_scan td, .last_scan th {
+	border: 1px	solid black;
+	padding: 8px;
+}
+
+.scan_page_table {
+	margin-left: 12vw;
+	border-collapse: collapse;
+	width: 75vw;
+}
+
+.scan_page_table td, .scan_page_table th {
+	border: 1px solid black;
+	padding: 8px;
+}
+
+.scan_page_table tr:nth-child(even) {
+	background-color: rgb(123, 208, 219);
+}
+
+.scan_page_table tr:hover {
+	background-color: rgb(154, 228, 238);
+	color: rgb(255, 255, 255);
+}
+
+
+.scan_page_table th {
+	background-color : rgb(154, 228, 238);
+	color: black;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+
+.light_cube {
+	background-color: rgb(187, 246, 246);
+	color: rgb(187, 246, 246);
+	margin: 400px;
+}
+.form {
+	margin: auto;
+}
+  
+.form input, .form select, .form textarea {
+	border-radius: 5px;
+	border: 1px solid #17a2b8;
+	outline: none;
+	background: none;
+	padding: 5px;
+	width: 100%;
+}

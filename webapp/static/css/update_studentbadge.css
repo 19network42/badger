@@ -1,0 +1,38 @@
+/* ----------------------------------------------------------- */
+
+		/*			UPDATE STUDENT BADGE			 */
+
+/* ----------------------------------------------------------- */
+
+.update_stud_badge {
+	background-color: rgb(238, 212, 255);
+	font-family: 'Raleway-Regular', serif;
+}
+
+.update_stud_badge h1 {
+	padding-top: 6vh;
+	padding-bottom: 3vh;
+	font-family: 'Retrolight';
+	font-size: 100px;
+	font-weight: 100;
+	width: 75vw;
+}
+
+.update_user_table {
+	background-color: rgb(202, 185, 255);
+	width: 75vw;
+	border: 1px solid black;
+	margin-top: 7px;
+	padding: 8px;
+	border-radius: 0;
+}
+
+.submit_user_btn {
+	margin-top: 30px;;
+	margin-bottom: 35%;
+	width: 125px;
+	border-color: black;
+}
+.submit_user_btn:hover {
+	background-color: rgb(255, 230, 185);
+}

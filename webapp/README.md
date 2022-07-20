@@ -22,7 +22,7 @@ $ cp template.env .env
 
 ## Manual
 
-This project is a web application designed to keep track of scan requests from badges linked to students during an event.
+This project is a web application designed to keep track of scan requests from badges linked to students during an event.  
 The scans can have different values depending on the event to keep track of drinks, presences or else.
 
 The project is divided into 6 applications :
@@ -45,96 +45,256 @@ Hanle the database related to the events and his scanning types.
 Render the different html pages and handle the website requests.
 The html files can be found in the template folder.
 
-### launch and run
+## launch and run
 
 When launched, the embedded program will send a post request to the website to receive the different scanning type of the current event. Then, the embedded program will wait for scans and send an other post request with the current scanning type (or mode) and the badge uid. The webapp will send a response depending on the scan validity and store the scan into the database.
 
-### account app
+## account app
 
-### api app
+🔴
 
-### badges app
+## api app
 
-### core app
+The api application handle the connection with the embedded program and handle the Scan model.
 
-### events app
+### views
 
-### pages app
+- init_page:
 
-- base.html: Render the menubar to redirect to the differents locations
+POST:  
+Send the modes of the current event to the embedded program in a json format.
 
-- home_page: render home.html
+- scan_post_management:
 
-POST:
-Can redirect to : events_page, students_page
+POST:  
+Receive an UID and a mode from the embedded program in a json format. The function checks for a StudentBadge with this UID and assign his login to a new Scan object along with his other relative informations.  
+If the uid sent by the scan has not StudentBadge assigned yet, the scan login is set as UNDEFINED.  
+  
+It also checks for the validity of the scan depending the mode amount and the number of time an UID has been scanned for the mode in the current event.
 
-- events_page : render events_page.html
+### models
 
-GET:
-List all Event objects with their name and dates.
+- Scan:
 
-POST:
-The update button redirect to the update_event page and the delete button delete the chosen Event object.
+uid: uid of the badge sent by the embedded program.  
+date: date of the scan.  
+mode: mode sent by the embedded program.  
+login: login based on the StudentBadge that is assigned the given uid.  
+validity: if the scan is valid based on the amount of the given mode.  
+event: event to which the badge has been scanned.
 
-The one_event page is rendered if clicking on the event name.
+## badges app
 
-- one_event : render one_event.html
+Handle the Badge, Student and StudentBadge models.
 
-GET:
-List the scans of the event and his different modes.
+### models
 
-POST:
-The update button redirect to the update_event page.
+- Student:
 
-- user_page : render user.html
+intra_id: id of the student.  
+login: login of the student.  
+email: email of the student.  
+displayname: 🔴 idk  
+image_url: image of the student on the intranet.  
+is_staff: boolean, if the student is a staff member or not.
 
-GET:
-List all User objects with their information.
+- Badge:
 
-- calendar_page : render calendar.html
+serial: Badge serial.  
+uid: badge uid.  
+reference: Badge reference.  
+badge_type: Depends on the student status (Piscineux or Student).
 
-🔴 Infos missing
+- StudentBadge:
 
-- search_general : render search_general.html
+student: Student model.  
+badge: Badge model.  
+start_at: The date of the acquisition of the badge by the student.  
+end_at: The date of the requisition of the badge.  
+caution_paid: The caution paid by the student for the badge.  
+caution_returned: Boolean, caution returned or not.  
+lost: Boolean, badge lost or not.
 
-POST:
-From the menubar : possibility to search for a specific Event object and / or StudentBadge object.
+## core app
 
-Redirect to search_general.html and list all Event and StudentBadge objects matching the parameter given in the search bar.
+🔴
 
-- mode_page : called by update_event
+## events app
 
-GET:
-List every mode of the Event object with the id parameter.
+Handle the Event and Mode models.
 
-POST:
-Possibility to add and delete a mode for an Event object.
+### models
 
-- update_event : render update_event.html
+🔴 Quick fix still in file. (two_hours_hence function)
 
-GET:
-Render the Event form for the specified Event object and his list of modes (see mode_page).
+- Event:
 
-POST:
-Update the Event object and redirect to the events_page (events.html).
+date: Event starting date.  
+name: Event name.  
+end: Event end date.
 
-- add_event : render add_event.html
+🔴 get_current_event return nothing if not events, and undefined behavior if multiple.
 
-GET:
-Render an Event form to submit.
+- Mode:
 
-POST:
-The add modes button redirect to the update_event page to add the different modes and save the new submitted Event object.
+amount: Max valid scans possibles for the mode.  
+type: Name / type of the mode.  
+event: Related event for this mode.
 
-- delete_event : render delete_event.html
+## pages app
 
-GET:
-Confirmation page to delete the chosen event.
+The pages application is divided based on the different databases. Each databases type has a view file that handle the requests from their respective pages.  
+The urls.py file shows which url is linked to which function in the views.
 
-POST:
-Delete the chosen event and redirect to event_pages.
+### admin_views 🔴
 
-🔴 Scan pages to add to pages part !!
+- login:
 
-## templates (html files)
+- authenticate:
 
+- authorize:
+
+- logout:
+
+- user_page:
+
+### badges_views
+
+- add_student:
+
+POST:  
+Add a StudentBadge to the database and redirect to list_student  
+ELSE:  
+Render add_student.html  
+  
+🔴 add_student (in add user) add a student_badge with a complicated form.    
+Submitted variable should also be deleted (useless in html and function)    
+Context should be in a variable outside the return line (uniformity of functions)
+
+- update_student:
+
+ALL:  
+Render update_student.html  
+Update the StudentBadge  
+  
+🔴 different than add_student, might need update to look/work like add_student (divide in post and get)  
+Context should be in a variable outside the return line (uniformity of functions)
+
+- one_student:
+
+ALL:  
+Render one_student.html with a specific StudentBadge
+
+- testing_student:
+
+🔴 idk what that is
+
+- list_student:
+
+ALL:  
+Render students.html with all StudentBadge objects
+
+- udate_studentbadge:
+
+POST:  
+Can be called on the scan page by clicking on a specific scan.  
+Assign an uid to a StudentBadge.  
+  
+ALL:  
+Render update_studentbadge.html
+
+🔴 Update student vs update studentbadge ?? + too much error management ?
+(If login is already assigned uid, can't assign an other one)
+
+### calendar_views
+
+Infos can be found at https://github.com/huiwenhw
+
+### event_views
+
+- events_page:
+
+ALL:  
+Render events.html with all Events objects
+
+- one_event:
+
+ALL:  
+Render one_event.html with a specific event, the scans related to the event
+and his modes (or scanning type)
+
+- update_event:
+
+POST:  
+Update an Event object.  
+  
+ALL:  
+Render update_event.html and call mode_page.
+
+- add_event:
+
+POST:  
+Add an event and redirect to update_event.  
+ALL:  
+Render add_event.html.  
+
+- delete_event:
+
+POST:  
+Delete an event and redirect to events_page.  
+ALL:  
+Render delete_event.html.
+
+- mode_page:
+
+This function is called by other page functions.
+  
+POST:  
+Delete or add a mode for an event.  
+ALL:  
+Add the specific modes of an event, a mode_form and an mode_error if needed
+to the context given in parameter.  
+
+🔴 Can be put directly in update event since its the only function that calls it
+
+### general_views
+
+- home_page: 
+
+render home.html
+
+- search_general: 
+
+POST:  
+From the menubar : possibility to search for a specific Event object and / or StudentBadge object.  
+Redirect to search_general.html and list all Event and StudentBadge objects matching the parameter given in the search bar.  
+
+### scan views
+
+- scan_page:
+
+ALL:  
+Render scans.html with all the Scan objects and the last scan.  
+
+🔴 Do we need the last scan since it is on top of the list ?
+
+- search_scan_page:
+
+GET:  
+Render search_scan.html.  
+ALL:  
+Render scans.html with all the scans matching the event_name and login given.
+  
+🔴 Not used yet
+
+- delete_scan:
+
+POST:  
+Delete scan and redirect to scan_page .  
+🔴 redirect a verifier  
+ALL:  
+Render delete_event.html.  
+🔴 Pourquoi render delete_event ??
+
+
+## templates (html files) To do ?

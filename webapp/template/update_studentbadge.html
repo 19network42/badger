@@ -2,20 +2,20 @@
 
 {% block content %}
 	<center>
-	<br/><br/><br/>
-	<h1>Add a valid login for the user</h1>
-	<br/><br/><br/>
-
+	<div class="update_stud_badge">
+		<h1>Add login of new user</h1>
 		<form action="" method=POST>
 			{% csrf_token %}
 			
-			{{ form.as_p}}
+			{{ form.as_p }}
 			
-			<button name="submit" value="add">submit</button>
+			
 			{% if error %}
-				Error : {{ error }}
-				<br/>
+				<h3>Error : {{ error }}</h3>
+				<br/>		
 			{% endif %}
+			<button name="submit" value="add" class="btn submit_user_btn">Submit</button>
 		</form>
+	</div>
 	</center>
 {% endblock %}
