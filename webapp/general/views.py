@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime, timedelta, date
-# from django.core.paginator import Paginator
+from django.core.paginator import Paginator
 # from django.views.generic import ListView
 
 #---------------------------------------#
@@ -137,17 +137,19 @@ def	search_general(request):
 #										#
 #---------------------------------------#
 
-# def	scan_page(request):
-# 	#	GET management
-# 	scans = Scan.objects.all()
-# 	paginator = Paginator(scans, per_page=20)
-# 	page = request.GET.get('page')
-# 	page_object = paginator.get_page(page)
-# 	context = {
-# 		'current_scan': Scan.objects.last(),
-# 		'page_obj': page_object
-# 	}
-# 	return render(request, "general/scans.html", context)
+@csrf_exempt
+@login_required(login_url='accounts:login')
+def	scan_page(request):
+	scans = Scan.objects.all()
+	p = Paginator(Scan.objects.all(), 10)
+	page = request.GET.get('page')
+	page_object = p.get_page(page)
+	context = {
+		'current_scan': Scan.objects.last(),
+		'page_obj': page_object,
+		'scans': scans
+	}
+	return render(request, "general/scans.html", context)
 
 @csrf_exempt
 @login_required(login_url='accounts:login')
@@ -159,13 +161,13 @@ def	scan_page(request):
 	}
 	return render(request, "general/scans.html", context)
 
-@login_required(login_url='accounts:login')
-def	one_scan_page(request, scan_id):
-	scan = Scan.objects.get(pk=scan_id)
-	context = {
-		'scan' : scan
-	}
-	return render(request, "general/one_scan.html", context)
+# @login_required(login_url='accounts:login')
+# def	one_scan_page(request, scan_id):
+# 	scan = Scan.objects.get(pk=scan_id)
+# 	context = {
+# 		'scan' : scan
+# 	}
+# 	return render(request, "general/one_scan.html", context)
 
 def search_scan_page(request):
 	if request.method == 'GET':

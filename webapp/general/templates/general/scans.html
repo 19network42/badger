@@ -16,8 +16,8 @@
 			</tr>
 			{% for scan in scans reversed %}
 			<tr>
-				<td>{{ scan.uid }}</td>
-				<td>{{ scan.login }}</td>
+				<td><a href="{% url 'general:one_scan' scan.pk%}"><u>{{ scan.uid }}</u></a></td>
+				<td><a href="{% url 'general:one_scan' scan.pk%}"><u>{{ scan.login }}</u></a></td>
 				<td>{{ scan.date }}</td>
 				{% if scan.event %}
 					<td>{{ scan.event.name }}</td>
@@ -32,7 +32,8 @@
 		</tr>
 		{% endfor %}
 	</table>
-	
+	<br/></br/>
+	{{ page_object }}
 </div>
 
 <script>

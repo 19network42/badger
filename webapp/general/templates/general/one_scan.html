@@ -22,7 +22,7 @@
 			<td>{{ scan.login }}</td>
 			<td>{{ scan.date }}</td>
 			{% if scan.event %}
-				<td>{{ scan.event.name }}</td>
+				<td><a href="{% url 'events:one_event' scan.event.pk%}"><u>{{ scan.event.name }}</u></a></td>
 			{% else %}
 				<td> Undefined </td>
 			{% endif %}
