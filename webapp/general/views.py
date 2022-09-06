@@ -147,19 +147,9 @@ def	scan_page(request):
 	context = {
 		'current_scan': Scan.objects.last(),
 		'page_scan': page_scan,
-		'scans': scans
+		'scans': scans,
 	}
 	return render(request, "general/scans.html", context)
-
-# @csrf_exempt
-# @login_required(login_url='accounts:login')
-# def	scan_page(request):
-# 	#	GET management
-# 	context = {
-# 		'scans': Scan.objects.all(),
-# 		'current_scan': Scan.objects.last()
-# 	}
-# 	return render(request, "general/scans.html", context)
 
 @login_required(login_url='accounts:login')
 def	one_scan_page(request, scan_id):

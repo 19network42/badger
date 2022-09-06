@@ -1,6 +1,5 @@
 {% extends 'general/base.html' %}
 {% load static %}
-
 {% block content %}
 <div id="scan_page">
 		<h1>ALL SCANS</h1>
@@ -33,19 +32,36 @@
 		{% endfor %}
 	</table>
 	<br/> <hr>
-	Page {{ page_scan.number }} of {{ page_scan.paginator.num_pages }}<br/>
+	<nav aria-label="Page navigation">
+		<ul class="pagination">
 
-	{% if page_scan.has_previous %}
-	<a href="?page=1">&laquo First</a>
-	<a href="?page={{ page_scan.previous_page_number }}">Previous</a>
-	{% endif %}
+			{% if page_scan.has_previous %}
+			<li class="page-item"><a class="page-link" href="?page=1">
+				&laquo First</a></li>
+			<li class="page-item"><a class="page-link" href="?page={{ page_scan.previous_page_number }}">
+				Previous</a></li>
+			{% elif not page_scan.has_previous %}
+				<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			{% endif %}
+			<!--
+				to display the current page and the total amount of pages
+				<li class="page-item disabled"><a href="#" class="page-link">
+					{{ page_scan.number }} of {{ page_scan.paginator.num_pages }}</a></li>
+			-->
+			{% for page in page_scan.paginator.page_range %}
+				<li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+			{% endfor %}
 
-	{% if page_scan.has_next %}
-		<a href="?page={{ page_scan.next_page_number }}">Next</a>
-		<a href="?page={{ page_scan.paginator.num_pages }}">Last &raquo</a>
-	{% endif %}
-	
-
+			{% if page_scan.has_next %}
+				<li class="page-item"><a class="page-link" href="?page={{ page_scan.next_page_number }}">
+				Next</a></li>
+				<li class="page-item"></li><a class="page-link" href="?page={{ page_scan.paginator.num_pages }}">
+					Last &raquo</a></li>
+			{% elif not page_scan.has_next %}
+				<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			{% endif %}
+		</ul>
+	</nav>
 </div>
 
 <script>
