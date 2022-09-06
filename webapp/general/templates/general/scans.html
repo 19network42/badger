@@ -14,7 +14,7 @@
 				<th></th>
 				<th></th>
 			</tr>
-			{% for scan in scans reversed %}
+			{% for scan in page_scan reversed %}
 			<tr>
 				<td><a href="{% url 'general:one_scan' scan.pk%}"><u>{{ scan.uid }}</u></a></td>
 				<td><a href="{% url 'general:one_scan' scan.pk%}"><u>{{ scan.login }}</u></a></td>
@@ -32,8 +32,20 @@
 		</tr>
 		{% endfor %}
 	</table>
-	<br/></br/>
-	{{ page_object }}
+	<br/> <hr>
+	Page {{ page_scan.number }} of {{ page_scan.paginator.num_pages }}<br/>
+
+	{% if page_scan.has_previous %}
+	<a href="?page=1">&laquo First</a>
+	<a href="?page={{ page_scan.previous_page_number }}">Previous</a>
+	{% endif %}
+
+	{% if page_scan.has_next %}
+		<a href="?page={{ page_scan.next_page_number }}">Next</a>
+		<a href="?page={{ page_scan.paginator.num_pages }}">Last &raquo</a>
+	{% endif %}
+	
+
 </div>
 
 <script>

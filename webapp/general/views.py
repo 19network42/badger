@@ -137,29 +137,29 @@ def	search_general(request):
 #										#
 #---------------------------------------#
 
-# @csrf_exempt
-# @login_required(login_url='accounts:login')
-# def	scan_page(request):
-# 	scans = Scan.objects.all()
-# 	p = Paginator(Scan.objects.all(), 10)
-# 	page = request.GET.get('page')
-# 	page_object = p.get_page(page)
-# 	context = {
-# 		'current_scan': Scan.objects.last(),
-# 		'page_obj': page_object,
-# 		'scans': scans
-# 	}
-# 	return render(request, "general/scans.html", context)
-
 @csrf_exempt
 @login_required(login_url='accounts:login')
 def	scan_page(request):
-	#	GET management
+	scans = Scan.objects.all()
+	p = Paginator(Scan.objects.all(), 10)
+	page = request.GET.get('page')
+	page_scan = p.get_page(page)
 	context = {
-		'scans': Scan.objects.all(),
-		'current_scan': Scan.objects.last()
+		'current_scan': Scan.objects.last(),
+		'page_scan': page_scan,
+		'scans': scans
 	}
 	return render(request, "general/scans.html", context)
+
+# @csrf_exempt
+# @login_required(login_url='accounts:login')
+# def	scan_page(request):
+# 	#	GET management
+# 	context = {
+# 		'scans': Scan.objects.all(),
+# 		'current_scan': Scan.objects.last()
+# 	}
+# 	return render(request, "general/scans.html", context)
 
 @login_required(login_url='accounts:login')
 def	one_scan_page(request, scan_id):
