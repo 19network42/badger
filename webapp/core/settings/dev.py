@@ -61,3 +61,5 @@ CHANNEL_LAYERS={
 API42_UID = os.getenv('API42_UID')
 API42_SECRET = os.getenv('API42_SECRET')
 API42_REDIRECT_URI = 'http://localhost:8000/authorize'
+
+ARDUINO_SECRET_KEY = os.getenv('ARDUINO_SECRET_KEY')

@@ -1,17 +1,15 @@
-from django.http import HttpResponse
-from badges.models import StudentBadge
-from events.models import get_current_event, Mode
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from .models import Scan, Log
-from badges.models import StudentBadge
-import json, sys
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 import json
-from pages.scans_views import scan_page
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from .models import Scan, Log
+from badges.models import StudentBadge
+from events.models import get_current_event, Mode
+from general.views import scan_page
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 """
 Upon request from the arduino : 
@@ -34,18 +32,28 @@ def specific_response(data_response, login):
 	mode = ['default']
 	if login == "tamighi":
 		data_response = response("Tamighi has been scanned... * blushes *", [223, 24, 245], True, mode, len(mode))
-	elif login == "Suske":
-		data_response = response("Pls tell staff to not reboot me", [204, 255, 204], True, mode, len(mode))
+	elif login == "lrondia":
+		data_response = response("(┛◉_◉)┛彡┻━┻", [223, 24, 245], True, mode, len(mode))
 	elif login == "Zeno":
 		data_response = response("What is yellow and is waiting?", [153, 0, 153], True, "Default")
+	elif login == "abuzdin":
+		data_response = response("Hello the creator!", [153, 0, 153], True, "Default")
 	elif login == "skip":
 		data_response = response("-> Next", [204, 255, 204], True, mode, len(mode))
 	elif login == "ncolin":
 		data_response = response("prout", [204, 255, 204], True, mode, len(mode))
 	return data_response
 
+def check_secret(request):
+	print("    eqweqe ", settings.ARDUINO_SECRET_KEY)
+	if request.headers["X-Secret"] != settings.ARDUINO_SECRET_KEY:
+		return False
+	return True
+
 @csrf_exempt
 def init_page(request):
+	if not check_secret(request):
+		return HttpResponse(status=401)
 	if request.method == 'POST':
 		event = get_current_event()
 		if not (event):
@@ -84,9 +92,11 @@ def scan_limit_reached(scan):
 	else:
 		return False
 
+
 @csrf_exempt
 def scan(request):
-	# POST
+	if not check_secret(request):
+		return HttpResponse(status=401)
 	if request.method == 'POST':
 		#	Check if there is a current event. Undefined behavior if there is more than one.
 		scan = get_scan(request)
@@ -120,9 +130,9 @@ def scan(request):
 		log = Log.objects.all()
 		real_time_scan(request, scan)
 		return HttpResponse(json.dumps(response_data), content_type="application/json", status=201)
-	# GET
 	else:
-		return scan_page(request)
+	# Not a post request
+		return HttpResponseBadRequest()
 
 
 def real_time_scan(request, scan):

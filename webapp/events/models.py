@@ -18,7 +18,7 @@ class Event(models.Model):
 		return (self.date < now < self.end)
 	@property
 	def get_html_url(self):
-		url = reverse('pages:one_event', args=(self.id,))
+		url = reverse('events:one_event', args=(self.id,))
 		return f'<a href="{url}"> {self.name} </a>'
 	def __str__(self):
 		return self.name
@@ -37,4 +37,4 @@ class Mode(models.Model):
 	event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event', null=True)
 
 	def __str__(self):
-		return "[" + str(self.event) + "] " +   str(self.amount)  + " " + self.type 
+		return "[" + str(self.event) + "] " +   str(self.amount)  + " " + self.type

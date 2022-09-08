@@ -70,3 +70,22 @@
 	margin-top: 30px;
 	font-size: larger;
 }
+
+.add_eventbtn {
+	margin-bottom: 30px;
+	height: 50px;
+	padding : 0px;
+	border-color: black;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.add_eventbtn:hover {
+	color: white !important;
+	border-color: rgb(202, 31, 31);
+	background-color: rgb(202, 31, 31);
+}
+
+#add_event :hover{
+	color: white;
+}

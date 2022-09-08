@@ -19,8 +19,11 @@ from django.urls import path, include
 urlpatterns = [
 	path('admin/', admin.site.urls),
 
-	path('', include('pages.urls', namespace='pages')),
-	path('', include('api.urls', namespace='api')),
+	path('', include('general.urls', namespace='general')),
+	path('', include('accounts.urls', namespace='accounts')),
+	path('', include('badges.urls', namespace='badges')),
+	path('', include('events.urls', namespace='events')),
+	path('api/', include('api.urls', namespace='api')),
 ]
 
 admin.site.site_header = "Badger Administration"

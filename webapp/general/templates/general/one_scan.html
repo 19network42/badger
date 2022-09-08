@@ -1,0 +1,36 @@
+{% extends 'general/base.html' %}
+
+{% block content %}
+<div id="one_scan_page">
+	<br/><br/>
+	<center>
+		<h1>{{scan.login}}</h1>
+	</center>
+	<br/>
+	<table class="scan_page_table" id="scan_table">
+		<tr>
+			<th>Badge UID</th>
+			<th>Login</th>
+			<th>Date</th>
+			<th>Event</th>
+			<th>Validity</th>
+			<th></th>
+			<th></th>
+		</tr>
+		<tr>
+			<td>{{ scan.uid }}</td>
+			<td>{{ scan.login }}</td>
+			<td>{{ scan.date }}</td>
+			{% if scan.event %}
+				<td><a href="{% url 'events:one_event' scan.event.pk%}"><u>{{ scan.event.name }}</u></a></td>
+			{% else %}
+				<td> Undefined </td>
+			{% endif %}
+			<td> {{ scan.validity }} </td>
+			<td align="center"><a href="{% url 'badges:update_studentbadge' scan.pk %}"
+				class="btn btn-outline-secondary btn-sm">Update</a></td>
+			<td align="center"><a href="{% url 'general:delete_scan' scan.pk %}"
+				class="btn btn-outline-danger btn-sm">Delete</a></td>
+		</tr>
+</div>
+{% endblock %}

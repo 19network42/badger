@@ -5,5 +5,5 @@ app_name = 'api'
 
 urlpatterns = [
 	path('scan/', scan, name = 'scan'),
-	path('init/', init_page),
+	path('init/', init_page, name= 'init'),
 ]

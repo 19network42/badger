@@ -1,0 +1,12 @@
+{% extends 'general/base.html' %}
+{% block content %}
+<br/><br/>
+<div class="clearfix">
+	<a class="btn btn-info left" href="{% url 'general:calendar' %}?{{ prev_month }}"> Previous Month </a>
+	<a class="position-absolute top-10 start-50 translate-middle btn btn-secondary" href="{% url 'general:calendar' %}"> Today </a>
+	<a class="btn btn-info right" href="{% url 'general:calendar' %}?{{ next_month }}"> Next Month </a>
+</div>
+<center>
+	{{ calendar }}
+</center>
+{% endblock %}
